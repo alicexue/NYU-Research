@@ -20,7 +20,8 @@ rt8_avg=[];
 perf4_avg=[];
 perf8_avg=[];
 strOneBlock = 'T';
-i = blockN;
+used_date = date;
+i = 0;
 
 if blockN < 10
     s = ['C:\Users\Alice\Documents\MATLAB\data\', obs, '\', task, '\', date, '_stim0',num2str(i),'.mat'];
@@ -42,6 +43,10 @@ if oneBlock == true
         rt8_avg = rt8;
         perf4_avg = perf4;
         perf8_avg = perf8;
+        %rt4_avg = [rt4_avg,rt4];
+        %rt8_avg = [rt8_avg,rt8];
+        %perf4_avg = [perf4_avg,perf4];
+        %perf8_avg = [perf8_avg,perf8];
     end
 else 
     strOneBlock = 'F';
@@ -60,6 +65,10 @@ else
             rt8_avg = horzcat(rt8_avg,rt8);
             perf4_avg = horzcat(perf4_avg,perf4);
             perf8_avg = horzcat(perf8_avg,perf8);
+            %rt4_avg = [rt4_avg,rt4];
+            %rt8_avg = [rt8_avg,rt8];
+            %perf4_avg = [perf4_avg,perf4];
+            %perf8_avg = [perf8_avg,perf8];
         end
     end
 end
@@ -73,7 +82,7 @@ errorbar(4:4:8,rt*1000,rt_std*1000,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],
 
 xlim([3 9])
 set(gca,'XTick', 4:4:8,'FontSize',25,'LineWidth',2,'FontName','Times New Roman')
-ylim([0 500])
+ylim([0 1000])
 %set(gca,'YTick', 50:10:100)
 
 % title([obs ' ' condition],'FontSize',14)

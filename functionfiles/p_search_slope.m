@@ -1,18 +1,18 @@
-function p_search_slope(obs, date, oneBlock, blockN, task)
+function p_search_slope(obs, task, date, oneBlock, blockN)
 
 %%% Example
-%%%  p_search_slope('ax', '150709', false, 5,'difficult')
+%%% p_search_slope('ax', 'difficult', '150709', false, 5)
 
 %% Parameters
 
 %obs = 'ax';
+%task = 'difficult'
 %date = '150709';
 %oneBlock? = false;
 %blockN = 5;
-%task = 'difficult'
 
 % if oneBlock == true, then only blockN is analyzed
-% if oneBlock == false, then the blocks with a number < blockN are analyzed
+% if oneBlock == false, then the blocks with a number <= blockN are analyzed
 
 %% Obtain pboth, pone and pnone for each run and concatenate over run
 rt4_avg=[];
@@ -22,15 +22,14 @@ perf8_avg=[];
 strOneBlock = 'T';
 i = blockN;
 
-if blockN < 10
-    s = ['C:\Users\Alice\Documents\MATLAB\data\', obs, '\', task, '\', date, '_stim0',num2str(i),'.mat'];
-    existent = exist(s,'file');
-elseif blockN >= 10
-    s = ['C:\Users\Alice\Documents\MATLAB\data\', obs, '\', task, '\', date, '_stim',num2str(i),'.mat'];
-    existent = exist(s,'file');
-end
-
 if oneBlock == true 
+    if blockN < 10
+        s = ['C:\Users\Alice\Documents\MATLAB\data\', obs, '\', task, '\', date, '_stim0',num2str(i),'.mat'];
+        existent = exist(s,'file');
+    elseif blockN >= 10
+        s = ['C:\Users\Alice\Documents\MATLAB\data\', obs, '\', task, '\', date, '_stim',num2str(i),'.mat'];
+        existent = exist(s,'file');
+    end    
     if existent == 0;
         errorStruct.message = 'Data file blockN not found.';
         errorStruct.identifier = 'p_search_slope:fileNotFound'; 

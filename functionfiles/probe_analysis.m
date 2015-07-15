@@ -1,19 +1,21 @@
-function [pb,po,pn,pbp,pop,pnp] = probe_analysis(date,obs,block_tocheck)
+function [pb,po,pn,pbp,pop,pnp] = probe_analysis(obs,task,date,blockN)
 %% This program allows the analysis of the probe task
 
+%%% Example
+%%% probe_analysis('ax', 'difficult', '150714', 1)
 
-%% Some parameters
+%% Parameters
 
-% block_tocheck = 1;
-% date = '141009';
-% obs = 'ho';
-% title_task = 'Difficult';
+% obs = 'ax';
+% task = 'difficult';
+% date = '150714';
+% blockN = 1;
 
 %% Load the data
-if block_tocheck < 10
-    load(['/Users/hyunjinoh/Desktop/Jane/MATLAB/data/' obs '/' date '_stim0' num2str(block_tocheck) '.mat'])
-elseif block_tocheck >= 10
-    load(['/Users/hyunjinoh/Desktop/Jane/MATLAB/data/' obs '/' date '_stim0' num2str(block_tocheck) '.mat'])
+if blockN < 10
+    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\' date '_stim0' num2str(blockN) '.mat'])
+else
+    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_', task '\' date '_stim' num2str(blockN) '.mat'])
 end
 
 %% Get Probe data
@@ -24,7 +26,6 @@ identity = [1 0;2 0;3 0;4 0;5 0;6 0;7 0;8 0;9 0;10 0;11 0;12 0];
 positions = [-16 -13.25 -10.5 -7.75 -5 -2.25 0.5 3.25 6 8.75 11.5 14.25];
 
 exp = getTaskParameters(myscreen,task);
-
 
 expProbe = task{1}.probeTask;
 

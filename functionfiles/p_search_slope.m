@@ -20,46 +20,37 @@ rt8_avg=[];
 perf4_avg=[];
 perf8_avg=[];
 strOneBlock = 'T';
-i = blockN;
+tmp = blockN;
+numBlocks = 1;
 
-if oneBlock == true 
-    if blockN < 10
-        s = ['C:\Users\Alice\Documents\MATLAB\data\', obs, '\', task, '\', date, '_stim0',num2str(i),'.mat'];
-        existent = exist(s,'file');
-    elseif blockN >= 10
-        s = ['C:\Users\Alice\Documents\MATLAB\data\', obs, '\', task, '\', date, '_stim',num2str(i),'.mat'];
-        existent = exist(s,'file');
-    end    
-    if existent == 0;
+if oneBlock == false
+    numBlocks = blockN;
+    strOneBlock = 'F';
+end   
+
+for i = 1:numBlocks;
+    if oneBlock == false
+        tmp = i;
+    end
+    if tmp < 10
+        strBlockN = ['0', num2str(tmp)];
+    else
+        strBlockN = num2str(tmp);
+    end  
+    s = ['C:\Users\Alice\Documents\MATLAB\data\', obs, '\', task, '\', date, '_stim', strBlockN, '.mat'];    
+    exists = exist(s,'file');
+    if oneBlock == true && exists == 0;
         errorStruct.message = 'Data file blockN not found.';
         errorStruct.identifier = 'p_search_slope:fileNotFound'; 
         error(errorStruct);
-    else 
-        [rt4,rt8,perf4,perf8] = search_slope(date,obs,blockN,task);
-
-        rt4_avg = rt4;
-        rt8_avg = rt8;
-        perf4_avg = perf4;
-        perf8_avg = perf8;
     end
-else 
-    strOneBlock = 'F';
-    for i = 1:blockN;
-        if blockN < 10
-            s = ['C:\Users\Alice\Documents\MATLAB\data\', obs, '\', task, '\', date, '_stim0',num2str(i),'.mat'];
-            existent = exist(s,'file');
-        elseif blockN >= 10
-            s = ['C:\Users\Alice\Documents\MATLAB\data\', obs, '\', task, '\', date, '_stim',num2str(i),'.mat'];
-            existent = exist(s,'file');
-        end        
-        if existent ~= 0
-            [rt4,rt8,perf4,perf8] = search_slope(date,obs,i,task);
+    if exists ~= 0
+        [rt4,rt8,perf4,perf8] = search_slope(date,obs,tmp,task);
 
-            rt4_avg = horzcat(rt4_avg,rt4);
-            rt8_avg = horzcat(rt8_avg,rt8);
-            perf4_avg = horzcat(perf4_avg,perf4);
-            perf8_avg = horzcat(perf8_avg,perf8);
-        end
+        rt4_avg = horzcat(rt4_avg,rt4);
+        rt8_avg = horzcat(rt8_avg,rt8);
+        perf4_avg = horzcat(perf4_avg,perf4);
+        perf8_avg = horzcat(perf8_avg,perf8);
     end
 end
 

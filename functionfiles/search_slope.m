@@ -10,7 +10,7 @@ function [rt4,rt8,perf4,perf8] = search_slope(date,obs,block_tocheck,task)
 
 if block_tocheck < 10
     load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\' date '_stim0' num2str(block_tocheck) '.mat'])
-elseif block_tocheck >= 10
+else
     load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\' date '_stim' num2str(block_tocheck) '.mat'])
 end
 

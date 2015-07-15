@@ -46,7 +46,7 @@ for i = 1:numBlocks
         errorStruct.identifier = 'p_search_slope:fileNotFound'; 
         error(errorStruct);
     end
-	if exists ~= 0
+    if exists ~= 0
         [pb,po,pn,pbp,pop,pnp] = probe_analysis(obs,task,date,tmp); 
 
         pboth = horzcat(pboth,pb);
@@ -80,6 +80,9 @@ errorbar(30:30:450,Mpn,Spn,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'Marker
 legend('PBoth','POne','PNone')
 
 set(gca,'YTick',0:.2:1)
+
+% set(gca,'XTick',0:30:500)
+
 ylabel('Percent correct','FontSize',12)
 xlabel('Time from search array onset [ms]','FontSize',12)
 ylim([0 1])

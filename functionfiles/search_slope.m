@@ -18,7 +18,7 @@ end
 exp = getTaskParameters(myscreen,task);
 
 %% Compute reaction time according to the set size
-setsize = 4:4:8;
+% setsize = 4:4:8;
 
 size4 = exp.randVars.setsize==4;
 size8 = exp.randVars.setsize==8;

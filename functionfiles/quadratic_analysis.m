@@ -15,7 +15,7 @@ function [p1,p2] = quadratic_analysis(pBoth,pNone)
 % Basic quadratic theory says: x1+x2=sigma and x1*x2=phi when X^2 - sigma*X + phi = 0
 % After simplification, we can say:
 
-sigma = -(1+pBoth-pNone);
+sigma = 1+pBoth-pNone;
 phi = pBoth;
 
 %%% Landy's computation: assuming p1 and p2 are NOT independant (no need with our new version of the experiment)
@@ -35,7 +35,7 @@ delta_sq(holder) = -delta_sq(holder);
 %% Compute P1 and P2: P1 is either higer or equal to P2 by mathematical construction
 % P1 and P2 are the two solutions of the following second-degree equation:
 % X^2 - sigma*X + phi = 0
-p1 = (-sigma + delta_sq)./2;
-p2 = (-sigma - delta_sq)./2;
+p1 = (sigma + delta_sq)./2;
+p2 = (sigma - delta_sq)./2;
 
 end

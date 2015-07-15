@@ -15,9 +15,9 @@ function p_probe_analysis(obs, task, date, oneBlock, blockN)
 % if oneBlock == false, then the blocks with a number <= blockN are analyzed
 
 %% Obtain pboth, pone and pnone for each run and concatenate over run
-pboth=[];
-pone=[];
-pnone=[];
+pboth=zeros(1,blockN);
+pone=zeros(1,blockN);
+pnone=zeros(1,blockN);
 pboth_pair=[];
 pone_pair=[];
 pnone_pair=[];
@@ -47,12 +47,13 @@ for i = 1:numBlocks
         errorStruct.identifier = 'p_search_slope:fileNotFound'; 
         error(errorStruct);
     end
-	if exists ~= 0
+    if exists ~= 0
         [pb,po,pn,pbp,pop,pnp] = probe_analysis(obs,task,date,tmp); 
 
-        pboth = horzcat(pboth,pb);
-        pone = horzcat(pone,po);
-        pnone = horzcat(pnone,pn);
+        pboth(n) = pb;
+        pone(n) = po;
+        pnone(n) = pn;
+        n = n + 1;
         if i == 1 || oneBlock == true
             pboth_pair = pbp;
             pone_pair = pop;
@@ -64,6 +65,44 @@ for i = 1:numBlocks
         end
     end
 end
+
+pboth(n) = (1:n-1);
+rt8_avg = rt8_avg(1:n-1);
+perf4_avg = perf4_avg(1:n-1);
+perf8_avg = perf8_avg(1:n-1);
+% for i = 1:numBlocks
+%     if oneBlock == false
+%         tmp = i;
+%     end
+%     if tmp < 10
+%         strTmp = ['0', num2str(tmp)];
+%     else
+%         strTmp = num2str(tmp);
+%     end  
+%     s = ['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task, '\', date, '_stim', strTmp, '.mat'];    
+%     exists = exist(s,'file');            
+%     if oneBlock == true && exists == 0
+%         errorStruct.message = 'Data file blockN not found.';
+%         errorStruct.identifier = 'p_search_slope:fileNotFound'; 
+%         error(errorStruct);
+%     end
+%     if exists ~= 0
+%         [pb,po,pn,pbp,pop,pnp] = probe_analysis(obs,task,date,tmp); 
+% 
+%         pboth = horzcat(pboth,pb);
+%         pone = horzcat(pone,po);
+%         pnone = horzcat(pnone,pn);
+%         if i == 1 || oneBlock == true
+%             pboth_pair = pbp;
+%             pone_pair = pop;
+%             pnone_pair = pnp;
+%         else
+%             pboth_pair = cat(2,pboth_pair,pbp);
+%             pone_pair = cat(2,pone_pair,pop);
+%             pnone_pair = cat(2,pnone_pair,pnp);
+%         end
+%     end
+% end
 
 %% Averaging across runs
 Mpb = mean(pboth,2);
@@ -81,6 +120,9 @@ errorbar(30:30:450,Mpn,Spn,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'Marker
 legend('PBoth','POne','PNone')
 
 set(gca,'YTick',0:.2:1)
+
+% set(gca,'XTick',0:30:500)
+
 ylabel('Percent correct','FontSize',12)
 xlabel('Time from search array onset [ms]','FontSize',12)
 ylim([0 1])

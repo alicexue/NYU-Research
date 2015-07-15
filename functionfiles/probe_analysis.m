@@ -29,7 +29,7 @@ exp = getTaskParameters(myscreen,task);
 
 expProbe = task{1}.probeTask;
 
-theTrials = find(task{1}.randVars.fixBreak == 0); % what does this mean?
+theTrials = find(task{1}.randVars.fixBreak == 0);
 
 %% Revert the order of the list
 pboth = zeros(1,12);
@@ -82,7 +82,7 @@ pb = [];
 po = [];
 pn = [];
 theTrials = find(task{1}.randVars.fixBreak == 0); 
-for delays = unique(exp.randVars.delays) % why is this random?
+for delays = unique(exp.randVars.delays)
         pb(delays,:) = pboth(exp.randVars.delays(theTrials)==delays);
         po(delays,:) = pone(exp.randVars.delays(theTrials)==delays);
         pn(delays,:) = pnone(exp.randVars.delays(theTrials)==delays);

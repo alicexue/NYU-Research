@@ -44,6 +44,32 @@ for n = theTrials
             idx1 = idx1 + i;
             idx2 = idx2 + i;
             i = i - 2;
+%             if idx1 == 1;idx1 = 12;
+%             elseif idx1 == 2;idx1 = 11;
+%             elseif idx1 == 3;idx1 = 10;
+%             elseif idx1 == 4;idx1 = 9;
+%             elseif idx1 == 5;idx1 = 8;
+%             elseif idx1 == 6;idx1 = 7;
+%             elseif idx1 == 7;idx1 = 6;
+%             elseif idx1 == 8;idx1 = 5;
+%             elseif idx1 == 9;idx1 = 4;
+%             elseif idx1 == 10;idx1 = 3;
+%             elseif idx1 == 11;idx1 = 2;
+%             elseif idx1 == 12;idx1 = 1;
+%             end
+%             if idx2 == 1;idx2 = 12;
+%             elseif idx2 == 2;idx2 = 11;
+%             elseif idx2 == 3;idx2 = 10;
+%             elseif idx2 == 4;idx2 = 9;
+%             elseif idx2 == 5;idx2 = 8;
+%             elseif idx2 == 6;idx2 = 7;
+%             elseif idx2 == 7;idx2 = 6;
+%             elseif idx2 == 8;idx2 = 5;
+%             elseif idx2 == 9;idx2 = 4;
+%             elseif idx2 == 10;idx2 = 3;
+%             elseif idx2 == 11;idx2 = 2;
+%             elseif idx2 == 12;idx2 = 1;
+%             end
         end
         
         selected_idx1 = expProbe.list{n}==idx1;

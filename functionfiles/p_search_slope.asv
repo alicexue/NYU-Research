@@ -15,10 +15,48 @@ function p_search_slope(obs, task, date, oneBlock, blockN)
 % if oneBlock == false, then the blocks with a number <= blockN are analyzed
 
 %% Obtain pboth, pone and pnone for each run and concatenate over run
-rt4_avg = zeros(1,blockN);
-rt8_avg = zeros(1,blockN);
-perf4_avg = zeros(1,blockN);
-perf8_avg = zeros(1,blockN);
+% rt4_avg=[];
+% rt8_avg=[];
+% perf4_avg=[];
+% perf8_avg=[];
+% strOneBlock = 'T';
+% tmp = blockN;
+% numBlocks = 1;
+% 
+% if oneBlock == false
+%     numBlocks = blockN;
+%     strOneBlock = 'F';
+% end   
+% 
+% for i = 1:numBlocks
+%     if oneBlock == false
+%         tmp = i;
+%     end
+%     if tmp < 10
+%         strTmp = ['0', num2str(tmp)];
+%     else
+%         strTmp = num2str(tmp);
+%     end  
+%     s = ['C:\Users\Alice\Documents\MATLAB\data\', obs, '\', task, '\', date, '_stim', strTmp, '.mat'];    
+%     exists = exist(s,'file');
+%     if oneBlock == true && exists == 0
+%         errorStruct.message = 'Data file blockN not found.';
+%         errorStruct.identifier = 'p_search_slope:fileNotFound'; 
+%         error(errorStruct);
+%     end
+%     if exists ~= 0
+%         [rt4,rt8,perf4,perf8] = search_slope(date,obs,tmp,task);
+% 
+%         rt4_avg = horzcat(rt4_avg,rt4);
+%         rt8_avg = horzcat(rt8_avg,rt8);
+%         perf4_avg = horzcat(perf4_avg,perf4);
+%         perf8_avg = horzcat(perf8_avg,perf8);
+%     end
+% end
+rt4_avg=(1,blockN);
+rt8_avg=(1,blockN);
+perf4_avg=(1,blockN);
+perf8_avg=(1,blockN);
 strOneBlock = 'T';
 tmp = blockN;
 numBlocks = 1;
@@ -28,7 +66,6 @@ if oneBlock == false
     strOneBlock = 'F';
 end   
 
-n = 1;
 for i = 1:numBlocks
     if oneBlock == false
         tmp = i;
@@ -48,18 +85,12 @@ for i = 1:numBlocks
     if exists ~= 0
         [rt4,rt8,perf4,perf8] = search_slope(date,obs,tmp,task);
 
-        rt4_avg(n) = rt4;
-        rt8_avg(n) = rt8;
-        perf4_avg(n) = perf4;
-        perf8_avg(n) = perf8;
-        n = n + 1;
+        rt4_avg = horzcat(rt4_avg,rt4);
+        rt8_avg = horzcat(rt8_avg,rt8);
+        perf4_avg = horzcat(perf4_avg,perf4);
+        perf8_avg = horzcat(perf8_avg,perf8);
     end
 end
-rt4_avg = rt4_avg(1:n-1);
-rt8_avg = rt8_avg(1:n-1);
-perf4_avg = perf4_avg(1:n-1);
-perf8_avg = perf8_avg(1:n-1);
-
 %% Plot reaction time
 rt = [mean(rt4_avg) mean(rt8_avg)];
 rt_std = [std(rt4_avg) std(rt8_avg)];

@@ -30,6 +30,7 @@ if oneBlock == false
     strOneBlock = 'F';
 end  
 
+n = 1;
 for i = 1:numBlocks
     if oneBlock == false
         tmp = i;

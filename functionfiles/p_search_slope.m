@@ -1,4 +1,7 @@
 function p_search_slope(obs, task, date1, date2, maxBlockN)
+%%% This function analyzes all of the data from date1 to date2 with a block
+%%% number <= maxBlockN. 
+%%% date1 and date2 can differ by month but not year
 
 %%% Example
 %%% p_search_slope('ax', 'difficult', '150701', '150709', 7)
@@ -76,7 +79,7 @@ ylim([0 500])
 % title([obs ' ' condition],'FontSize',14)
 xlabel('set size','FontSize',25,'FontName','Times New Roman')
 ylabel('RT (ms)','FontSize',25,'FontName','Times New Roman')
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\rt\' 'rtSetSize' num2str(maxBlockN)]);
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\rt\' obs '_' task '_rtSetSize']);
 print ('-djpeg', '-r500',namefig);
 
 %% Plot performance
@@ -95,7 +98,7 @@ set(gca,'YTick', 50:20:100,'FontSize',25,'LineWidth',2,'FontName','Times New Rom
 xlabel('set size','FontSize',25,'FontName','Times New Roman')
 ylabel('Accuracy','FontSize',25,'FontName','Times New Roman')
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\perf\' 'perfSetSize' num2str(maxBlockN)]);
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\perf\' obs '_' task '_perfSetSize']);
 print ('-djpeg', '-r500',namefig);
 
 end

@@ -1,4 +1,7 @@
 function p_probe_analysis(obs, task, date1, date2, maxBlockN)
+%%% This function analyzes all of the data from date1 to date2 with a block
+%%% number <= maxBlockN. 
+%%% date1 and date2 can differ in month and year
 
 %%% Example
 %%% p_probe_analysis('ax', 'difficult', '150714', '150720', 1)
@@ -23,42 +26,53 @@ pnone_pair=[];
 date1num = str2num(date1);
 date2num = str2num(date2);
 numDates = date2num - date1num + 1;
-
-if numDates > 100
-    n = (date2num - date1num)/100;
+m = 1;
+y = 1;
+if numDates > 10000
+    y = fix((date2num - date1num)/10000)+1;
+    m = 12;
+elseif numDates > 100
+    m = fix((date2num - date1num)/100)+1;
 end
-for tmp = 1:n
-    date1num = date1/100*100+100;
-    date2num = date2/100*100+100+
-    for date = date1num:date2num
-        for blockN = 0:maxBlockN
-            if blockN < 10
-                strTmp = ['0', num2str(blockN)];
-            else
-                strTmp = num2str(blockN);
-            end  
-            s = ['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task, '\', num2str(date), '_stim', strTmp, '.mat'];    
-            exists = exist(s,'file');            
-            if exists ~= 0
-                [pb,po,pn,pbp,pop,pnp] = probe_analysis(obs,task,num2str(date),blockN); 
-
-                pboth = horzcat(pboth,pb);
-                pone = horzcat(pone,po);
-                pnone = horzcat(pnone,pn);
-                if date == date1num 
-                    pboth_pair = pbp;
-                    pone_pair = pop;
-                    pnone_pair = pnp;
+for tmp = 1:y
+    for tmp2 = 1:m 
+        n2 = fix(str2num(date1)/100)*100+((tmp2-1)*100);
+        if tmp2~=1 && numDates > 100
+            date1num = n2;
+            date2num = date1num+31;
+        elseif tmp2==1 && numDates > 100
+            date2num = n2+31;
+        end
+        for date = date1num:date2num
+            for blockN = 0:maxBlockN
+                if blockN < 10
+                    strTmp = ['0', num2str(blockN)];
                 else
-                    pboth_pair = cat(2,pboth_pair,pbp);
-                    pone_pair = cat(2,pone_pair,pop);
-                    pnone_pair = cat(2,pnone_pair,pnp);
+                    strTmp = num2str(blockN);
+                end  
+                s = ['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task, '\', num2str(date), '_stim', strTmp, '.mat'];    
+                exists = exist(s,'file');            
+                if exists ~= 0
+                    [pb,po,pn,pbp,pop,pnp] = probe_analysis(obs,task,num2str(date),blockN); 
+
+                    pboth = horzcat(pboth,pb);
+                    pone = horzcat(pone,po);
+                    pnone = horzcat(pnone,pn);
+                    if date == date1num 
+                        pboth_pair = pbp;
+                        pone_pair = pop;
+                        pnone_pair = pnp;
+                    else
+                        pboth_pair = cat(2,pboth_pair,pbp);
+                        pone_pair = cat(2,pone_pair,pop);
+                        pnone_pair = cat(2,pnone_pair,pnp);
+                    end
                 end
             end
         end
     end
-end
-
+end   
+k
 %% Averaging across runs
 Mpb = mean(pboth,2);
 Mpo = mean(pone,2);
@@ -84,7 +98,7 @@ ylim([0 1])
 
 title([task ' search (' obs ')'],'FontSize',14)
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' num2str(maxBlockN) 'rawProbs']);
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' task '_rawProbs']);
 print ('-djpeg', '-r500',namefig);
 
 %% Transform pboth and pnone into p1 and p2
@@ -105,7 +119,7 @@ ylim([0 1])
 
 title([task ' search (' obs ')'],'FontSize',24,'FontName','Times New Roman')
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' num2str(maxBlockN) 'p1p2']);
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' task '_p1p2']);
 print ('-djpeg', '-r500',namefig);
 
 %% Averaging across runs pair by pair
@@ -139,7 +153,7 @@ for numPair = 1:size(p1,3)
     title(['PAIR n' num2str(numPair) ' (' obs ')'],'FontSize',14)   
 end
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' num2str(maxBlockN) 'p1p2PAIR']);
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' task '_p1p2PAIR']);
 print ('-djpeg', '-r500',namefig);
 
 end

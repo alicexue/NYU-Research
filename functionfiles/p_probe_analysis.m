@@ -1,4 +1,7 @@
 function p_probe_analysis(obs, task, date1, date2, maxBlockN)
+%%% This function analyzes all of the data from date1 to date2 with a block
+%%% number <= maxBlockN. 
+%%% date1 and date2 can differ in months but not years
 
 %%% Example
 %%% p_probe_analysis('ax', 'difficult', '150714', '150720', 1)
@@ -23,11 +26,11 @@ pnone_pair=[];
 date1num = str2num(date1);
 date2num = str2num(date2);
 numDates = date2num - date1num + 1;
-n = 1;
+m = 1;
 if numDates > 100
-    n = fix((date2num - date1num)/100)+1;
+    m = fix((date2num - date1num)/100)+1;
 end
-for tmp = 1:n 
+for tmp = 1:m 
     n2 = fix(str2num(date1)/100)*100+((tmp-1)*100);
     if tmp~=1 && numDates > 100
         date1num = n2;
@@ -88,7 +91,7 @@ ylim([0 1])
 
 title([task ' search (' obs ')'],'FontSize',14)
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' num2str(maxBlockN) 'rawProbs']);
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' task '_rawProbs']);
 print ('-djpeg', '-r500',namefig);
 
 %% Transform pboth and pnone into p1 and p2
@@ -109,7 +112,7 @@ ylim([0 1])
 
 title([task ' search (' obs ')'],'FontSize',24,'FontName','Times New Roman')
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' num2str(maxBlockN) 'p1p2']);
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' task '_p1p2']);
 print ('-djpeg', '-r500',namefig);
 
 %% Averaging across runs pair by pair
@@ -143,7 +146,7 @@ for numPair = 1:size(p1,3)
     title(['PAIR n' num2str(numPair) ' (' obs ')'],'FontSize',14)   
 end
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' num2str(maxBlockN) 'p1p2PAIR']);
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' task '_p1p2PAIR']);
 print ('-djpeg', '-r500',namefig);
 
 end

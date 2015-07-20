@@ -1,64 +1,65 @@
-function p_search_slope(obs, task, date, oneBlock, blockN)
+function p_search_slope(obs, task, date1, date2, maxBlockN)
 
 %%% Example
-%%% p_search_slope('ax', 'difficult', '150709', false, 5)
+%%% p_search_slope('ax', 'difficult', '150701', '150709', 7)
 
 %% Parameters
 
 %obs = 'ax';
 %task = 'difficult'
-%date = '150709';
-%oneBlock? = false;
-%blockN = 5;
+%date1 = '150701';
+%date2 = '150709';
+%maxBlockN = 7;
 
-% if oneBlock == true, then only blockN is analyzed
-% if oneBlock == false, then the blocks with a number <= blockN are analyzed
+% maxBlockN refers to the largest number block across all dates
 
 %% Obtain pboth, pone and pnone for each run and concatenate over run
-rt4_avg = zeros(1,blockN);
-rt8_avg = zeros(1,blockN);
-perf4_avg = zeros(1,blockN);
-perf8_avg = zeros(1,blockN);
-strOneBlock = 'T';
-tmp = blockN;
-numBlocks = 1;
+date1num = str2num(date1);
+date2num = str2num(date2);
+numDates = date2num - date1num + 1;
 
-if oneBlock == false
-    numBlocks = blockN;
-    strOneBlock = 'F';
-end   
-
+rt4_avg = zeros(1,numDates*2);
+rt8_avg = zeros(1,numDates*2);
+perf4_avg = zeros(1,numDates*2);
+perf8_avg = zeros(1,numDates*2);
+c = 1;
 n = 1;
-for i = 1:numBlocks
-    if oneBlock == false
-        tmp = i;
+if numDates > 100
+    n = fix((date2num - date1num)/100)+1;
+end
+for tmp = 1:n 
+    n2 = fix(str2num(date1)/100)*100+((tmp-1)*100);
+    if tmp~=1 && numDates > 100
+        date1num = n2;
+        date2num = date1num+31;
+    elseif tmp==1 && numDates > 100
+        date2num = n2+31;
     end
-    if tmp < 10
-        strTmp = ['0', num2str(tmp)];
-    else
-        strTmp = num2str(tmp);
-    end  
-    s = ['C:\Users\Alice\Documents\MATLAB\data\', obs, '\', task, '\', date, '_stim', strTmp, '.mat'];    
-    exists = exist(s,'file');
-    if oneBlock == true && exists == 0
-        errorStruct.message = 'Data file blockN not found.';
-        errorStruct.identifier = 'p_search_slope:fileNotFound'; 
-        error(errorStruct);
-    end
-    if exists ~= 0
-        [rt4,rt8,perf4,perf8] = search_slope(date,obs,tmp,task);
+    for date = date1num:date2num
+        for blockN = 0:maxBlockN
+            if blockN < 10
+                strTmp = ['0', num2str(blockN)];
+            else
+                strTmp = num2str(blockN);
+            end  
+            s = ['C:\Users\Alice\Documents\MATLAB\data\', obs, '\', task, '\', num2str(date), '_stim', strTmp, '.mat'];    
+            exists = exist(s,'file');
+            if exists ~= 0
+                [rt4,rt8,perf4,perf8] = search_slope(num2str(date),obs,blockN,task);
 
-        rt4_avg(n) = rt4;
-        rt8_avg(n) = rt8;
-        perf4_avg(n) = perf4;
-        perf8_avg(n) = perf8;
-        n = n + 1;
+                rt4_avg(c) = rt4;
+                rt8_avg(c) = rt8;
+                perf4_avg(c) = perf4;
+                perf8_avg(c) = perf8;
+                c = c + 1;
+            end
+        end
     end
 end
-rt4_avg = rt4_avg(1:n-1);
-rt8_avg = rt8_avg(1:n-1);
-perf4_avg = perf4_avg(1:n-1);
-perf8_avg = perf8_avg(1:n-1);
+rt4_avg = rt4_avg(1:c-1);
+rt8_avg = rt8_avg(1:c-1);
+perf4_avg = perf4_avg(1:c-1);
+perf8_avg = perf8_avg(1:c-1);
 
 %% Plot reaction time
 rt = [mean(rt4_avg) mean(rt8_avg)];
@@ -75,7 +76,7 @@ ylim([0 500])
 % title([obs ' ' condition],'FontSize',14)
 xlabel('set size','FontSize',25,'FontName','Times New Roman')
 ylabel('RT (ms)','FontSize',25,'FontName','Times New Roman')
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\rt\' 'rtSetSize' strOneBlock num2str(blockN)]);
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\rt\' 'rtSetSize' num2str(maxBlockN)]);
 print ('-djpeg', '-r500',namefig);
 
 %% Plot performance
@@ -94,7 +95,7 @@ set(gca,'YTick', 50:20:100,'FontSize',25,'LineWidth',2,'FontName','Times New Rom
 xlabel('set size','FontSize',25,'FontName','Times New Roman')
 ylabel('Accuracy','FontSize',25,'FontName','Times New Roman')
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\perf\' 'perfSetSize' strOneBlock num2str(blockN)]);
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\perf\' 'perfSetSize' num2str(maxBlockN)]);
 print ('-djpeg', '-r500',namefig);
 
 end

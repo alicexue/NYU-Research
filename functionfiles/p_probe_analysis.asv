@@ -23,18 +23,13 @@ pnone_pair=[];
 date1num = str2num(date1);
 date2num = str2num(date2);
 numDates = date2num - date1num + 1;
-n = 1;
+
 if numDates > 100
-    n = fix((date2num - date1num)/100)+1;
+    n = (date2num - date1num)/100;
 end
-for tmp = 1:n 
-    n2 = fix(str2num(date1)/100)*100+((tmp-1)*100);
-    if tmp~=1 && numDates > 100
-        date1num = n2;
-        date2num = date1num+31;
-    elseif tmp==1 && numDates > 100
-        date2num = n2+31;
-    end
+for tmp = 1:n
+    date1num = date1/100*100+100;
+    date2num = date2/100*100+100+
     for date = date1num:date2num
         for blockN = 0:maxBlockN
             if blockN < 10
@@ -63,6 +58,7 @@ for tmp = 1:n
         end
     end
 end
+
 %% Averaging across runs
 Mpb = mean(pboth,2);
 Mpo = mean(pone,2);

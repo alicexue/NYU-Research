@@ -1,11 +1,10 @@
-function [pb,po,pn,pbp,pop,pnp] = probe_analysis(obs,task,date,blockN)
-%% This program allows the analysis of the probe task
+function [pb,po,pn,pbp,pop,pnp,sHemi,dHemi,diag] = probe_analysis(obs,task,date,blockN)
+%% This program analyzes the probe task
 
-%%% Example
+%% Example
 %%% probe_analysis('ax', 'difficult', '150714', 1)
 
 %% Parameters
-
 % obs = 'ax';
 % task = 'difficult';
 % date = '150714';
@@ -77,10 +76,10 @@ for n = theTrials
         end       
     end   
 end
+pb = zeros(15,12);
+po = zeros(15,12);
+pn = zeros(15,12);
 
-pb = [];
-po = [];
-pn = [];
 theTrials = find(task{1}.randVars.fixBreak == 0); 
 for delays = unique(exp.randVars.delays)
         pb(delays,:) = pboth(exp.randVars.delays(theTrials)==delays);
@@ -88,10 +87,10 @@ for delays = unique(exp.randVars.delays)
         pn(delays,:) = pnone(exp.randVars.delays(theTrials)==delays);
 end
 
-pbp = [];
-pop = [];
-pnp = [];
-theTrials = find(task{1}.randVars.fixBreak == 0);
+pbp = zeros(15,2,6);
+pop = zeros(15,2,6);
+pnp = zeros(15,2,6);
+
 for delays = unique(exp.randVars.delays)
     for pair = unique(exp.randVars.probePairsLoc)
         pbp(delays,:,pair) = pboth(exp.randVars.delays(theTrials)==delays & exp.randVars.probePairsLoc(theTrials)==pair);
@@ -99,29 +98,17 @@ for delays = unique(exp.randVars.delays)
         pnp(delays,:,pair) = pnone(exp.randVars.delays(theTrials)==delays & exp.randVars.probePairsLoc(theTrials)==pair);
     end
 end
+% these contain pboth and pnone
+sHemi = cat(3,pbp(:,:,1),pbp(:,:,6)); 
+diag = cat(3,pbp(:,:,2),pbp(:,:,5));
+dHemi = cat(3,pbp(:,:,3),pbp(:,:,4));
 
-%%
-% ntrialPerCond = size(pb,2);
-% 
-% pbs = std(pb,[],2)./sqrt(ntrialPerCond);
-% pns = std(pn,[],2)./sqrt(ntrialPerCond);
-% pos = std(po,[],2)./sqrt(ntrialPerCond);
-% figure;hold on;
-% 
-% errorbar(30:30:450,mean(pb,2)*100,pbs*100,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-% errorbar(30:30:450,mean(po,2)*100,pos*100,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
-% errorbar(30:30:450,mean(pn,2)*100,pns*100,'bo-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.35 .47 .89])
-% 
-% legend('pboth','pone','pnone')
-% 
-% set(gca,'YTick',0:20:100)
-% ylabel('Percent correct','FontSize',12)
-% xlabel('Time from search array onset [ms]','FontSize',12)
-% ylim([-.2 100])
-% 
-% title([title_task ' search (' obs ')'],'FontSize',14)
+sHemi = cat(3,sHemi,pnp(:,:,1));
+diag = cat(3,diag,pnp(:,:,2));
+dHemi = cat(3,dHemi,pnp(:,:,3));
 
-% namefig=sprintf([title_task '_' obs '_' num2str(block_tocheck)]);
-% print ('-djpeg', '-r500',namefig);
+sHemi = cat(3,sHemi,pnp(:,:,6));
+diag = cat(3,diag,pnp(:,:,5));
+dHemi = cat(3,dHemi,pnp(:,:,4));
 
-
+end

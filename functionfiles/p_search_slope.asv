@@ -16,7 +16,7 @@ function p_search_slope(obs, task, date1, date2, maxBlockN)
 % maxBlockN refers to the largest number block across all dates
 
 %% Change task name to feature/conjunction
-if strcmp(task,'difficult')
+if task == 'difficult'
     condition = 'Conjunction';
 else 
     condition = 'Feature';
@@ -72,36 +72,39 @@ perf8_avg = perf8_avg(1:c-1);
 
 %% Plot reaction time
 rt = [mean(rt4_avg) mean(rt8_avg)];
-rt_sem = [std(rt4_avg)/size(rt4_avg,2) std(rt8_avg)/size(rt4_avg,2)];
+rt_std = [std(rt4_avg) std(rt8_avg)];
+
 figure;hold on;
-errorbar(4:4:8,rt*1000,rt_sem*1000,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
+errorbar(4:4:8,rt*1000,rt_std*1000,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
 
 xlim([3 9])
-set(gca,'XTick', 4:4:8,'FontSize',20,'LineWidth',2,'FontName','Times New Roman')
+set(gca,'XTick', 4:4:8,'FontSize',25,'LineWidth',2,'FontName','Times New Roman')
 ylim([0 500])
+%set(gca,'YTick', 50:10:100)
 
-title([condition ' Reaction Time (' obs ')'],'FontSize',22)
-xlabel('Set Size','FontSize',20,'FontName','Times New Roman')
-ylabel('RT (ms)','FontSize',20,'FontName','Times New Roman')
+title([condition ' Reaction Time (' obs ')'],'FontSize',14)
+xlabel('set size','FontSize',25,'FontName','Times New Roman')
+ylabel('RT (ms)','FontSize',25,'FontName','Times New Roman')
 namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\rt\' obs '_' condition '_rtSetSize']);
 print ('-djpeg', '-r500',namefig);
 
 %% Plot performance
 p = [mean(perf4_avg) mean(perf8_avg)];
-p_sem= [std(perf4_avg)/size(perf4_avg,2) std(perf8_avg)/size(perf4_avg,2)];
+p_std = [std(perf4_avg) std(perf8_avg)];
 
 figure;hold on;
-errorbar(4:4:8,p*100,p_sem*100,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
+errorbar(4:4:8,p*100,p_std*100,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
 
 xlim([3 9])
-set(gca,'XTick', 4:4:8,'FontSize',20,'LineWidth',2,'FontName','Times New Roman')
+set(gca,'XTick', 4:4:8,'FontSize',25,'LineWidth',2,'FontName','Times New Roman')
 ylim([50 100])
-set(gca,'YTick', 50:20:100,'FontSize',20,'LineWidth',2,'FontName','Times New Roman')
+set(gca,'YTick', 50:20:100,'FontSize',25,'LineWidth',2,'FontName','Times New Roman')
 
-title([condition ' Accuracy (' obs ')'],'FontSize',22)
-xlabel('Set Size','FontSize',20,'FontName','Times New Roman')
-ylabel('Accuracy','FontSize',20,'FontName','Times New Roman')
+title([condition ' Accuracy (' obs ')'],'FontSize',14)
+xlabel('set size','FontSize',25,'FontName','Times New Roman')
+ylabel('Accuracy','FontSize',25,'FontName','Times New Roman')
 
 namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\perf\' obs '_' condition '_perfSetSize']);
 print ('-djpeg', '-r500',namefig);
+
 end

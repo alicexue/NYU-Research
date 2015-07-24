@@ -1,14 +1,14 @@
-function [rt4,rt8,perf4,perf8] = search_slope(date,obs,block_tocheck,task)
+function [rt4,rt8,perf4,perf8] = search_slope(obs,task,file)
 %% Example
-% search_slope('150709','ax',5,'difficult')
+% search_slope('ax','difficult','150701_stim05.mat')
+
+%% Parameters
+% obs = 'ax';
+% task = 'difficult';
+% file = '150701_stim05.mat';
 
 %% Load data
-
-if block_tocheck < 10
-    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\' date '_stim0' num2str(block_tocheck) '.mat'])
-else
-    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\' date '_stim' num2str(block_tocheck) '.mat'])
-end
+load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\' file])
 
 %% Transform data
 exp = getTaskParameters(myscreen,task);

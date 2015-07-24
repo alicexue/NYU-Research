@@ -1,13 +1,13 @@
-function [perfDelays,rtDelays] = perf1_slope(date,obs,block_tocheck,task)
+function [perfDelays,rtDelays] = perf1_slope(obs,task,file)
 %% Example
-% perf1_slope('150722', 'ax', 1, 'easy')
+% perf1_slope('ax','difficult','150716_stim01.mat')
 
+%% Parameters
+% obs = 'ax';
+% task = 'difficult';
+% file = '150716_stim01.mat';
 %% Load data
-if block_tocheck < 10
-    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\' date '_stim0' num2str(block_tocheck) '.mat'])
-else
-    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\' date '_stim' num2str(block_tocheck) '.mat'])
-end
+load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\' file])
 
 %% Transform data
 exp = getTaskParameters(myscreen,task);
@@ -45,5 +45,4 @@ for delays = unique(exp.randVars.delays)
     a = rtime(tmp2);
     rtDelays(delays,:) = a;
 end
-
 end

@@ -26,11 +26,7 @@ for n = 1:size(files,1)
     if fileL > 4 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')
         [perfDelays,rtDelays] = perf1_slope(obs,task,filename);
         perf_avg(:,c) = perfDelays; 
-        if overallObs
-            rt_median = cat(3,rt_median,rtDelays);
-        else
-            rt_median = horzcat(rt_median,rtDelays);
-        end
+        rt_median = cat(3,rt_median,rtDelays);
         c = c + 1;
     end
 end
@@ -52,7 +48,7 @@ if overallObs == false
     set(gca,'YTick', 50:20:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
 
     title([condition ' Performance (' obs ')'],'FontSize',20)
-    xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
+    xlabel('Time from search array onset','FontSize',15,'Fontname','Ariel')
     ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
 
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_PerfDelays']);
@@ -63,8 +59,8 @@ if overallObs == false
     rt = zeros(1,15);
     rt_sem = zeros(1,15);
     for delay = 1:size(rt_median,1)
-        rt(1,delay) = median(rt_median(delay,:));
-        rt_sem(1,delay) = (std(rt_median(delay,:))/sqrt(size(rt_median,2)));
+        rt(1,delay) = median(rt_median(delay,:,:));
+        rt_sem(1,delay) = (std(rt_median(delay,:))/sqrt(size(rt_median,2)*size(rt_median,3)));
     end
 
     errorbar(40:30:460,rt*1000,rt_sem*1000,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
@@ -72,10 +68,11 @@ if overallObs == false
     ylim([0 3000])
     set(gca,'YTick', 0:500:3000,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
     title([condition ' Reaction Time (' obs ')'],'FontSize',20)
-    xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
+    xlabel('Time from search array onset','FontSize',15,'Fontname','Ariel')
     ylabel('RT [ms] ','FontSize',15,'Fontname','Ariel')  
 
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_rtDelays']);
     print ('-djpeg', '-r500',namefig);
 end
+keyboard
 end

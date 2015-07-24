@@ -1,21 +1,16 @@
-function [pb,po,pn,pbp,pop,pnp,sHemi,dHemi,diag] = probe_analysis(obs,task,date,blockN)
+function [pb,po,pn,pbp,pop,pnp,sHemi,dHemi,diag] = probe_analysis(obs,task,file)
 %% This program analyzes the probe task
 
 %% Example
-%%% probe_analysis('ax', 'difficult', '150714', 1)
+%%% probe_analysis('ax', 'difficult','150716_stim01.mat')
 
 %% Parameters
 % obs = 'ax';
 % task = 'difficult';
-% date = '150714';
-% blockN = 1;
+% file = '150716_stim01.mat';
 
 %% Load the data
-if blockN < 10
-    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\' date '_stim0' num2str(blockN) '.mat'])
-else
-    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_', task '\' date '_stim' num2str(blockN) '.mat'])
-end
+load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\' file])
 
 %% Get Probe data
 %%% Probe identity
@@ -91,6 +86,7 @@ pbp = zeros(15,2,6);
 pop = zeros(15,2,6);
 pnp = zeros(15,2,6);
 
+theTrials = find(task{1}.randVars.fixBreak == 0); 
 for delays = unique(exp.randVars.delays)
     for pair = unique(exp.randVars.probePairsLoc)
         pbp(delays,:,pair) = pboth(exp.randVars.delays(theTrials)==delays & exp.randVars.probePairsLoc(theTrials)==pair);

@@ -53,7 +53,7 @@ ylim([0 500])
 title([condition ' Reaction Time (' obs ')'],'FontSize',22)
 xlabel('Set Size','FontSize',20,'Fontname','Ariel')
 ylabel('RT [ms]','FontSize',20,'Fontname','Ariel')
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\rt\' obs '_' condition '_rtSetSize']);
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\figures\' obs '_' condition '_rtSetSize']);
 print ('-djpeg', '-r500',namefig);
 
 %% Plot performance
@@ -72,6 +72,6 @@ title([condition ' Accuracy (' obs ')'],'FontSize',22)
 xlabel('Set Size','FontSize',20,'Fontname','Ariel')
 ylabel('Accuracy','FontSize',20,'Fontname','Ariel')
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\perf\' obs '_' condition '_perfSetSize']);
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\figures\' obs '_' condition '_perfSetSize']);
 print ('-djpeg', '-r500',namefig);
 end

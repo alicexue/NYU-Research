@@ -131,8 +131,6 @@ print ('-djpeg', '-r500',namefig);
 % Mpn_pair = mean(pnone_pair,2);
 
 pair_p1 = [];
-pair_p1 = [];
-pair_p2 = [];
 pair_p2 = [];
 
 for i = 1:numObs

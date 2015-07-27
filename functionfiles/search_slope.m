@@ -19,8 +19,8 @@ exp = getTaskParameters(myscreen,task);
 size4 = exp.randVars.setsize==4;
 size8 = exp.randVars.setsize==8;
 
-rt4 = nanmean(exp.reactionTime(size4));
-rt8 = nanmean(exp.reactionTime(size8));
+rt4 = nanmedian(exp.reactionTime(size4));
+rt8 = nanmedian(exp.reactionTime(size8));
 
 % rt4_sd = nanstd(exp.reactionTime(size4))/sqrt(size(exp.reactionTime(size4),2));
 % rt8_sd = nanstd(exp.reactionTime(size8))/sqrt(size(exp.reactionTime(size8),2));

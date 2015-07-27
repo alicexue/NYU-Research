@@ -23,14 +23,16 @@ for n = 1:size(files,1)
     filename = files(n).name;
     fileL = size(filename,2);
     if fileL > 4 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')
-        [perfDelays,rtDelays] = perf1_slope(obs,task,filename);
+        [perfDelays,rtDelays] = main_slope(obs,task,filename);
         perf_avg(:,c) = perfDelays; 
-        if overallObs
-            rt_median = cat(3,rt_median,rtDelays);
+        if size(rtDelays,2) == 24
+            rt_median = cat(3,rt_median,rtDelays(:,1:12));
+            rt_median = cat(3,rt_median,rtDelays(:,13:24));
+            c = c + 2;
         else
-            rt_median = horzcat(rt_median,rtDelays);
+            rt_median = cat(3,rt_median,rtDelays);
+            c = c + 1;
         end
-        c = c + 1;
     end
 end
 perf_avg = perf_avg(:,1:c-1);

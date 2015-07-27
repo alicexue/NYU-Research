@@ -1,11 +1,12 @@
-function [perfDelays,rtDelays] = perf1_slope(obs,task,file)
+function [perfDelays,rtDelays] = main_slope(obs,task,file)
 %% Example
-% perf1_slope('ax','difficult','150716_stim01.mat')
+% main_slope('ax','difficult','150716_stim01.mat')
 
 %% Parameters
 % obs = 'ax';
 % task = 'difficult';
 % file = '150716_stim01.mat';
+
 %% Load data
 load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\' file])
 
@@ -13,9 +14,12 @@ load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\' file])
 exp = getTaskParameters(myscreen,task);
 
 %% Compute performance for each delay
-perfDelays = zeros(15,12);
+perfDelays = [];
+% perfDelays = zeros(15,12);
 for n = 1:size(exp.randVars.targetOrientation,2)
-    if (exp.randVars.targetOrientation(n) == 1 && exp.response(n) == 1) || (exp.randVars.targetOrientation(n) == 2 && exp.response(n) == 2)
+    orientation = exp.randVars.targetOrientation(n);
+    response = exp.response(n);
+    if (orientation == 1 && response == 1) || (orientation == 2 && response == 2)
         perf(n) = 1;
     else
         perf(n) = 0;
@@ -29,7 +33,9 @@ end
 perfDelays = mean(perfDelays,2); 
 
 %% Compute rt for each delay
-rtDelays = zeros(15,12);
+rtDelays = [];
+%rtDelays = zeros(15,12);
+
 for n = 1:size(exp.reactionTime,2)
     rt(n) = exp.reactionTime(:,n);
 end

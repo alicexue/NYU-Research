@@ -26,9 +26,12 @@ expProbe = task{1}.probeTask;
 theTrials = find(task{1}.randVars.fixBreak == 0);
 
 %% Revert the order of the list
-pboth = zeros(1,12);
-pnone = zeros(1,12);
-pone = zeros(1,12);
+% pboth = zeros(1,12);
+% pnone = zeros(1,12);
+% pone = zeros(1,12);
+pboth = [];
+pnone = [];
+pone = [];
 for n = theTrials
     if ~isempty(expProbe.probeResponse1{n})
         idx1 = find(positions == expProbe.probeResponse1{n});
@@ -44,21 +47,23 @@ for n = theTrials
         selected_idx2 = expProbe.list{n}==idx2;
         reported1 = identity(selected_idx1,:);
         reported2 = identity(selected_idx2,:);
+        presented1 = expProbe.probePresented1{n};
+        presented2 = expProbe.probePresented2{n};
         
         cor1 = 0;
         cor2 = 0;
-        if (reported1(1)==expProbe.probePresented1{n}(1))&&((reported1(2)==expProbe.probePresented1{n}(2)))...
-                || (reported1(1)==expProbe.probePresented2{n}(1))&&((reported1(2)==expProbe.probePresented2{n}(2)))
+        if (reported1(1)==presented1(1))&&((reported1(2)==presented1(2)))...
+                || (reported1(1)==presented2(1))&&((reported1(2)==presented2(2)))
             cor1 = 1;
-        elseif (reported2(1)==expProbe.probePresented1{n}(1))&&((reported2(2)==expProbe.probePresented1{n}(2)))...
-                || (reported2(1)==expProbe.probePresented2{n}(1))&&((reported2(2)==expProbe.probePresented2{n}(2)))
+        elseif (reported2(1)==presented1(1))&&((reported2(2)==presented1(2)))...
+                || (reported2(1)==presented2(1))&&((reported2(2)==presented2(2)))
             cor2 = 1;
         else
             cor1 = 0;
             cor2 = 0;
         end
-        if (reported2(1)==expProbe.probePresented1{n}(1))&&((reported2(2)==expProbe.probePresented1{n}(2)))...
-                || (reported2(1)==expProbe.probePresented2{n}(1))&&((reported2(2)==expProbe.probePresented2{n}(2)))
+        if (reported2(1)==presented1(1))&&((reported2(2)==presented1(2)))...
+                || (reported2(1)==presented2(1))&&((reported2(2)==presented2(2)))
             cor2 = 1;
         end
         
@@ -71,27 +76,36 @@ for n = theTrials
         end       
     end   
 end
-pb = zeros(15,12);
-po = zeros(15,12);
-pn = zeros(15,12);
+pb = [];
+po = [];
+pn = [];
+% pb = zeros(15,12);
+% po = zeros(15,12);
+% pn = zeros(15,12);
 
-theTrials = find(task{1}.randVars.fixBreak == 0); 
+theTrials = task{1}.randVars.fixBreak == 0; 
 for delays = unique(exp.randVars.delays)
-        pb(delays,:) = pboth(exp.randVars.delays(theTrials)==delays);
-        po(delays,:) = pone(exp.randVars.delays(theTrials)==delays);
-        pn(delays,:) = pnone(exp.randVars.delays(theTrials)==delays);
+    delayTrials = exp.randVars.delays(theTrials)==delays;
+    pb(delays,:) = pboth(delayTrials);
+    po(delays,:) = pone(delayTrials);
+    pn(delays,:) = pnone(delayTrials);
 end
 
-pbp = zeros(15,2,6);
-pop = zeros(15,2,6);
-pnp = zeros(15,2,6);
+pbp = [];
+pop = [];
+pnp = [];
+% pbp = zeros(15,2,6);
+% pop = zeros(15,2,6);
+% pnp = zeros(15,2,6);
 
 theTrials = find(task{1}.randVars.fixBreak == 0); 
 for delays = unique(exp.randVars.delays)
     for pair = unique(exp.randVars.probePairsLoc)
-        pbp(delays,:,pair) = pboth(exp.randVars.delays(theTrials)==delays & exp.randVars.probePairsLoc(theTrials)==pair);
-        pop(delays,:,pair) = pone(exp.randVars.delays(theTrials)==delays & exp.randVars.probePairsLoc(theTrials)==pair);
-        pnp(delays,:,pair) = pnone(exp.randVars.delays(theTrials)==delays & exp.randVars.probePairsLoc(theTrials)==pair);
+        delaysTrials = exp.randVars.delays(theTrials)==delays;
+        pairTrials = exp.randVars.probePairsLoc(theTrials)==pair;
+        pbp(delays,:,pair) = pboth(delaysTrials & pairTrials);
+        pop(delays,:,pair) = pone(delaysTrials & pairTrials);
+        pnp(delays,:,pair) = pnone(delaysTrials & pairTrials);
     end
 end
 % these contain pboth and pnone

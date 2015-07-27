@@ -1,6 +1,6 @@
 function [pb,po,pn,pbp,pop,pnp,pbSH,pbDH,pbD,pnSH,pnDH,pnD] = p_probe_analysis(obs, task, overallObs)
 %% Example
-%%% p_probe_analysis('ax', 'difficult')
+%%% p_probe_analysis('ax', 'difficult',false)
 
 %% Parameters
 % obs = 'ax';

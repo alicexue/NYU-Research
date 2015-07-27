@@ -1,6 +1,6 @@
 function [rt4_avg,rt8_avg,perf4_avg,perf8_avg] = p_search_slope(obs,task)
 %% Example
-%%% p_search_slope('ax', 'difficult',false)
+%%% p_search_slope('ax', 'difficult')
 
 %% Parameters
 % obs = 'ax';

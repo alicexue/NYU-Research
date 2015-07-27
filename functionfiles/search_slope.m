@@ -27,7 +27,9 @@ rt8 = nanmean(exp.reactionTime(size8));
 
 %% Compute performance according to the set size
 for n = 1:size(exp.randVars.targetOrientation,2)
-    if (exp.randVars.targetOrientation(n) == 1 && exp.response(n) == 1) || (exp.randVars.targetOrientation(n) == 2 && exp.response(n) == 2)
+    orientation = exp.randVars.targetOrientation(n);
+    response = exp.response(n);
+    if (orientation == 1 && response == 1) || (orientation == 2 && response == 2)
         perf(n) = 1;
     else
         perf(n) = 0;

@@ -4,7 +4,7 @@ function [rt4,rt8,perf4_avg,perf8_avg] = p_search_slope(obs,task)
 
 %% Parameters
 % obs = 'ax';
-% task = 'difficult'
+% task = 'difficult';
 
 %% Change task name to feature/conjunction
 if strcmp(task,'difficult')
@@ -14,10 +14,10 @@ else
 end
 
 %% Obtain pboth, pone and pnone for each run and concatenate over run
-rt4 = zeros(1,500);
-rt8 = zeros(1,500);
-perf4_avg = zeros(1,500);
-perf8_avg = zeros(1,500);
+rt4 = zeros(1,1000);
+rt8 = zeros(1,1000);
+perf4_avg = zeros(1,1000);
+perf8_avg = zeros(1,1000);
 c = 1;
 
 files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\', task]);  
@@ -39,11 +39,10 @@ rt8 = rt8(1:c-1);
 perf4_avg = perf4_avg(1:c-1);
 perf8_avg = perf8_avg(1:c-1);
 
-
 %% Plot reaction time
 rt_median = [median(rt4) median(rt8)];
-rt_avg = [mean(rt4) mean(rt8)];
-rt_sem = [std(rt_avg)/size(rt_avg,2) std(rt_avg)/size(rt_avg,2)];
+rt_sem = [std(rt4)/size(rt4,2) std(rt8)/size(rt4,2)];
+
 figure;hold on;
 errorbar(4:4:8,rt_median*1000,rt_sem*1000,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
 
@@ -59,8 +58,7 @@ print ('-djpeg', '-r500',namefig);
 
 %% Plot performance
 p = [mean(perf4_avg) mean(perf8_avg)];
-p_sem= [std(perf4_avg)/size(perf4_avg,2) std(perf8_avg)/size(perf4_avg,2)];
-
+p_sem = [std(perf4_avg)/size(perf4_avg,2) std(perf8_avg)/size(perf8_avg,2)];
 figure;hold on;
 errorbar(4:4:8,p*100,p_sem*100,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
 

@@ -41,7 +41,7 @@ files = dir('C:\Users\Alice\Documents\MATLAB\data');
 for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
-    if fileL == 2 && ~strcmp(obs(1,1),'.')
+    if fileL == 2 || fileL == 3 && ~strcmp(obs(1,1),'.')
         [pb,po,pn,pbp,pop,pnp,pbSH,pbDH,pbD,pnSH,pnDH,pnD] = p_probe_analysis(obs,task,true);              
         
         pboth = cat(3,pboth,pb);

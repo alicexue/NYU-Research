@@ -109,7 +109,6 @@ for delays = unique(exp.randVars.delays)
         pnp(delays,:,pair) = pnone(delaysTrials & pairTrials);
     end
 end
-keyboard
 % these contain pboth and pnone
 sHemi = cat(3,pbp(:,:,1),pbp(:,:,6)); 
 diag = cat(3,pbp(:,:,2),pbp(:,:,5));

@@ -14,7 +14,7 @@ else
 end
 
 %% Obtain perf for each run and concatenate over each run
-perf_avg = zeros(15,500);
+perf_avg = zeros(15,1000);
 rt_median = [];
 c = 1;
 
@@ -25,14 +25,8 @@ for n = 1:size(files,1)
     if fileL > 4 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')
         [perfDelays,rtDelays] = main_slope(obs,task,filename);
         perf_avg(:,c) = perfDelays; 
-        if size(rtDelays,2) == 24
-            rt_median = cat(3,rt_median,rtDelays(:,1:12));
-            rt_median = cat(3,rt_median,rtDelays(:,13:24));
-            c = c + 2;
-        else
-            rt_median = cat(3,rt_median,rtDelays);
-            c = c + 1;
-        end
+        rt_median = horzcat(rt_median,rtDelays);
+        c = c + 1;
     end
 end
 perf_avg = perf_avg(:,1:c-1);
@@ -64,8 +58,8 @@ rt = zeros(1,15);
 rt_sem = zeros(1,15);
 for delay = 1:size(rt_median,1)
     rt(1,delay) = median(rt_median(delay,:));
-    rt_sem(1,delay) = (std(rt_median(delay,:))/sqrt(size(rt_median,2)));
 end
+rt_sem(1,delay) = (std(rt)/sqrt(size(rt_median,2)));
 
 errorbar(40:30:460,rt*1000,rt_sem*1000,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 

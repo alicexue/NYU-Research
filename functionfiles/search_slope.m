@@ -26,6 +26,7 @@ rt8 = nanmedian(exp.reactionTime(size8));
 % rt8_sd = nanstd(exp.reactionTime(size8))/sqrt(size(exp.reactionTime(size8),2));
 
 %% Compute performance according to the set size
+perf = zeros(1,size(size4,2));
 for n = 1:size(exp.randVars.targetOrientation,2)
     orientation = exp.randVars.targetOrientation(n);
     response = exp.response(n);
@@ -38,5 +39,4 @@ end
 
 perf4 = mean(perf(size4));
 perf8 = mean(perf(size8));
-
 end

@@ -1,11 +1,11 @@
-function [pb,po,pn,pbp,pop,pnp,pbSH,pbDH,pbD,pnSH,pnDH,pnD] = p_probe_analysis(obs, task, overallObs)
+function [pb,po,pn,pbp,pop,pnp,pbSH,pbDH,pbD,pnSH,pnDH,pnD] = p_probe_analysis(obs, task, multipleObs)
 %% Example
 %%% p_probe_analysis('ax', 'difficult',false)
 
 %% Parameters
 % obs = 'ax';
 % task = 'difficult'
-% overallObs = false;
+% multipleObs = false;
 
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
@@ -52,7 +52,7 @@ for i = 1:size(files,1)
     end
 end
 
-if overallObs == false 
+if multipleObs == false 
     %% Averaging across runs
     Mpb = mean(pb,2);
     Mpo = mean(po,2);
@@ -115,7 +115,7 @@ if overallObs == false
         plot(40:30:460,p1(:,:,numPair),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
         plot(40:30:460,p2(:,:,numPair),'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
 
-        legend('p1','p2')
+        legend('p1','p2','Location','SouthEast')
 
         set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
@@ -164,7 +164,7 @@ if overallObs == false
         plot(40:30:460,p1(:,:),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
         plot(40:30:460,p2(:,:),'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])   
 
-        legend('p1','p2')
+        legend('p1','p2','Location','SouthEast')
 
         set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')

@@ -1,16 +1,21 @@
 function [rt4,rt8,perf4_avg,perf8_avg] = p_search_slope(obs,task)
 %% Example
-%%% p_search_slope('ax', 'difficult')
+%%% p_search_slope('ax', 'difficult');
 
 %% Parameters
 % obs = 'ax';
 % task = 'difficult';
 
+% Note: to assess performance of different files, put the stim files in a new
+% folder with the name of the task plus some character and enter the folder
+% name as the task parameter in this function
+% make sure the folder has a 'figures' folder
+
 %% Change task name to feature/conjunction
-if strcmp(task,'difficult')
-    condition = 'Conjunction';
-else 
+if strcmp(task(1:4),'easy')
     condition = 'Feature';
+else
+    condition = 'Conjunction';
 end
 
 %% Obtain pboth, pone and pnone for each run and concatenate over run
@@ -48,7 +53,7 @@ errorbar(4:4:8,rt_median*1000,rt_sem*1000,'-o','LineWidth',2,'MarkerFaceColor',[
 
 xlim([3 9])
 set(gca,'XTick',4:4:8,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
-ylim([0 500])
+ylim([0 300])
 
 title([condition ' Reaction Time (' obs ')'],'FontSize',22)
 xlabel('Set Size','FontSize',20,'Fontname','Ariel')

@@ -12,7 +12,6 @@ load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\' file])
 
 %% Transform data
 exp = getTaskParameters(myscreen,task);
-theTrials = find(task{1}.randVars.fixBreak == 0);
 
 %% Compute performance for each delay
 perf = zeros(1,600);
@@ -27,7 +26,7 @@ for n = 1:size(exp.randVars.targetOrientation,2)
     end
 end
 perf = perf(1,1:n);
-
+theTrials = find(task{1}.randVars.fixBreak == 0);
 for delays = unique(exp.randVars.delays)
     perfDelays(delays,:) = perf(exp.randVars.delays(theTrials)==delays);
 end
@@ -35,18 +34,20 @@ perfDelays = mean(perfDelays,2);
 
 %% Compute rt for each delay
 rt = zeros(1,600);
+rtime = zeros(1,600);
 rtDelays = zeros(13,24);
 
 rtTmp = exp.reactionTime;
 rtIndices = find(~isnan(rtTmp));
 
 for n = 1:size(rtIndices,2)
-    rt(n) = rtTmp(rtIndices(n));
+    rt2(n) = rtTmp(rtIndices(n));
 end
+rt 
 
 for delays = unique(exp.randVars.delays) 
     tmp2 = exp.randVars.delays(theTrials)==delays;
-    a = rt(tmp2);
+    a = rtime(tmp2);
     rtDelays(delays,:) = a;
 end
 end

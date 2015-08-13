@@ -1,6 +1,6 @@
 function [rt4,rt8,perf4,perf8] = search_slope(obs,task,file)
 %% Example
-% search_slope('ax','difficult','150701_stim05.mat')
+% search_slope('ax','difficult','150701_stim05.mat');
 
 %% Parameters
 % obs = 'ax';

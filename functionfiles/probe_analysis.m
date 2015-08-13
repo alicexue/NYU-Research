@@ -1,8 +1,8 @@
-function [pb,po,pn,pbp,pop,pnp,sHemi,dHemi,diag] = probe_analysis(obs,task,file)
+function [pb,po,pn,pbp,pop,pnp] = probe_analysis(obs,task,file)
 %% This program analyzes the probe task
 
 %% Example
-%%% probe_analysis('ax', 'difficult','150716_stim01.mat')
+%%% probe_analysis('ax', 'difficult','150716_stim01.mat');
 
 %% Parameters
 % obs = 'ax';
@@ -29,6 +29,7 @@ theTrials = find(task{1}.randVars.fixBreak == 0);
 pboth = zeros(1,500);
 pnone = zeros(1,500);
 pone = zeros(1,500);
+
 for n = theTrials
     if ~isempty(expProbe.probeResponse1{n})
         idx1 = find(positions == expProbe.probeResponse1{n});
@@ -77,12 +78,9 @@ pboth = pboth(1,1:n);
 pnone = pnone(1,1:n);
 pone = pone(1,1:n);
 
-pb = [];
-po = [];
-pn = [];
-% pb = zeros(15,12);
-% po = zeros(15,12);
-% pn = zeros(15,12);
+pb = zeros(13,24);
+po = zeros(13,24);
+pn = zeros(13,24);
 
 theTrials = task{1}.randVars.fixBreak == 0; 
 for delays = unique(exp.randVars.delays)
@@ -92,12 +90,9 @@ for delays = unique(exp.randVars.delays)
     pn(delays,:) = pnone(delayTrials);
 end
 
-pbp = [];
-pop = [];
-pnp = [];
-% pbp = zeros(15,2,6);
-% pop = zeros(15,2,6);
-% pnp = zeros(15,2,6);
+pbp = zeros(13,2,12);
+pop = zeros(13,2,12);
+pnp = zeros(13,2,12);
 
 theTrials = find(task{1}.randVars.fixBreak == 0); 
 for delays = unique(exp.randVars.delays)
@@ -109,18 +104,4 @@ for delays = unique(exp.randVars.delays)
         pnp(delays,:,pair) = pnone(delaysTrials & pairTrials);
     end
 end
-keyboard
-% these contain pboth and pnone
-sHemi = cat(3,pbp(:,:,1),pbp(:,:,6)); 
-diag = cat(3,pbp(:,:,2),pbp(:,:,5));
-dHemi = cat(3,pbp(:,:,3),pbp(:,:,4));
-
-sHemi = cat(3,sHemi,pnp(:,:,1));
-diag = cat(3,diag,pnp(:,:,2));
-dHemi = cat(3,dHemi,pnp(:,:,3));
-
-sHemi = cat(3,sHemi,pnp(:,:,6));
-diag = cat(3,diag,pnp(:,:,5));
-dHemi = cat(3,dHemi,pnp(:,:,4));
-
 end

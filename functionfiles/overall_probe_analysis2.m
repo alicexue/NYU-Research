@@ -198,6 +198,7 @@ for numPair = 1:size(pair_p1,3)/2
     set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
     set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
     ylim([0 1])
+    xlim([0 500])
 
     if numPair == 1 || numPair == 4
         ylabel('Percent correct','FontSize',16,'Fontname','Ariel')
@@ -253,6 +254,7 @@ for i = 1:6
     set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
 
     ylim([0 1])
+    xlim([0 500])
 
     if i == 1           
         title('Same Hemifield','FontSize',14,'Fontname','Ariel')  
@@ -262,7 +264,7 @@ for i = 1:6
     elseif i == 3
         title('Square Diagonals','FontSize',14,'Fontname','Ariel')
     else
-        title(['Diamond Diagonals' num2str(i-3)],'FontSize',14,'Fontname','Ariel')
+        title(['Diamond Diagonals' num2str(i)],'FontSize',14,'Fontname','Ariel')
     end     
 
     if i == 4

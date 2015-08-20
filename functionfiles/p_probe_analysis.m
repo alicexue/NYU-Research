@@ -1,4 +1,4 @@
-function [pb,po,pn,pbp,pop,pnp,SH,DH,di,di1,di2,di3] = p_probe_analysis(obs, task, multipleObs)
+function [pb,po,pn,pbp,pop,pnp,SH,DH,di,si1,si2,dDi] = p_probe_analysis(obs, task, multipleObs)
 %% Example
 %%% p_probe_analysis('ax','difficult',false);
 
@@ -26,15 +26,15 @@ pnp=[];
 pbSH=[];
 pbDH=[];
 pbDg=[];
-pbDDg1=[];
-pbDDg2=[];
+pbDSi1=[];
+pbDSi2=[];
 pbDDg3=[];
 
 pnSH=[];
 pnDH=[];
 pnDg=[];
-pnDDg1=[];
-pnDDg2=[];
+pnDSi1=[];
+pnDSi2=[];
 pnDDg3=[];
 
 files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task]);  
@@ -55,15 +55,15 @@ for i = 1:size(files,1)
         pbSH = horzcat(pbSH,(cat(3,bp(:,:,1),bp(:,:,6)))); 
         pbDH = horzcat(pbDH,(cat(3,bp(:,:,2),bp(:,:,5))));
         pbDg = horzcat(pbDg,(cat(3,bp(:,:,3),bp(:,:,4))));
-        pbDDg1 = horzcat(pbDDg1,(cat(3,bp(:,:,9),bp(:,:,10))));
-        pbDDg2 = horzcat(pbDDg2,(cat(3,bp(:,:,8),bp(:,:,11))));
+        pbDSi1 = horzcat(pbDSi1,(cat(3,bp(:,:,9),bp(:,:,10))));
+        pbDSi2 = horzcat(pbDSi2,(cat(3,bp(:,:,8),bp(:,:,11))));
         pbDDg3 = horzcat(pbDDg3,(cat(3,bp(:,:,7),bp(:,:,12))));
         
         pnSH = horzcat(pnSH,(cat(3,np(:,:,1),np(:,:,6)))); 
         pnDH = horzcat(pnDH,(cat(3,np(:,:,2),np(:,:,5))));
         pnDg = horzcat(pnDg,(cat(3,np(:,:,3),np(:,:,4))));
-        pnDDg1 = horzcat(pnDDg1,(cat(3,np(:,:,9),np(:,:,10))));
-        pnDDg2 = horzcat(pnDDg2,(cat(3,np(:,:,8),np(:,:,11))));
+        pnDSi1 = horzcat(pnDSi1,(cat(3,np(:,:,9),np(:,:,10))));
+        pnDSi2 = horzcat(pnDSi2,(cat(3,np(:,:,8),np(:,:,11))));
         pnDDg3 = horzcat(pnDDg3,(cat(3,np(:,:,7),np(:,:,12))));
     end
 end
@@ -75,10 +75,10 @@ pbMdHemi = mean(mean(pbDH,2),3);
 pnMdHemi = mean(mean(pnDH,2),3);
 pbMsDiag = mean(mean(pbDg,2),3);
 pnMsDiag = mean(mean(pnDg,2),3);
-pbMdDiag1 = mean(mean(pbDDg1,2),3);
-pnMdDiag1 = mean(mean(pnDDg1,2),3);
-pbMdDiag2 = mean(mean(pbDDg2,2),3);
-pnMdDiag2 = mean(mean(pnDDg2,2),3);
+pbMdSide1 = mean(mean(pbDSi1,2),3);
+pnMdSide1 = mean(mean(pnDSi1,2),3);
+pbMdSide2 = mean(mean(pbDSi2,2),3);
+pnMdSide2 = mean(mean(pnDSi2,2),3);
 pbMdDiag3 = mean(mean(pbDDg3,2),3);
 pnMdDiag3 = mean(mean(pnDDg3,2),3);  
 
@@ -116,7 +116,7 @@ if multipleObs == false
     figure;hold on;
     plot(100:30:460,p1,'ro-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.96 .37 .15])
     plot(100:30:460,p2,'go-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.13 .7 .15])
-
+    
     legend('p1','p2','Location','SouthEast')
 
     set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -151,11 +151,12 @@ if multipleObs == false
         set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
         ylim([0 1])
+        xlim([0 500])
         
         if numPair == 1 || numPair == 4
             ylabel('Percent correct','FontSize',16,'Fontname','Ariel')
         end
-        if numPair == 4
+        if numPair == 5
             xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
         end
 
@@ -177,11 +178,12 @@ if multipleObs == false
         set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
         ylim([0 1])
+        xlim([0 500])
         
         if numPair == 1 || numPair == 4
             ylabel('Percent correct','FontSize',16,'Fontname','Ariel')
         end
-        if numPair == 4
+        if numPair == 5
             xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
         end
 
@@ -191,23 +193,17 @@ if multipleObs == false
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2PAIR2']);
     print ('-djpeg', '-r500',namefig);     
 
-    %% Graph same/different hemifields and diagonals
+    %% Graph same/different hemifields and diagonals for square configuration
     figure; hold on;
-    for i = 1:6
+    for i = 1:3
         if i == 1
             [p1,p2] = quadratic_analysis(pbMsHemi, pnMsHemi);
         elseif i == 2
             [p1,p2] = quadratic_analysis(pbMdHemi, pnMdHemi);
         elseif i == 3
             [p1,p2] = quadratic_analysis(pbMsDiag, pnMsDiag);
-        elseif i == 4
-            [p1,p2] = quadratic_analysis(pbMdDiag1, pnMdDiag1);            
-        elseif i == 5
-            [p1,p2] = quadratic_analysis(pbMdDiag2, pnMdDiag2);
-        else
-            [p1,p2] = quadratic_analysis(pbMdDiag3, pnMdDiag3);
         end    
-        subplot(2,3,i)
+        subplot(1,3,i)
         hold on;
         plot(100:30:460,p1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
         plot(100:30:460,p2,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])   
@@ -218,33 +214,62 @@ if multipleObs == false
         set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
 
         ylim([0 1])
+        xlim([0 500])
         
         if i == 1           
-            title(['Same Hemifield (' obs ')'],'FontSize',14,'Fontname','Ariel')  
+            title('Same Hemifield','FontSize',14,'Fontname','Ariel')  
             ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
         elseif i == 2
-            title(['Different Hemifield (' obs ')'],'FontSize',14,'Fontname','Ariel')           
+            title('Different Hemifield','FontSize',14,'Fontname','Ariel')           
+            xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
         elseif i == 3
             title(['Square Diagonals (' obs ')'],'FontSize',14,'Fontname','Ariel')
-        else
-            title(['Diamond Diagonals' num2str(i-3) ' (' obs ')'],'FontSize',14,'Fontname','Ariel')
         end     
-        
-        if i == 4
-            ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
-            xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
-        end
-        
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2HemiDiag']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2HemiDiagS']);
+    print ('-djpeg', '-r500',namefig);
+    %% Graph same/different hemifields and diagonals
+    figure; hold on;
+    for i = 1:3
+        if i == 1
+            [p1,p2] = quadratic_analysis(pbMdSide1, pnMdSide1);            
+        elseif i == 2
+            [p1,p2] = quadratic_analysis(pbMdSide2, pnMdSide2);
+        else
+            [p1,p2] = quadratic_analysis(pbMdDiag3, pnMdDiag3);
+        end
+        subplot(1,3,i)
+        hold on;
+        plot(100:30:460,p1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
+        plot(100:30:460,p2,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])   
+
+        legend('p1','p2','Location','SouthEast')
+
+        set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+        set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+
+        ylim([0 1])
+        xlim([0 500])
+        
+        if i == 1 
+            title(['Diamond Sides n' num2str(i)],'FontSize',14,'Fontname','Ariel')
+            ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
+        elseif i == 2
+            title(['Diamond Sides n' num2str(i)],'FontSize',14,'Fontname','Ariel')
+            xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
+        else 
+            title(['Diamond Diags (' obs ')'],'FontSize',14,'Fontname','Ariel')
+        end 
+    end
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2HemiDiagD']);
     print ('-djpeg', '-r500',namefig);
 end
-
+    
 SH = horzcat(pbMsHemi,pnMsHemi);
 DH = horzcat(pbMdHemi,pnMdHemi);
 di = horzcat(pbMsDiag,pnMsDiag);
-di1 = horzcat(pbMdDiag1,pnMdDiag1);
-di2 = horzcat(pbMdDiag2,pnMdDiag2);
-di3 = horzcat(pbMdDiag3,pnMdDiag3);
+si1 = horzcat(pbMdSide1,pnMdSide1);
+si2 = horzcat(pbMdSide2,pnMdSide2);
+dDi = horzcat(pbMdDiag3,pnMdDiag3);
 end
 

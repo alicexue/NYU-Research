@@ -25,16 +25,16 @@ pnone_pair=[];
 pbSH=[];
 pbDH=[];
 pbDg=[];
-pbDDg1=[];
-pbDDg2=[];
-pbDDg3=[];
+pbDSi1=[];
+pbDSi2=[];
+pbDDg=[];
 
 pnSH=[];
 pnDH=[];
 pnDg=[];
-pnDDg1=[];
-pnDDg2=[];
-pnDDg3=[];
+pnDSi1=[];
+pnDSi2=[];
+pnDDg=[];
 
 numObs = 0;
 
@@ -43,7 +43,7 @@ for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
     if fileL == 2 || fileL == 3 && ~strcmp(obs(1,1),'.')
-        [pb,po,pn,pbp,pop,pnp,SH,DH,di,di1,di2,di3] = p_probe_analysis(obs,task,true);              
+        [pb,po,pn,pbp,pop,pnp,SH,DH,di,si1,si2,diD] = p_probe_analysis(obs,task,true);              
         
         pboth = horzcat(pboth,pb);
         pone = horzcat(pone,po);
@@ -56,15 +56,15 @@ for n = 1:size(files,1)
         pbSH = horzcat(pbSH,SH(:,1)); 
         pbDH = horzcat(pbDH,DH(:,1));
         pbDg = horzcat(pbDg,di(:,1));
-        pbDDg1 = horzcat(pbDDg1,di1(:,1));
-        pbDDg2 = horzcat(pbDDg2,di2(:,1));        
-        pbDDg3 = horzcat(pbDDg3,di3(:,1));        
+        pbDSi1 = horzcat(pbDSi1,si1(:,1));
+        pbDSi2 = horzcat(pbDSi2,si2(:,1));        
+        pbDDg = horzcat(pbDDg,diD(:,1));        
         pnSH = horzcat(pnSH,SH(:,2));
         pnDH = horzcat(pnDH,DH(:,2));
         pnDg = horzcat(pnDg,di(:,2));   
-        pnDDg1 = horzcat(pnDDg1,di1(:,2));   
-        pnDDg2 = horzcat(pnDDg2,di2(:,2));   
-        pnDDg3 = horzcat(pnDDg3,di3(:,2));  
+        pnDSi1 = horzcat(pnDSi1,si1(:,2));   
+        pnDSi2 = horzcat(pnDSi2,si2(:,2));   
+        pnDDg = horzcat(pnDDg,diD(:,2));  
         
         numObs = numObs + 1;
     end
@@ -110,6 +110,7 @@ set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
 ylabel('Probe report probabilities','FontSize',20,'Fontname','Ariel')
 xlabel('Time from discrimination task onset [ms]','FontSize',20,'Fontname','Ariel')
 ylim([0 1])
+xlim([0 500])
 
 title([condition ' Search'],'FontSize',24,'Fontname','Ariel')
 
@@ -140,7 +141,7 @@ for numPair = 1:size(Mpb_pair,3)/2
     if numPair == 1 || numPair == 4
         ylabel('Percent correct','FontSize',16,'Fontname','Ariel')
     end
-    if numPair == 4
+    if numPair == 5
         xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
     end
 
@@ -162,11 +163,12 @@ for numPair = 1:size(Mpb_pair,3)/2
     set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
     set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
     ylim([0 1])
+    xlim([0 500])
 
     if numPair == 1 || numPair == 4
         ylabel('Percent correct','FontSize',16,'Fontname','Ariel')
     end
-    if numPair == 4
+    if numPair == 5
         xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
     end
 
@@ -183,30 +185,24 @@ MpbDH = mean(mean(pbDH,2),3);
 MpnDH = mean(mean(pnDH,2),3);
 MpbDg = mean(mean(pbDg,2),3);
 MpnDg = mean(mean(pnDg,2),3);
-MpbDg1 = mean(mean(pbDDg1,2),3);
-MpnDg1 = mean(mean(pnDDg1,2),3);
-MpbDg2 = mean(mean(pbDDg2,2),3);
-MpnDg2 = mean(mean(pnDDg2,2),3);
-MpbDg3 = mean(mean(pbDDg3,2),3);
-MpnDg3 = mean(mean(pnDDg3,2),3);       
+MpbDg1 = mean(mean(pbDSi1,2),3);
+MpnDg1 = mean(mean(pnDSi1,2),3);
+MpbDg2 = mean(mean(pbDSi2,2),3);
+MpnDg2 = mean(mean(pnDSi2,2),3);
+MpbDg3 = mean(mean(pbDDg,2),3);
+MpnDg3 = mean(mean(pnDDg,2),3);       
 
-%% Graph same/different hemifields and diagonals
+%% Graph same/different hemifields and diagonals for square configuration
 figure; hold on;
-for i = 1:6
+for i = 1:3
     if i == 1
         [p1,p2] = quadratic_analysis(MpbSH, MpnSH);
     elseif i == 2
         [p1,p2] = quadratic_analysis(MpbDH, MpnDH);
     elseif i == 3
         [p1,p2] = quadratic_analysis(MpbDg, MpnDg);
-    elseif i == 4
-        [p1,p2] = quadratic_analysis(MpbDg1, MpnDg1);            
-    elseif i == 5
-        [p1,p2] = quadratic_analysis(MpbDg2, MpnDg2);
-    else
-        [p1,p2] = quadratic_analysis(MpbDg3, MpnDg3);
     end    
-    subplot(2,3,i)
+    subplot(1,3,i)
     hold on;
     plot(100:30:460,p1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
     plot(100:30:460,p2,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])   
@@ -217,25 +213,54 @@ for i = 1:6
     set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
 
     ylim([0 1])
+    xlim([0 500])
 
     if i == 1           
         title('Same Hemifield','FontSize',14,'Fontname','Ariel')  
         ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
     elseif i == 2
-        title('Different Hemifield','FontSize',14,'Fontname','Ariel')           
+        title('Different Hemifield','FontSize',14,'Fontname','Ariel')  
+        xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
     elseif i == 3
         title('Square Diagonals','FontSize',14,'Fontname','Ariel')
-    else
-        title(['Diamond Diagonals' num2str(i-3)],'FontSize',14,'Fontname','Ariel')
-    end     
+    end    
+end
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' condition '_p1p2HemiDiagS']);
+print ('-djpeg', '-r500',namefig);
 
-    if i == 4
+%% Graph same/different hemifields and diagonals for diamond configuration
+figure; hold on;
+for i = 1:3
+    if i == 1
+        [p1,p2] = quadratic_analysis(MpbDg1, MpnDg1);            
+    elseif i == 2
+        [p1,p2] = quadratic_analysis(MpbDg2, MpnDg2);
+    elseif i == 3
+        [p1,p2] = quadratic_analysis(MpbDg3, MpnDg3);
+    end    
+    subplot(1,3,i)
+    hold on;
+    plot(100:30:460,p1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
+    plot(100:30:460,p2,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])   
+
+    legend('p1','p2','Location','SouthEast')
+
+    set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+    set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+
+    ylim([0 1])
+    xlim([0 500])
+
+    title(['Diamond Diagonals n' num2str(i)],'FontSize',14,'Fontname','Ariel')
+
+    if i == 1
         ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
+    elseif i == 2
         xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
     end
 
 end
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' condition '_p1p2HemiDiag']);
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' condition '_p1p2HemiDiagD']);
 print ('-djpeg', '-r500',namefig);
 end
 

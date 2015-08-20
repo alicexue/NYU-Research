@@ -18,7 +18,7 @@ perf_avg = zeros(13,10000);
 rt_median = [];
 c = 1;
 
-files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task]);  
+files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task]);    
 for n = 1:size(files,1)
     filename = files(n).name;
     fileL = size(filename,2);

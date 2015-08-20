@@ -26,35 +26,41 @@ rt8 = nanmedian(exp.reactionTime(size8));
 % rt8_sd = nanstd(exp.reactionTime(size8))/sqrt(size(exp.reactionTime(size8),2));
 
 %% Compute performance according to the set size
+perf = zeros(1,size(size4,2));
 noFixBreakIndices = find(~isnan(exp.reactionTime));
-perf = zeros(1,size(noFixBreakIndices,2));
+keyboard
+
 for n = 1:size(noFixBreakIndices,2)
-    tmp = noFixBreakIndices(n);
-    orientation = exp.randVars.targetOrientation(tmp);
-    response = exp.response(tmp);
+    orientation = exp.randVars.targetOrientation(n);
+    response = exp.response(n);
     if (orientation == 1 && response == 1) || (orientation == 2 && response == 2)
         perf(n) = 1;
     else
         perf(n) = 0;
     end
-    s4(n) = size4(tmp);
-    s8(n) = size8(tmp);
-end 
-   
-i4 = 1;
-i8 = 1;
+    s4 = size4(n);
+    s8 = size8(n);
+end
+   keyboard 
 
-for n = 1:size(noFixBreakIndices,2)
-    if s4(n)
-        perf4(i4) = perf(n);
+for n = 1:size(exp.randVars.targetOrientation,2)
+    orientation = exp.randVars.targetOrientation(n);
+    response = exp.response(n);
+    if (orientation == 1 && response == 1) || (orientation == 2 && response == 2)
+        tmp = 1;
+    else
+        tmp = 0;
+    end
+    if size4(n) && ~isnan(response)
+        perf4(i4) = tmp;
         i4 = i4 + 1;
-    elseif s8(n)
-        perf8(i8) = perf(n);
+    elseif size8(n) && ~isnan(response)
+        perf8(i8) = tmp;
         i8 = i8 + 1;
     end
 end
 
-perf4 = mean(perf4);
-perf8 = mean(perf8);
-
+perf4 = mean(perf(size4));
+perf8 = mean(perf(size8));
+keyboard
 end

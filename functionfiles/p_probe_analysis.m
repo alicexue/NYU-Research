@@ -1,4 +1,4 @@
-function [pb,po,pn,pbp,pop,pnp,SH,DH,di,si1,si2,dDi] = p_probe_analysis(obs, task, multipleObs)
+function [P1,P2,pb,po,pn,Mpb_pair,Mpn_pair,SH,DH,di,si1,si2,dDi] = p_probe_analysis(obs, task, multipleObs)
 %% Example
 %%% p_probe_analysis('ax','difficult',false);
 
@@ -82,15 +82,25 @@ pnMdSide2 = mean(mean(pnDSi2,2),3);
 pbMdDiag3 = mean(mean(pbDDg3,2),3);
 pnMdDiag3 = mean(mean(pnDDg3,2),3);  
 
+Mpb = mean(pb,2);
+Mpo = mean(po,2);
+Mpn = mean(pn,2);
+Spb = std(pb,[],2)./sqrt(size(pb,2));
+Spo = std(po,[],2)./sqrt(size(po,2));
+Spn = std(pn,[],2)./sqrt(size(pn,2));
+
+%% Transform pboth and pnone into p1 and p2
+[P1,P2] = quadratic_analysis(Mpb,Mpn);
+
+%% Averaging across runs pair by pair
+Mpb_pair = mean(pbp,2);
+Mpn_pair = mean(pnp,2);
+
+%% Transform pboth and pnone into p1 and p2
+[p1,p2] = quadratic_analysis(Mpb_pair,Mpn_pair);
+
 if multipleObs == false 
     %% Averaging across runs
-    Mpb = mean(pb,2);
-    Mpo = mean(po,2);
-    Mpn = mean(pn,2);
-    Spb = std(pb,[],2)./sqrt(size(pb,2));
-    Spo = std(po,[],2)./sqrt(size(po,2));
-    Spn = std(pn,[],2)./sqrt(size(pn,2));
-
     figure;hold on;
     errorbar(100:30:460,Mpb,Spb,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[1 0 0])
     errorbar(100:30:460,Mpo,Spo,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 1 0])
@@ -108,14 +118,11 @@ if multipleObs == false
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_rawProbs']);
     print ('-djpeg', '-r500',namefig);
 
-    %% Transform pboth and pnone into p1 and p2
-    [p1,p2] = quadratic_analysis(Mpb,Mpn);
-
     %% Plot p1 and p2 for each probe delay
 
     figure;hold on;
-    plot(100:30:460,p1,'ro-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.96 .37 .15])
-    plot(100:30:460,p2,'go-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.13 .7 .15])
+    plot(100:30:460,P1,'ro-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.96 .37 .15])
+    plot(100:30:460,P2,'go-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.13 .7 .15])
     
     legend('p1','p2','Location','SouthEast')
 
@@ -131,13 +138,6 @@ if multipleObs == false
 
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2']);
     print ('-djpeg', '-r500',namefig); 
-
-    %% Averaging across runs pair by pair
-    Mpb_pair = mean(pbp,2);
-    Mpn_pair = mean(pnp,2);
-
-    %% Transform pboth and pnone into p1 and p2
-    [p1,p2] = quadratic_analysis(Mpb_pair,Mpn_pair);
     
     %% Plot p1 and p2 for each probe delay for each pair - square configuration
     figure;

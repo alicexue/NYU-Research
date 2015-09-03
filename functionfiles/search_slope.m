@@ -1,4 +1,4 @@
-function [rt4,rt8,perf4,perf8] = search_slope(obs,task,file)
+function [rt4,rt8,perf4,perf8] = search_slope(obs,task,file,training)
 %% Example
 % search_slope('ax','difficult','150701_stim05.mat');
 
@@ -8,7 +8,11 @@ function [rt4,rt8,perf4,perf8] = search_slope(obs,task,file)
 % file = '150701_stim05.mat';
 
 %% Load data
-load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\' file])
+if training
+    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\training\' file])
+else 
+    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\' file])
+end
 
 %% Transform data
 exp = getTaskParameters(myscreen,task);
@@ -56,5 +60,4 @@ end
 
 perf4 = mean(perf4);
 perf8 = mean(perf8);
-
 end

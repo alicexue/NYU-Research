@@ -25,6 +25,8 @@ expProbe = task{1}.probeTask;
 
 theTrials = find(task{1}.randVars.fixBreak == 0);
 
+nTrials = size(theTrials,2);
+
 %% Revert the order of the list
 pboth = zeros(1,500);
 pnone = zeros(1,500);
@@ -78,9 +80,10 @@ pboth = pboth(1,1:n);
 pnone = pnone(1,1:n);
 pone = pone(1,1:n);
 
-pb = zeros(13,24);
-po = zeros(13,24);
-pn = zeros(13,24);
+t = nTrials/13;
+pb = zeros(13,t);
+po = zeros(13,t);
+pn = zeros(13,t);
 
 theTrials = task{1}.randVars.fixBreak == 0; 
 for delays = unique(exp.randVars.delays)
@@ -89,10 +92,10 @@ for delays = unique(exp.randVars.delays)
     po(delays,:) = pone(delayTrials);
     pn(delays,:) = pnone(delayTrials);
 end
-
-pbp = zeros(13,2,12);
-pop = zeros(13,2,12);
-pnp = zeros(13,2,12);
+t = t/12;
+pbp = zeros(13,t,12);
+pop = zeros(13,t,12);
+pnp = zeros(13,t,12);
 
 theTrials = find(task{1}.randVars.fixBreak == 0); 
 for delays = unique(exp.randVars.delays)

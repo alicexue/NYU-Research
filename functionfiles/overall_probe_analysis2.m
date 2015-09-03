@@ -1,7 +1,7 @@
-function overall_probe_analysis2(task)
-%% This function solves for p1 and p2 for each obs and then averages them
+function [all_p1,all_p2] = overall_probe_analysis2(task)
+%% This function gets p1 and p2 from all observers and averages them
 %% Example
-%%% overall_probe_analysis2('difficult');
+%%% overall_probe_analysis('difficult');
 
 %% Parameters
 % task = 'difficult'
@@ -18,29 +18,25 @@ pboth=[];
 pone=[];
 pnone=[];
 
-pboth1=[];
-pone1=[];
-pnone1=[];
+pair_p1=[];
+pair_p2=[];
 
-pboth_pair=[];
-pone_pair=[];
-pnone_pair=[];
+SH_p1=[];
+DH_p1=[];
+di_p1=[];
+si1_p1=[];
+si2_p1=[];
+diD_p1=[];
 
-pbSH = [];
-pbDH = [];
-pbDg = [];
-pbDDg1 = [];
-pbDDg2 = [];
-pbDDg3 = [];
-pnSH = [];
-pnDH = [];
-pnDg = [];
-pnDDg1 = [];
-pnDDg2 = [];
-pnDDg3 = [];
+SH_p2=[];
+DH_p2=[];
+di_p2=[];
+si1_p2=[];
+si2_p2=[];
+diD_p2=[];
 
-P1 = [];
-P2 = [];
+all_p1=[];
+all_p2=[];
 
 numObs = 0;
 
@@ -48,47 +44,75 @@ files = dir('C:\Users\Alice\Documents\MATLAB\data');
 for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
-    if fileL == 4 || fileL == 5 && ~strcmp(obs(1,1),'.')
-        [pb,po,pn,pbp,pop,pnp,SH,DH,di,di1,di2,di3] = p_probe_analysis(obs,task,true);              
-        
-        pboth = cat(3,pboth,pb);
-        pone = cat(3,pone,po);
-        pnone = cat(3,pnone,pn); 
+    if (fileL == 2 || fileL == 3) && ~strcmp(obs(1,1),'.')
+        [P1,P2,pb,po,pn,pbp,pnp,SH,DH,di,si1,si2,diD] = p_probe_analysis(obs,task,true);       
+        if ~isempty(P1) 
+            pboth = horzcat(pboth,pb);
+            pone = horzcat(pone,po);
+            pnone = horzcat(pnone,pn); 
 
-        pboth1 = horzcat(pboth1,pb);
-        pone1 = horzcat(pone1,po);
-        pnone1 = horzcat(pnone1,pn);         
-        
-        pboth_pair = horzcat(pboth_pair,pbp);
-        pone_pair = horzcat(pone_pair,pop); 
-        pnone_pair = horzcat(pnone_pair,pnp);
-
-        pbSH = horzcat(pbSH,SH(:,1)); 
-        pbDH = horzcat(pbDH,DH(:,1));
-        pbDg = horzcat(pbDg,di(:,1));
-        pbDDg1 = horzcat(pbDDg1,di1(:,1));
-        pbDDg2 = horzcat(pbDDg2,di2(:,1));        
-        pbDDg3 = horzcat(pbDDg3,di3(:,1));   
-        
-        pnSH = horzcat(pnSH,SH(:,2));
-        pnDH = horzcat(pnDH,DH(:,2));
-        pnDg = horzcat(pnDg,di(:,2));   
-        pnDDg1 = horzcat(pnDDg1,di1(:,2));   
-        pnDDg2 = horzcat(pnDDg2,di2(:,2));   
-        pnDDg3 = horzcat(pnDDg3,di3(:,2));  
-        
-        numObs = numObs + 1;
+            [tmpP1,tmpP2] = quadratic_analysis(pbp,pnp);
+            pair_p1 = horzcat(pair_p1,tmpP1);
+            pair_p2 = horzcat(pair_p2,tmpP2);            
+            
+            [tmpP1,tmpP2] = quadratic_analysis(SH(:,1),SH(:,2));
+            SH_p1 = horzcat(SH_p1,tmpP1);
+            SH_p2 = horzcat(SH_p2,tmpP2);
+            
+            [tmpP1,tmpP2] = quadratic_analysis(DH(:,1),DH(:,2));
+            DH_p1 = horzcat(DH_p1,tmpP1);
+            DH_p2 = horzcat(DH_p2,tmpP2);
+            
+            [tmpP1,tmpP2] = quadratic_analysis(di(:,1),di(:,2));
+            di_p1 = horzcat(di_p1,tmpP1);
+            di_p2 = horzcat(di_p2,tmpP2);
+            
+            [tmpP1,tmpP2] = quadratic_analysis(si1(:,1),si1(:,2));
+            si1_p1 = horzcat(si1_p1,tmpP1);
+            si1_p2 = horzcat(si1_p2,tmpP2);
+            
+            [tmpP1,tmpP2] = quadratic_analysis(si2(:,1),si2(:,2));
+            si2_p1 = horzcat(si2_p1,tmpP1);
+            si2_p2 = horzcat(si2_p2,tmpP2);
+            
+            [tmpP1,tmpP2] = quadratic_analysis(diD(:,1),diD(:,2));
+            diD_p1 = horzcat(diD_p1,tmpP1);
+            diD_p2 = horzcat(diD_p2,tmpP2);            
+           
+            all_p1 = horzcat(all_p1,P1);
+            all_p2 = horzcat(all_p2,P2);
+            numObs = numObs + 1;
+        end
     end
 end
 
-%% Averaging across runs
-Mpb = mean(mean(pboth,2),3);
-Mpo = mean(mean(pone,2),3);
-Mpn = mean(mean(pnone,2),3);
+pair_p1=mean(pair_p1,2);
+pair_p2=mean(pair_p2,2);
 
-Spb = std(pboth1,[],2)./sqrt(numObs);
-Spo = std(pone1,[],2)./sqrt(numObs);
-Spn = std(pnone1,[],2)./sqrt(numObs); 
+SH_p1=mean(SH_p1,2);
+DH_p1=mean(DH_p1,2);
+di_p1=mean(di_p1,2);
+si1_p1=mean(si1_p1,2);
+si2_p1=mean(si2_p1,2);
+diD_p1=mean(diD_p1,2);
+
+SH_p2=mean(SH_p2,2);
+DH_p2=mean(DH_p2,2);
+di_p2=mean(di_p2,2);
+si1_p2=mean(si1_p2,2);
+si2_p2=mean(si2_p2,2);
+diD_p2=mean(diD_p2,2);
+
+all_p1=mean(all_p1,2);
+all_p2=mean(all_p2,2);
+
+%% Averaging across runs
+Mpb = mean(pboth,2);
+Mpo = mean(pone,2);
+Mpn = mean(pnone,2);
+Spb = std(pboth,[],2)./sqrt(numObs);
+Spo = std(pone,[],2)./sqrt(numObs);
+Spn = std(pnone,[],2)./sqrt(numObs);
 
 figure;hold on;
 errorbar(100:30:460,Mpb,Spb,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[1 0 0])
@@ -108,20 +132,10 @@ title([condition ' Search'],'FontSize',24,'Fontname','Ariel')
 namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' condition '_rawProbs']);
 print ('-djpeg', '-r500',namefig);
 
-%% Transform pboth and pnone into p1 and p2
-for i = 1:size(Mpb,3)
-    [p1,p2] = quadratic_analysis(Mpb(:,1,i),Mpn(:,1,i));
-    P1 = horzcat(P1,p1);
-    P2 = horzcat(P2,p2);
-end
-
-P1 = mean(P1,2);
-P2 = mean(P2,2);
-
 %% Plot p1 and p2 for each probe delay
 figure;hold on;
-plot(100:30:460,P1,'ro-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.96 .37 .15])
-plot(100:30:460,P2,'go-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.13 .7 .15])
+plot(100:30:460,all_p1,'ro-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.96 .37 .15])
+plot(100:30:460,all_p2,'go-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.13 .7 .15])
 
 legend('p1','p2','Location','SouthEast')
 
@@ -136,36 +150,13 @@ title([condition ' Search'],'FontSize',24,'Fontname','Ariel')
 namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' condition '_p1p2']);
 print ('-djpeg', '-r500',namefig);
 
-%% Averaging across runs pair by pair
-% Mpb_pair = mean(pboth_pair,2);
-% Mpn_pair = mean(pnone_pair,2);
-
-pair_p1 = [];
-pair_p2 = [];
-
-for i = 1:numObs
-    midL = size(pboth_pair,2)/2;
-    obs_pb = pboth_pair(:,1:i*midL,:);
-    obs_pn = pnone_pair(:,1:i*midL,:);
-    tmp1 = mean(obs_pb,2);
-    tmp2 = mean(obs_pn,2);
-    [tmpP1,tmpP2] = quadratic_analysis(tmp1,tmp2);
-    pair_p1 = horzcat(pair_p1,tmpP1);
-    pair_p2 = horzcat(pair_p2,tmpP2);
-end
-pair_p1 = mean(pair_p1,2);
-pair_p2 = mean(pair_p2,2);
-
-%% Transform pboth and pnone into p1 and p2
-[p1,p2] = quadratic_analysis(pair_p1,pair_p2);
-
 %% Plot p1 and p2 for each pair - square configuration
 figure;
 for numPair = 1:size(pair_p1,3)/2
     subplot(2,3,numPair)
     hold on;
-    plot(100:30:460,p1(:,:,numPair),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-    plot(100:30:460,p2(:,:,numPair),'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+    plot(100:30:460,pair_p1(:,:,numPair),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
+    plot(100:30:460,pair_p2(:,:,numPair),'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
 
     legend('p1','p2','Location','SouthEast')
     set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
@@ -176,14 +167,14 @@ for numPair = 1:size(pair_p1,3)/2
     if numPair == 1 || numPair == 4
         ylabel('Percent correct','FontSize',16,'Fontname','Ariel')
     end
-    if numPair == 4
+    if numPair == 5
         xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
     end
 
-    title(['PAIR n' num2str(numPair) ' (' obs ')'],'FontSize',14,'Fontname','Ariel')  
+    title(['PAIR n' num2str(numPair)],'FontSize',14,'Fontname','Ariel')  
 end
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' condition '_p1p2PAIR1']);
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' condition '_2p1p2PAIR1']);
 print ('-djpeg', '-r500',namefig);
 
 %% Plot p1 and p2 for each pair - diamond configuration
@@ -191,8 +182,8 @@ figure;
 for numPair = 1:size(pair_p1,3)/2
     subplot(2,3,numPair)
     hold on;
-    plot(100:30:460,p1(:,:,numPair+6),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-    plot(100:30:460,p2(:,:,numPair+6),'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+    plot(100:30:460,pair_p1(:,:,numPair+6),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
+    plot(100:30:460,pair_p2(:,:,numPair+6),'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
 
     legend('p1','p2','Location','SouthEast')
     set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
@@ -203,50 +194,33 @@ for numPair = 1:size(pair_p1,3)/2
     if numPair == 1 || numPair == 4
         ylabel('Percent correct','FontSize',16,'Fontname','Ariel')
     end
-    if numPair == 4
+    if numPair == 5
         xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
     end
 
     title(['PAIR n' num2str(numPair+6)],'FontSize',14,'Fontname','Ariel')  
 end
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' condition '_p1p2PAIR2']);
-print ('-djpeg', '-r500',namefig);
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' condition '_2p1p2PAIR2']);
+print ('-djpeg', '-r500',namefig);  
 
-%% Averaging across runs pair by pair for hemifields and diagonals
-MpbSH = mean(mean(pbSH,2),3);
-MpnSH = mean(mean(pnSH,2),3);
-MpbDH = mean(mean(pbDH,2),3);
-MpnDH = mean(mean(pnDH,2),3);
-MpbDg = mean(mean(pbDg,2),3);
-MpnDg = mean(mean(pnDg,2),3);
-MpbDDg1 = mean(mean(pbDDg1,2),3);
-MpnDDg1 = mean(mean(pnDDg1,2),3);
-MpbDDg2 = mean(mean(pbDDg2,2),3);
-MpnDDg2 = mean(mean(pnDDg2,2),3);
-MpbDDg3 = mean(mean(pbDDg3,2),3);
-MpnDDg3 = mean(mean(pnDDg3,2),3);
-
-%% Graph same/different hemifields and diagonals
+%% Graph same/different hemifields and diagonals for square configuration
 figure; hold on;
-for i = 1:6
+for i = 1:3
     if i == 1
-        [p1,p2] = quadratic_analysis(MpbSH, MpnSH);
+        t1 = SH_p1;
+        t2 = SH_p2;
     elseif i == 2
-        [p1,p2] = quadratic_analysis(MpbDH, MpnDH);
+        t1 = DH_p1;
+        t2 = DH_p2;
     elseif i == 3
-        [p1,p2] = quadratic_analysis(MpbDg, MpnDg);
-    elseif i == 4
-        [p1,p2] = quadratic_analysis(MpbDDg1, MpnDDg1);            
-    elseif i == 5
-        [p1,p2] = quadratic_analysis(MpbDDg2, MpnDDg2);
-    else
-        [p1,p2] = quadratic_analysis(MpbDDg3, MpnDDg3);
+        t1 = di_p1;
+        t2 = di_p2;
     end    
-    subplot(2,3,i)
+    subplot(1,3,i)
     hold on;
-    plot(100:30:460,p1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-    plot(100:30:460,p2,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])   
+    plot(100:30:460,t1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
+    plot(100:30:460,t2,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])   
 
     legend('p1','p2','Location','SouthEast')
 
@@ -260,20 +234,51 @@ for i = 1:6
         title('Same Hemifield','FontSize',14,'Fontname','Ariel')  
         ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
     elseif i == 2
-        title('Different Hemifield','FontSize',14,'Fontname','Ariel')           
+        title('Different Hemifield','FontSize',14,'Fontname','Ariel')  
+        xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
     elseif i == 3
         title('Square Diagonals','FontSize',14,'Fontname','Ariel')
-    else
-        title(['Diamond Diagonals' num2str(i)],'FontSize',14,'Fontname','Ariel')
-    end     
+    end    
+end
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' condition '_2p1p2HemiDiagS']);
+print ('-djpeg', '-r500',namefig);
 
-    if i == 4
+%% Graph same/different hemifields and diagonals for diamond configuration
+figure; hold on;
+for i = 1:3
+    if i == 1
+        t1 = si1_p1;
+        t2 = si1_p2;
+    elseif i == 2
+        t1 = si2_p1;
+        t2 = si2_p2;
+    elseif i == 3
+        t1 = diD_p1;
+        t2 = diD_p2;
+    end    
+    subplot(1,3,i)
+    hold on;
+    plot(100:30:460,t1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
+    plot(100:30:460,t2,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])   
+
+    legend('p1','p2','Location','SouthEast')
+
+    set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+    set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+
+    ylim([0 1])
+    xlim([0 500])
+
+    title(['Diamond Diagonals n' num2str(i)],'FontSize',14,'Fontname','Ariel')
+
+    if i == 1
         ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
+    elseif i == 2
         xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
     end
 
 end
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' condition '_p1p2HemiDiag']);
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' condition '_2p1p2HemiDiagD']);
 print ('-djpeg', '-r500',namefig);
 end
 

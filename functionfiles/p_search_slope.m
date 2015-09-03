@@ -1,21 +1,25 @@
-function [rt4,rt8,perf4_avg,perf8_avg] = p_search_slope(obs,task)
+function [rt4,rt8,perf4_avg,perf8_avg] = p_search_slope(obs,task,training)
 %% Example
-%%% p_search_slope('ax', 'difficult');
+%%% p_search_slope('ax', 'difficult',false);
 
 %% Parameters
 % obs = 'ax';
 % task = 'difficult';
+% training = false;
 
-% Note: to assess performance of different files, put the stim files in a new
-% folder with the name of the task plus some character and enter the folder
-% name as the task parameter in this function
-% make sure the folder has a 'figures' folder
+% the training boolean is for the first two days of the pre-experiment
 
 %% Change task name to feature/conjunction
 if strcmp(task(1:4),'easy')
     condition = 'Feature';
 else
     condition = 'Conjunction';
+end
+
+if training
+    tTask = [task '\training'];
+else 
+    tTask = task;
 end
 
 %% Obtain pboth, pone and pnone for each run and concatenate over run
@@ -25,12 +29,12 @@ perf4_avg = zeros(1,1000);
 perf8_avg = zeros(1,1000);
 c = 1;
 
-files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\', task]);  
+files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\', tTask]);  
 for n = 1:size(files,1)
     filename = files(n).name;
     fileL = size(filename,2);
     if fileL > 4 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')
-        [RT4,RT8,Perf4,Perf8] = search_slope(obs,task,filename);
+        [RT4,RT8,Perf4,Perf8] = search_slope(obs,task,filename,training);
 
         rt4(c) = RT4;
         rt8(c) = RT8;
@@ -58,7 +62,7 @@ ylim([0 300])
 title([condition ' Reaction Time (' obs ')'],'FontSize',22)
 xlabel('Set Size','FontSize',20,'Fontname','Ariel')
 ylabel('RT [ms]','FontSize',20,'Fontname','Ariel')
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\figures\' obs '_' condition '_rtSetSize']);
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' tTask '\figures\' obs '_' condition '_rtSetSize']);
 print ('-djpeg', '-r500',namefig);
 
 %% Plot performance
@@ -76,6 +80,6 @@ title([condition ' Accuracy (' obs ')'],'FontSize',22)
 xlabel('Set Size','FontSize',20,'Fontname','Ariel')
 ylabel('Accuracy','FontSize',20,'Fontname','Ariel')
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\figures\' obs '_' condition '_perfSetSize']);
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' tTask '\figures\' obs '_' condition '_perfSetSize']);
 print ('-djpeg', '-r500',namefig);
 end

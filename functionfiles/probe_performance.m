@@ -1,13 +1,19 @@
-function [pb,po,pn,pbp,pop,pnp,pboth,pone,pnone] = probe_analysis(obs,task,file)
-%% This program analyzes the probe task
-
+function [p,pTargetP,pTargetA] = probe_performance(obs,task,file)
+%% This program analyzes general performance on the probe task
 %% Example
-%%% probe_analysis('ax', 'difficult','150820_stim01.mat');
+%%% probe_performance('ax', 'difficult','150820_stim01.mat');
 
 %% Parameters
 % obs = 'ax';
 % task = 'difficult';
 % file = '150716_stim01.mat';
+
+%% Change task filename to feature/conjunction
+if strcmp(task,'difficult')
+    condition = 'Conjunction';
+else 
+    condition = 'Feature';
+end
 
 %% Load the data
 load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\' file])
@@ -28,9 +34,7 @@ theTrials = find(task{1}.randVars.fixBreak == 0);
 nTrials = size(theTrials,2);
 
 %% Revert the order of the list
-pboth = zeros(1,500);
-pnone = zeros(1,500);
-pone = zeros(1,500);
+perf = zeros(2,size(theTrials,2));
 
 for n = theTrials
     if ~isempty(expProbe.probeResponse1{n})
@@ -67,46 +71,55 @@ for n = theTrials
             cor2 = 1;
         end
         
-        if (cor1 == 1) && (cor2 == 1)
-            pboth(n) = 1;pnone(n) = 0;pone(n) = 0;
-        elseif ((cor1 == 1) && (cor2 == 0))||((cor1 == 0) && (cor2 == 1))
-            pboth(n) = 0;pnone(n) = 0;pone(n) = 1;
-        elseif (cor1 == 0) && (cor2 == 0)
-            pboth(n) = 0;pnone(n) = 1;pone(n) = 0;
-        end       
+        perf(:,n) = vertcat(cor1,cor2);
+        
+        if (expProbe.targetPresented{n}(1) == expProbe.probePresented1{n}(3)...
+            && expProbe.targetPresented{n}(2) == expProbe.probePresented1{n}(4))...
+            || (expProbe.targetPresented{n}(1) == expProbe.probePresented2{n}(3)...
+            && expProbe.targetPresented{n}(2) == expProbe.probePresented2{n}(4));
+
+            targetPA(n)=true;
+        else 
+            targetPA(n)=false;            
+        end        
     end   
 end
 
-pboth = pboth(1,1:n);
-pnone = pnone(1,1:n);
-pone = pone(1,1:n);
+targetPA = logical(targetPA);
+targetPA = targetPA(theTrials);
 
-t = nTrials/13;
-pb = zeros(13,t);
-po = zeros(13,t);
-pn = zeros(13,t);
+perfDelays=zeros(13,nTrials/13*2);
+perfTargetP=[];
+perfTargetA=[];
 
 theTrials = task{1}.randVars.fixBreak == 0; 
 for delays = unique(exp.randVars.delays)
     delayTrials = exp.randVars.delays(theTrials)==delays;
-    pb(delays,:) = pboth(delayTrials);
-    po(delays,:) = pone(delayTrials);
-    pn(delays,:) = pnone(delayTrials);
+    trialPerf = horzcat(perf(1,delayTrials),perf(2,delayTrials));
+    targetPTrials = targetPA & delayTrials;
+    targetATrials = ~targetPA & delayTrials;    
+    perfDelays(delays,:) = trialPerf;
+    perfTargetP(delays) = mean(perf(targetPTrials));
+    perfTargetA(delays) = mean(perf(targetATrials));
 end
-t = t/12;
-pbp = zeros(13,t,12);
-pop = zeros(13,t,12);
-pnp = zeros(13,t,12);
 
-theTrials = find(task{1}.randVars.fixBreak == 0); 
-for delays = unique(exp.randVars.delays)
-    for pair = unique(exp.randVars.probePairsLoc)
-        delaysTrials = exp.randVars.delays(theTrials)==delays;
-        pairTrials = exp.randVars.probePairsLoc(theTrials)==pair;
-        pbp(delays,:,pair) = pboth(delaysTrials & pairTrials);
-        pop(delays,:,pair) = pone(delaysTrials & pairTrials);
-        pnp(delays,:,pair) = pnone(delaysTrials & pairTrials);
-    end
-end
+p = mean(perfDelays,2);
+pTargetP = rot90(perfTargetP,-1);
+pTargetA = rot90(perfTargetA,-1);
+
+% perfPairs=zeros(13,nTrials/13,12);
+% 
+% theTrials = find(task{1}.randVars.fixBreak == 0); 
+% for delays = unique(exp.randVars.delays)
+%     for pair = unique(exp.randVars.probePairsLoc)
+%         delaysTrials = exp.randVars.delays(theTrials)==delays;
+%         pairTrials = exp.randVars.probePairsLoc(theTrials)==pair;
+%         a = perf(delaysTrials & pairTrials);
+%         keyboard
+%         pbp(delays,:,pair) = pboth(delaysTrials & pairTrials);
+%         pop(delays,:,pair) = pone(delaysTrials & pairTrials);
+%         pnp(delays,:,pair) = pnone(delaysTrials & pairTrials);
+%     end
+% end
 end
 

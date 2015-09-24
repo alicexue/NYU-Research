@@ -1,4 +1,4 @@
-function [P1,P2,pb,po,pn,Mpb_pair,Mpn_pair,SH,DH,di,si1,si2,dDi] = p_probe_analysis(obs,task,printFg)
+function [P1,P2,pb,po,pn,Mpb_pair,Mpn_pair,SH,DH,di,si1,si2,dDi] = p_probe_analysis(obs,task,printFg,correct)
 %% Example
 %%% p_probe_analysis('ax','difficult',false);
 

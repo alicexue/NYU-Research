@@ -1,4 +1,4 @@
-function [all_p1,all_p2] = overall_probe_analysis(task, printFg)
+function [all_p1,all_p2] = overall_probe_analysis(task, printFg,correct)
 %% This function gets p1 and p2 from all observers and averages them
 %% Example
 %%% overall_probe_analysis('difficult');

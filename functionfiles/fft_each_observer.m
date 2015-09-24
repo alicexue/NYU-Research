@@ -1,4 +1,5 @@
 function fft_each_observer(task)
+%% This function takes the difference of p1 and p2 for each observer and does an FFT on the results
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
     condition = 'Conjunction';

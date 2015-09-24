@@ -1,4 +1,7 @@
 function fft_across_observers(task)
+%% This function takes the average difference of p1 and p2 across all observers
+%% and then does and FFT on the difference and plots the results
+
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
     condition = 'Conjunction';

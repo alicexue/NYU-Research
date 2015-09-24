@@ -1,6 +1,6 @@
 function [pbPD,poPD,pnPD,pbAD,poAD,pnAD,pbPDP,pnPDP,pbADP,pnADP] = probe_target_analysis(obs,task,file)
-%% This program analyzes the probe task
-
+%% This program analyzes the probe task 
+%% This analyzes p1 and p2 when the target location matches a probe location, and also when it doesn't match a probe location
 %% Example
 %%% probe_target_analysis('ax', 'difficult','150820_stim01.mat');
 

@@ -1,5 +1,5 @@
 function overall_probe_analysisTB(task, printFg)
-%% This function gets p1 and p2 from all observers and averages them
+%% This function graphs the probe analysis for probes on the top and on the bottom
 %% Example
 %%% overall_probe_analysisTB('difficult');
 

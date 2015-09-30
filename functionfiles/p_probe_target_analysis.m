@@ -57,13 +57,13 @@ for i = 1:size(files,1)
 end
 
 %% Averaging across runs 
-MpbPD = nanmean(pbothPD,2);
-MpoPD = nanmean(ponePD,2);
-MpnPD = nanmean(pnonePD,2); 
+MpbPD = mean(pbothPD,2);
+MpoPD = mean(ponePD,2);
+MpnPD = mean(pnonePD,2); 
 
-MpbAD = nanmean(pbothAD,2);
-MpoAD = nanmean(poneAD,2);
-MpnAD = nanmean(pnoneAD,2);
+MpbAD = mean(pbothAD,2);
+MpoAD = mean(poneAD,2);
+MpnAD = mean(pnoneAD,2);
 
 SpbPD = std(pbothPD,[],2)/sqrt(size(pbothPD,2));
 SpoPD = std(ponePD,[],2)/sqrt(size(ponePD,2));
@@ -73,16 +73,16 @@ SpbAD = std(pbothAD,[],2)/sqrt(size(pbothAD,2));
 SpoAD = std(poneAD,[],2)/sqrt(size(poneAD,2));
 SpnAD = std(pnoneAD,[],2)/sqrt(size(pnoneAD,2));
 
-MpbPD=nanmean(pbothPD,2);
-MpoPD=nanmean(ponePD,2);
-MpnPD=nanmean(pnonePD,2);
-MpbAD=nanmean(pbothAD,2);
-MpoAD=nanmean(poneAD,2);
-MpnAD=nanmean(pnoneAD,2);
-MpbPDP=nanmean(pbothPDP,2);
-MpnPDP=nanmean(pnonePDP,2);
-MpbADP=nanmean(pbothADP,2);
-MpnADP=nanmean(pnoneADP,2);  
+MpbPD=mean(pbothPD,2);
+MpoPD=mean(ponePD,2);
+MpnPD=mean(pnonePD,2);
+MpbAD=mean(pbothAD,2);
+MpoAD=mean(poneAD,2);
+MpnAD=mean(pnoneAD,2);
+MpbPDP=mean(pbothPDP,2);
+MpnPDP=mean(pnonePDP,2);
+MpbADP=mean(pbothADP,2);
+MpnADP=mean(pnoneADP,2);  
 
 %% Transform pboth and pnone into p1 and p2
 [p1P,p2P] = quadratic_analysis(MpbPD,MpnPD);

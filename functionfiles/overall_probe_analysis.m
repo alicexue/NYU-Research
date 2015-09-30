@@ -6,7 +6,9 @@ function [all_p1,all_p2] = overall_probe_analysis(task, printFg)
 %% Parameters
 % task = 'difficult'
 % printFg = false;
+% correct = false;
 
+% if correct=true, the data will be corrected by the global average
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
     condition = 'Conjunction';
@@ -48,8 +50,8 @@ for n = 1:size(files,1)
     if (fileL == 2 || fileL == 3) && ~strcmp(obs(1,1),'.')
         [P1,P2,pb,po,pn,pbp,pnp,SH,DH,di,si1,si2,diD] = p_probe_analysis(obs,task,false); 
         a = {SH,DH,di,si1,si2,diD};
-        b = {SH_p1,SH_p2,DH_p1,DH_p2,di_p1,di_p2,si1_p1,si1_p2,si2_p1,si2_p2,diD_p1,diD_p2};
-
+        b = {SH_p1,DH_p1,di_p1,si1_p1,si2_p1,diD_p1,SH_p2,DH_p2,di_p2,si1_p2,si2_p2,diD_p2};
+        
         if ~isempty(P1) 
             pboth = horzcat(pboth,pb);
             pone = horzcat(pone,po);
@@ -58,7 +60,7 @@ for n = 1:size(files,1)
             [tmpP1,tmpP2] = quadratic_analysis(pbp,pnp);
             pair_p1 = horzcat(pair_p1,tmpP1);
             pair_p2 = horzcat(pair_p2,tmpP2);            
-            
+
             [tmpP1,tmpP2] = quadratic_analysis(SH(:,1),SH(:,2));
             SH_p1 = horzcat(SH_p1,tmpP1);
             SH_p2 = horzcat(SH_p2,tmpP2);
@@ -96,6 +98,20 @@ Mpn = mean(pnone,2);
 Spb = std(pboth,[],2)./sqrt(numObs);
 Spo = std(pone,[],2)./sqrt(numObs);
 Spn = std(pnone,[],2)./sqrt(numObs);
+
+% if correct
+%     for i=1:size(all_p1,2)
+%         all_p1(:,i) = all_p1(:,i) - mean(all_p1,2);
+%         all_p2(:,i) = all_p2(:,i) - mean(all_p2,2);
+%     end
+%     
+%     for i=1:size(pair_p1,2)
+%         for j=1:size(pair_p1,3)
+%             pair_p1(:,i,j) = pair_p1(:,i,j) - mean(pair_p1(:,:,j),2);
+%             pair_p2(:,i,j) = pair_p2(:,i,j) - mean(pair_p2(:,:,j),2);
+%         end
+%     end    
+% end
 
 m_p1=mean(all_p1,2);
 m_p2=mean(all_p2,2);

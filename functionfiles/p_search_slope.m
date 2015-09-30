@@ -1,6 +1,6 @@
 function [rt4,rt8,perf4,perf8] = p_search_slope(obs,task,training,printFg)
 %% Example
-%%% p_search_slope('ax', 'difficult',false);
+%%% p_search_slope('ax','difficult',false,true);
 
 %% Parameters
 % obs = 'ax';

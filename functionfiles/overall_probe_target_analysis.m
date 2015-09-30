@@ -1,7 +1,7 @@
 function [Mp1P,Mp2P,Mp1A,Mp2A] = overall_probe_target_analysis(task)
 %% This function gets p1 and p2 from all observers and averages them
 %% Example
-%%% overall_probe_analysis('difficult');
+%%% overall_probe_target_analysis('difficult');
 
 %% Parameters
 % task = 'difficult'
@@ -61,10 +61,10 @@ Sp2P=std(p2P,[],2)/sqrt(numObs);
 Sp1A=std(p1A,[],2)/sqrt(numObs);
 Sp2A=std(p2A,[],2)/sqrt(numObs);
 
-Mp1P=mean(p1P,2);
-Mp2P=mean(p2P,2);
-Mp1A=mean(p1A,2);
-Mp2A=mean(p2A,2);
+Mp1P1=mean(p1P,2);
+Mp2P1=mean(p2P,2);
+Mp1A1=mean(p1A,2);
+Mp2A1=mean(p2A,2);
 
 %% Averaging across runs
 MpbP = mean(pbP,2);

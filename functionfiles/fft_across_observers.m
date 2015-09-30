@@ -26,8 +26,8 @@ plot([2.8 5.6 8.3 11.1 13.9 16.7],fft_results(2:7),'ro-','LineWidth',2,'MarkerFa
 ylabel('Amplitude','FontSize',15,'Fontname','Ariel')
 xlabel('Frequency (Hz)','FontSize',15,'Fontname','Ariel')
 set(gca,'XTick',[2.8 5.6 8.3 11.1 13.9 16.7],'FontSize',12,'LineWidth',2','Fontname','Ariel')
-set(gca,'YTick',0:.2:1.6,'FontSize',12,'LineWidth',2','Fontname','Ariel')
-ylim([0 1.6])
+set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+ylim([0 1])
 title('FFT on the average data')
 
 namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task  '\time\' condition '_FFT']);

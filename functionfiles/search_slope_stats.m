@@ -1,6 +1,6 @@
 function search_slope_stats()
 % Find the ttest statistics for all observers' search slope print them in the
-% command line
+% command window
 
 %% Conduct ttest and print results
 files = dir('C:\Users\Alice\Documents\MATLAB\data');  
@@ -15,8 +15,8 @@ for n = 1:size(files,1)
                 task = 'difficult';
             end
             [rt4,rt8,perf4,perf8] = p_search_slope(obs,task,false,false);
-            rt_slope = (median(rt8) - median(rt4))/4;
-            p_slope = (mean(perf8) - mean(perf4))/4; 
+            rt_slope = (median(rt8) - median(rt4))/4*1000;
+            p_slope = (mean(perf8) - mean(perf4))/4*100; 
             [rt_h,rt_p,rt_ci,rt_stats] = ttest(rt4,rt8);
             [p_h,p_p,p_ci,p_stats] = ttest(perf4,perf8);       
 

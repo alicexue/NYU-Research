@@ -32,7 +32,7 @@ if displayFg
         namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' condition '_p1p2_difference']);
     else
         title([condition ' Search (' obs ')'],'FontSize',18,'Fontname','Ariel')
-        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2_difference']);
+        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\time\' obs '_' condition '_p1p2_difference']);
     end
     print ('-djpeg', '-r500',namefig);
 end

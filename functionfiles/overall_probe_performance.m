@@ -1,5 +1,5 @@
 function overall_probe_performance(task)
-%% This function averges the general performance on the probe task across observers
+%% This function averages the general performance on the probe task across observers
 %% Example
 %%% overall_probe_performance('difficult');
 
@@ -40,12 +40,12 @@ SpD = std(perfDelays,[],2)./sqrt(numObs);
 MpTP = mean(perfTP,2);
 SpTP = std(perfTP,[],2)./sqrt(numObs);
 MpTA = mean(perfTA,2);
-SpTP = std(perfTA,[],2)./sqrt(numObs);
+SpTA = std(perfTA,[],2)./sqrt(numObs);
 
 %% Plot average across observers
 figure; hold on;
 
-plot(100:30:460,MpD*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+errorbar(100:30:460,MpD*100,SpD*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 
 ylim([20 100])
 xlim([0 500])
@@ -62,7 +62,7 @@ print ('-djpeg', '-r500',namefig);
 %% Plot average across observers - target loc probed
 figure; hold on;
 
-plot(100:30:460,MpTP*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+errorbar(100:30:460,MpTP*100,SpTP*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 
 ylim([20 100])
 xlim([0 500])
@@ -79,7 +79,7 @@ print ('-djpeg', '-r500',namefig);
 %% Plot average across observers - target loc not probed
 figure; hold on;
 
-plot(100:30:460,MpD*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+errorbar(100:30:460,MpTA*100,SpTA*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 
 ylim([20 100])
 xlim([0 500])

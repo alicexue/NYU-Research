@@ -1,5 +1,5 @@
 function overall_probe_analysisTB(task, printFg)
-%% This function graphs the probe analysis for probes on the top and on the bottom
+%% This function graphs the probe analysis for probes on the top, bottom, left, and right
 %% Example
 %%% overall_probe_analysisTB('difficult',true);
 

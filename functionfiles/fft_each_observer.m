@@ -33,11 +33,12 @@ for n = 1:size(files,1)
             if ~average
                 figure; hold on;
                 plot([2.8 5.6 8.3 11.1 13.9 16.7],fft_results(2:7),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
-                ylabel('Amplitude','FontSize',15,'Fontname','Ariel')
+                ylabel('Amplitude (au)','FontSize',15,'Fontname','Ariel')
                 xlabel('Frequency (Hz)','FontSize',15,'Fontname','Ariel')
+                ylim([0 1.6])
                 set(gca,'XTick',[2.8 5.6 8.3 11.1 13.9 16.7],'FontSize',12,'LineWidth',2','Fontname','Ariel')    
-                set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
-                title(['FFT on the individual data (' obs ')'])
+                set(gca,'YTick',0:.2:1.6,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+                title([condition ' Search - FFT on the individual data (' obs ')'],'FontSize',18,'Fontname','Ariel')
                 namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task  '\figures\time\' obs '_' condition '_FFT']);
                 print ('-djpeg', '-r500',namefig);  
             end
@@ -49,11 +50,11 @@ end
 if average
     figure; hold on;
     plot([2.8 5.6 8.3 11.1 13.9 16.7],average_fft(2:7),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
-    ylabel('Amplitude','FontSize',15,'Fontname','Ariel')
+    ylabel('Amplitude (au)','FontSize',15,'Fontname','Ariel')
     xlabel('Frequency (Hz)','FontSize',15,'Fontname','Ariel')
     set(gca,'XTick',[2.8 5.6 8.3 11.1 13.9 16.7],'FontSize',12,'LineWidth',2','Fontname','Ariel')    
     set(gca,'YTick',0:.2:1.6,'FontSize',12,'LineWidth',2','Fontname','Ariel')
-    title(['FFT on the individual data'])
+    title([condition ' Search - FFT on the individual data'],'FontSize',18,'Fontname','Ariel')
     ylim([0 1])
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\time' condition '_FFT_each']);
     print ('-djpeg', '-r500',namefig); 

@@ -1,4 +1,4 @@
-function [pbothPD,ponePD,pnonePD,pbothAD,poneAD,pnoneAD,p1P,p2P,p1A,p2A] = p_probe_target_analysis(obs, task, printFg)
+function [pbothPD,ponePD,pnonePD,pbothAD,poneAD,pnoneAD,p1P,p2P,p1A,p2A,nTrialsP,nTrialsA] = p_probe_target_analysis(obs, task, printFg)
 %% Example
 %%% p_probe_target_analysis('ax','difficult',false);
 
@@ -34,12 +34,15 @@ pnonePDP=[];
 pbothADP=[];
 pnoneADP=[];
 
+nTrialsP=0;
+nTrialsA=0;
+
 files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task]);  
 for i = 1:size(files,1)
     filename = files(i).name;
     fileL = size(filename,2);
     if fileL == 17 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')
-        [pbPD,poPD,pnPD,pbAD,poAD,pnAD,pbPDP,pnPDP,pbADP,pnADP] = probe_target_analysis(obs,task,filename);
+        [pbPD,poPD,pnPD,pbAD,poAD,pnAD,pbPDP,pnPDP,pbADP,pnADP,numTrialsP,numTrialsA] = probe_target_analysis(obs,task,filename);
         
         pbothPD=horzcat(pbothPD,pbPD);
         ponePD=horzcat(ponePD,poPD);
@@ -52,7 +55,10 @@ for i = 1:size(files,1)
         pbothPDP=horzcat(pbothPDP,pbPDP);
         pnonePDP=horzcat(pnonePDP,pnPDP);
         pbothADP=horzcat(pbothADP,pbADP);
-        pnoneADP=horzcat(pnoneADP,pnADP);        
+        pnoneADP=horzcat(pnoneADP,pnADP);    
+        
+        nTrialsP = nTrialsP + numTrialsP;
+        nTrialsA = nTrialsA + numTrialsA;
     end
 end
 
@@ -102,7 +108,7 @@ if printFg == true
     xlabel('Time from search array onset [ms]','FontSize',18,'Fontname','Ariel')
     ylim([0 1])
 
-    title([condition ' Search - Target Probed (' obs ')'],'FontSize',18,'Fontname','Ariel')
+    title([condition ' Search - Target Probed (' obs ')'],'FontSize',16,'Fontname','Ariel')
 
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_TP' '_rawProbs']);
     print ('-djpeg', '-r500',namefig);
@@ -122,7 +128,7 @@ if printFg == true
     ylim([0 1])
     xlim([0 500])
 
-    title([condition ' Search - Target Probed (' obs ')'],'FontSize',18,'Fontname','Ariel')
+    title([condition ' Search - Target Probed - ' num2str(nTrialsP) ' Trials (' obs ')'],'FontSize',16,'Fontname','Ariel')
 
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_TP_p1p2']);
     print ('-djpeg', '-r500',namefig); 
@@ -139,7 +145,7 @@ if printFg == true
     xlabel('Time from search array onset [ms]','FontSize',18,'Fontname','Ariel')
     ylim([0 1])
 
-    title([condition ' Search - Target Not Probed (' obs ')'],'FontSize',18,'Fontname','Ariel')
+    title([condition ' Search - Target Not Probed (' obs ')'],'FontSize',16,'Fontname','Ariel')
 
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_TA' '_rawProbs']);
     print ('-djpeg', '-r500',namefig);
@@ -159,7 +165,7 @@ if printFg == true
     ylim([0 1])
     xlim([0 500])
 
-    title([condition ' Search - Target Not Probed (' obs ')'],'FontSize',18,'Fontname','Ariel')
+    title([condition ' Search - Target Not Probed - ' num2str(nTrialsA) ' Trials (' obs ')'],'FontSize',16,'Fontname','Ariel')
 
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_TA_p1p2']);
     print ('-djpeg', '-r500',namefig);     

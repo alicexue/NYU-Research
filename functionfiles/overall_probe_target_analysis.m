@@ -28,6 +28,9 @@ p2P=[];
 p1A=[];
 p2A=[];
 
+numTrialsP=0;
+numTrialsA=0;
+
 numObs = 0;
 
 files = dir('C:\Users\Alice\Documents\MATLAB\data');  
@@ -35,7 +38,7 @@ for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
     if (fileL == 2 || fileL == 3) && ~strcmp(obs(1,1),'.')
-        [pbothP,poneP,pnoneP,pbothA,poneA,pnoneA,P1P,P2P,P1A,P2A] = p_probe_target_analysis(obs,task,false); 
+        [pbothP,poneP,pnoneP,pbothA,poneA,pnoneA,P1P,P2P,P1A,P2A,nTrialsP,nTrialsA] = p_probe_target_analysis(obs,task,false); 
 
         if ~isempty(pbothP) 
             pbP=horzcat(pbP,pbothP);
@@ -50,21 +53,25 @@ for n = 1:size(files,1)
             p2P=horzcat(p2P,P2P);
             p1A=horzcat(p1A,P1A);
             p2A=horzcat(p2A,P2A);
+            
+            numTrialsP = numTrialsP + nTrialsP;
+            numTrialsA = numTrialsA + nTrialsA;
+
             numObs = numObs + 1;
         end
     end
 end
-
+keyboard
 Sp1P=std(p1P,[],2)/sqrt(numObs);
 Sp2P=std(p2P,[],2)/sqrt(numObs);
 
 Sp1A=std(p1A,[],2)/sqrt(numObs);
 Sp2A=std(p2A,[],2)/sqrt(numObs);
 
-Mp1P1=mean(p1P,2);
-Mp2P1=mean(p2P,2);
-Mp1A1=mean(p1A,2);
-Mp2A1=mean(p2A,2);
+Mp1P=mean(p1P,2);
+Mp2P=mean(p2P,2);
+Mp1A=mean(p1A,2);
+Mp2A=mean(p2A,2);
 
 %% Averaging across runs
 MpbP = mean(pbP,2);
@@ -87,9 +94,9 @@ ylabel('Percent correct','FontSize',20,'Fontname','Ariel')
 xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 ylim([0 1])
 
-title([condition ' Search - Target Probed'],'FontSize',20,'Fontname','Ariel')
+title([condition ' Search - Target Probed'],'FontSize',18,'Fontname','Ariel')
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' condition '_TP_rawProbs']);
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_TP_rawProbs']);
 print ('-djpeg', '-r500',namefig);
 
 %% Plot p1 and p2 for each probe delay
@@ -106,7 +113,7 @@ xlabel('Time from discrimination task onset [ms]','FontSize',20,'Fontname','Arie
 ylim([0 1])
 xlim([0 500])
 
-title([condition ' Search - Target Probed'],'FontSize',20,'Fontname','Ariel')
+title([condition ' Search - Target Probed - ' num2str(numTrialsP) ' Trials'],'FontSize',18,'Fontname','Ariel')
 
 namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_TP_p1p2']);
 print ('-djpeg', '-r500',namefig);
@@ -132,7 +139,7 @@ ylabel('Percent correct','FontSize',20,'Fontname','Ariel')
 xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 ylim([0 1])
 
-title([condition ' Search - Target Not Probed'],'FontSize',20,'Fontname','Ariel')
+title([condition ' Search - Target Not Probed'],'FontSize',18,'Fontname','Ariel')
 
 namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_TA_rawProbs']);
 print ('-djpeg', '-r500',namefig);
@@ -151,7 +158,7 @@ xlabel('Time from discrimination task onset [ms]','FontSize',20,'Fontname','Arie
 ylim([0 1])
 xlim([0 500])
 
-title([condition ' Search - Target Not Probed'],'FontSize',20,'Fontname','Ariel')
+title([condition ' Search - Target Not Probed - ' num2str(numTrialsA) ' Trials'],'FontSize',18,'Fontname','Ariel')
 
 namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_TA_p1p2']);
 print ('-djpeg', '-r500',namefig);

@@ -45,7 +45,13 @@ SpTA = std(perfTA,[],2)./sqrt(numObs);
 %% Plot average across observers
 figure; hold on;
 
+for i=1:numObs
+    plot(100:30:460,perfDelays(:,i)*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8)
+end
+
 errorbar(100:30:460,MpD*100,SpD*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+
+legend('obs 1','obs 2','obs 3','obs 4','obs 5','average','Location','NorthWest')
 
 ylim([20 100])
 xlim([0 500])
@@ -62,7 +68,13 @@ print ('-djpeg', '-r500',namefig);
 %% Plot average across observers - target loc probed
 figure; hold on;
 
+for i=1:numObs
+    plot(100:30:460,perfTP(:,i)*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8)
+end
+    
 errorbar(100:30:460,MpTP*100,SpTP*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+
+legend('obs 1','obs 2','obs 3','obs 4','obs 5','average','Location','NorthWest')
 
 ylim([20 100])
 xlim([0 500])
@@ -79,7 +91,13 @@ print ('-djpeg', '-r500',namefig);
 %% Plot average across observers - target loc not probed
 figure; hold on;
 
+for i=1:numObs
+    plot(100:30:460,perfTA(:,i)*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8)
+end
+    
 errorbar(100:30:460,MpTA*100,SpTA*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+
+legend('obs 1','obs 2','obs 3','obs 4','obs 5','average','Location','NorthWest')
 
 ylim([20 100])
 xlim([0 500])

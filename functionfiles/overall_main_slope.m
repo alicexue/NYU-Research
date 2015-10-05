@@ -1,4 +1,7 @@
 function overall_main_slope(task)
+%% Example
+% overall_main_slope('easy');
+
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
     condition = 'Conjunction';
@@ -35,7 +38,13 @@ p_sem = std(all_p,[],2)./sqrt(numObs);
 %% Plot rt
 figure; hold on;
 
+for i=1:numObs
+    plot(100:30:460,all_rt(:,i)*1000,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8)
+end
+
 errorbar(100:30:460,rt_m*1000,rt_sem*1000,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+
+legend('obs 1','obs 2','obs 3','obs 4','obs 5','average','Location','NorthEast')
 
 ylim([0 2000])
 set(gca,'YTick', 0:500:2000,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
@@ -49,7 +58,13 @@ print ('-djpeg', '-r500',namefig);
 %% Plot performance
 figure; hold on;
 
+for i=1:numObs
+    plot(100:30:460,all_p(:,i)*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8)
+end
+
 errorbar(100:30:460,p_m*100,p_sem*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+
+legend('obs 1','obs 2','obs 3','obs 4','obs 5','average','Location','SouthEast')
 
 ylim([50 100])
 set(gca,'YTick', 50:20:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
@@ -60,4 +75,5 @@ ylabel('Accuracy','FontSize',15,'Fontname','Ariel')
 
 namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_PerfDelays']);
 print ('-djpeg', '-r500',namefig);
+
 end

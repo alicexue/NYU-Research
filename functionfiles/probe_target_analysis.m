@@ -1,4 +1,4 @@
-function [pbPD,poPD,pnPD,pbAD,poAD,pnAD,pbPDP,pnPDP,pbADP,pnADP] = probe_target_analysis(obs,task,file)
+function [pbPD,poPD,pnPD,pbAD,poAD,pnAD,pbPDP,pnPDP,pbADP,pnADP,numTrialsP,numTrialsA] = probe_target_analysis(obs,task,file)
 %% This program analyzes the probe task 
 %% This analyzes p1 and p2 when the target location matches a probe location, and also when it doesn't match a probe location
 %% Example
@@ -35,6 +35,15 @@ for n = theTrials
         targetPA(n)=false;            
     end
 end
+
+numTrialsP = 0;
+for i=1:size(targetPA,2)
+    if targetPA(i)==1
+        numTrialsP = numTrialsP+1;
+    end
+end
+numTrialsA = nTrials - numTrialsP;
+
 targetPA = logical(targetPA);
 targetPA = targetPA(theTrials);
 

@@ -70,6 +70,7 @@ if printFg == true
     xlim([3 9])
     set(gca,'XTick',4:4:8,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
     ylim([0 300])
+    set(gca,'YTick', 0:50:300,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
 
     title([condition ' Reaction Time (' obs ')'],'FontSize',22)
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
@@ -84,7 +85,7 @@ if printFg == true
     xlim([3 9])
     set(gca,'XTick', 4:4:8,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
     ylim([50 100])
-    set(gca,'YTick', 50:20:100,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+    set(gca,'YTick', 50:10:100,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
 
     title([condition ' Accuracy (' obs ')'],'FontSize',22)
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')

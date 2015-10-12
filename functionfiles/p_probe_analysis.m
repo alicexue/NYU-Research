@@ -1,6 +1,6 @@
-function [P1,P2,pb,po,pn,Mpb_pair,Mpn_pair,SH,DH,di,si1,si2,dDi] = p_probe_analysis(obs,task,printFg)
+function [P1,P2,Mpb,Mpo,Mpn,Mpb_pair,Mpn_pair,SH,DH,di,si1,si2,dDi,P1C2,P2C2] = p_probe_analysis(obs,task,correct,printFg)
 %% Example
-%%% p_probe_analysis('ax','difficult',false);
+%%% p_probe_analysis('ax','difficult',false,false);
 
 %% Parameters
 % obs = 'ax';
@@ -43,7 +43,6 @@ for i = 1:size(files,1)
     fileL = size(filename,2);
     if fileL == 17 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')
         [b,o,n,bp,op,np] = probe_analysis(obs,task,filename); 
-
         pb = horzcat(pb,b);
         po = horzcat(po,o);
         pn = horzcat(pn,n); 
@@ -58,7 +57,7 @@ for i = 1:size(files,1)
         pbDSi1 = horzcat(pbDSi1,(cat(3,bp(:,:,9),bp(:,:,10))));
         pbDSi2 = horzcat(pbDSi2,(cat(3,bp(:,:,8),bp(:,:,11))));
         pbDDg3 = horzcat(pbDDg3,(cat(3,bp(:,:,7),bp(:,:,12))));
-        
+
         pnSH = horzcat(pnSH,(cat(3,np(:,:,1),np(:,:,6)))); 
         pnDH = horzcat(pnDH,(cat(3,np(:,:,3),np(:,:,4))));
         pnDg = horzcat(pnDg,(cat(3,np(:,:,2),np(:,:,5))));
@@ -99,7 +98,7 @@ Mpn_pair = mean(pnp,2);
 %% Transform pboth and pnone into p1 and p2
 [p1,p2] = quadratic_analysis(Mpb_pair,Mpn_pair);
 
-if printFg == true 
+if printFg && ~correct
     %% Averaging across runs
     figure;hold on;
     errorbar(100:30:460,Mpb,Spb,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[1 0 0])
@@ -112,10 +111,11 @@ if printFg == true
     ylabel('Percent correct','FontSize',20,'Fontname','Ariel')
     xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
     ylim([0 1])
-
+    
     title([condition ' Search (' obs ')'],'FontSize',24,'Fontname','Ariel')
 
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_rawProbs']);
+
     print ('-djpeg', '-r500',namefig);
 
     %% Plot p1 and p2 for each probe delay
@@ -125,10 +125,10 @@ if printFg == true
     plot(100:30:460,P2,'go-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.13 .7 .15])
     
     legend('p1','p2','Location','SouthEast')
-
+      
     set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
     set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
-    
+
     ylabel('Probe report probabilities','FontSize',20,'Fontname','Ariel')
     xlabel('Time from discrimination task onset [ms]','FontSize',20,'Fontname','Ariel')
     ylim([0 1])
@@ -138,7 +138,7 @@ if printFg == true
 
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2']);
     print ('-djpeg', '-r500',namefig); 
-    
+  
     %% Plot p1 and p2 for each probe delay for each pair - square configuration
     figure;
     for numPair = 1:size(Mpb_pair,3)/2
@@ -152,7 +152,7 @@ if printFg == true
         set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
         ylim([0 1])
         xlim([0 500])
-        
+
         if numPair == 1 || numPair == 4
             ylabel('Percent correct','FontSize',16,'Fontname','Ariel')
         end
@@ -162,7 +162,7 @@ if printFg == true
 
         title(['PAIR n' num2str(numPair) ' (' obs ')'],'FontSize',14,'Fontname','Ariel')  
     end
-
+    
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2PAIR1']);
     print ('-djpeg', '-r500',namefig);
 
@@ -179,7 +179,7 @@ if printFg == true
         set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
         ylim([0 1])
         xlim([0 500])
-        
+
         if numPair == 1 || numPair == 4
             ylabel('Percent correct','FontSize',16,'Fontname','Ariel')
         end
@@ -215,7 +215,7 @@ if printFg == true
 
         ylim([0 1])
         xlim([0 500])
-        
+
         if i == 1           
             title('Same Hemifield','FontSize',14,'Fontname','Ariel')  
             ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
@@ -250,7 +250,7 @@ if printFg == true
 
         ylim([0 1])
         xlim([0 500])
-        
+
         if i == 1 
             title(['Diamond Sides n' num2str(i)],'FontSize',14,'Fontname','Ariel')
             ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
@@ -264,12 +264,119 @@ if printFg == true
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2HemiDiagD']);
     print ('-djpeg', '-r500',namefig);
 end
-    
+
 SH = horzcat(pbMsHemi,pnMsHemi);
 DH = horzcat(pbMdHemi,pnMdHemi);
 di = horzcat(pbMsDiag,pnMsDiag);
 si1 = horzcat(pbMdSide1,pnMdSide1);
 si2 = horzcat(pbMdSide2,pnMdSide2);
 dDi = horzcat(pbMdDiag3,pnMdDiag3);
-end
 
+P1C2 = NaN(size(Mpb,1),1);
+P2C2 = NaN(size(Mpb,1),1);
+P1C3 = NaN(size(Mpb,1),1);
+P2C3 = NaN(size(Mpb,1),1);
+
+if correct
+    if ~isempty(Mpb)
+        global_averagePB = mean(Mpb);
+        global_averagePO = mean(Mpo);
+        global_averagePN = mean(Mpn);
+        global_averageP1 = mean(P1);
+        global_averageP2 = mean(P2); 
+        global_averageC3 = mean(vertcat(P1,P2));         
+        for i=1:13
+            Mpb(i,1) = Mpb(i,1)-global_averagePB;
+            Mpo(i,1) = Mpo(i,1)-global_averagePO;
+            Mpn(i,1) = Mpn(i,1)-global_averagePN;
+            P1C2(i,1) = P1(i,1)-global_averageP1;
+            P2C2(i,1) = P2(i,1)-global_averageP2;    
+            P1C3(i,1) = P1(i,1)-global_averageC3;
+            P2C3(i,1) = P2(i,1)-global_averageC3;
+        end
+        [P1C1,P2C1] = quadratic_analysis(Mpb,Mpn);
+        Spb = Spb*size(Spb,1)/(size(Spb,1)-1);
+        Spo = Spo*size(Spo,1)/(size(Spo,1)-1);
+        Spn = Spn*size(Spn,1)/(size(Spn,1)-1);   
+    end        
+    if printFg
+        %% Averaging across runs
+        figure;hold on;
+        errorbar(100:30:460,Mpb,Spb,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[1 0 0])
+        errorbar(100:30:460,Mpo,Spo,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 1 0])
+        errorbar(100:30:460,Mpn,Spn,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 1])
+        legend('PBoth','POne','PNone')
+
+        set(gca,'YTick',-0.2:.1:.2,'FontSize',18,'LineWidth',2','Fontname','Ariel')
+
+        ylabel('Percent correct','FontSize',20,'Fontname','Ariel')
+        xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
+        ylim([-0.2 0.2])
+
+        title([condition ' Search (' obs ')'],'FontSize',24,'Fontname','Ariel')
+        
+        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_rawProbsC1']);
+        print ('-djpeg', '-r500',namefig);
+
+        %% Plot p1 and p2 for each probe delay - getting p1 and p2 from the corrected Mpb and Mpn
+        figure;hold on;
+        plot(100:30:460,P1C1,'ro-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.96 .37 .15])
+        plot(100:30:460,P2C1,'go-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.13 .7 .15])
+
+        legend('p1','p2','Location','SouthEast')
+
+        set(gca,'YTick',-0.2:.2:1.2,'FontSize',18,'LineWidth',2','Fontname','Ariel')
+        set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
+
+        ylabel('Probe report probabilities','FontSize',20,'Fontname','Ariel')
+        xlabel('Time from discrimination task onset [ms]','FontSize',20,'Fontname','Ariel')
+        ylim([-0.2 1.2])
+        xlim([0 500])
+
+        title([condition ' Search (' obs ')'],'FontSize',24,'Fontname','Ariel')
+
+        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2C1']);
+        print ('-djpeg', '-r500',namefig); 
+
+        %% Plot p1 and p2 for each probe delay - p1 and p2 are corrected for the global average
+        figure;hold on;
+        plot(100:30:460,P1C2,'ro-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.96 .37 .15])
+        plot(100:30:460,P2C2,'go-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.13 .7 .15])
+
+        legend('p1','p2','Location','SouthEast')
+
+        set(gca,'YTick',-0.2:.1:0.2,'FontSize',18,'LineWidth',2','Fontname','Ariel')
+        set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
+
+        ylabel('Probe report probabilities','FontSize',20,'Fontname','Ariel')
+        xlabel('Time from discrimination task onset [ms]','FontSize',20,'Fontname','Ariel')
+        ylim([-0.2 0.2])
+        xlim([0 500])
+
+        title([condition ' Search (' obs ')'],'FontSize',24,'Fontname','Ariel')
+
+        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2C2']);
+        print ('-djpeg', '-r500',namefig);
+        %% Plot p1 and p2 for each probe delay - p1 and p2 are corrected for the combined global average
+        figure;hold on;
+        plot(100:30:460,P1C3,'ro-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.96 .37 .15])
+        plot(100:30:460,P2C3,'go-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.13 .7 .15])
+
+        legend('p1','p2','Location','SouthEast')
+
+        set(gca,'YTick',-0.4:.2:0.4,'FontSize',18,'LineWidth',2','Fontname','Ariel')
+        set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
+
+        ylabel('Probe report probabilities','FontSize',20,'Fontname','Ariel')
+        xlabel('Time from discrimination task onset [ms]','FontSize',20,'Fontname','Ariel')
+        ylim([-0.4 0.4])
+        xlim([0 500])
+
+        title([condition ' Search (' obs ')'],'FontSize',24,'Fontname','Ariel')
+
+        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2C3']);
+
+        print ('-djpeg', '-r500',namefig);        
+    end
+end
+end

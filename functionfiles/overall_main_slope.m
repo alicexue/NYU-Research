@@ -20,7 +20,7 @@ for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
     if (fileL == 2 || fileL == 3) && ~strcmp(obs(1,1),'.')
-        [rt,p] = p_main_slope(obs,task,false);
+        [rt,p] = p_main_slope(obs,task,true);
         if ~isnan(p)
             all_rt = horzcat(all_rt,rot90(rt,-1));
             all_p = horzcat(all_p,rot90(p,-1));
@@ -37,17 +37,21 @@ p_sem = std(all_p,[],2)./sqrt(numObs);
 
 %% Plot rt
 figure; hold on;
-
 for i=1:numObs
     plot(100:30:460,all_rt(:,i)*1000,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8)
 end
 
 errorbar(100:30:460,rt_m*1000,rt_sem*1000,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 
-legend('obs 1','obs 2','obs 3','obs 4','obs 5','average','Location','NorthEast')
+legend_obs = cell(numObs,1);
+for i=1:numObs
+    legend_obs{i} = ['obs ' num2str(i)];
+end
+legend_obs{numObs+1} = 'average';
+legend(legend_obs,'Location','NorthEast')
 
-ylim([0 2000])
-set(gca,'YTick', 0:500:2000,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+ylim([0 1200])
+set(gca,'YTick', 0:200:1200,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
 title([condition ' Reaction Time (n = ' num2str(numObs) ')'],'FontSize',20)
 xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
 ylabel('RT [ms] ','FontSize',15,'Fontname','Ariel')  
@@ -57,7 +61,6 @@ print ('-djpeg', '-r500',namefig);
 
 %% Plot performance
 figure; hold on;
-
 for i=1:numObs
     plot(100:30:460,all_p(:,i)*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8)
 end
@@ -67,7 +70,7 @@ errorbar(100:30:460,p_m*100,p_sem*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 
 legend('obs 1','obs 2','obs 3','obs 4','obs 5','average','Location','SouthEast')
 
 ylim([50 100])
-set(gca,'YTick', 50:20:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+set(gca,'YTick', 50:10:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
 
 title([condition ' Performance (n = ' num2str(numObs) ')'],'FontSize',20)
 xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')

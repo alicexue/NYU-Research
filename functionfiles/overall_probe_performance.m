@@ -51,11 +51,16 @@ end
 
 errorbar(100:30:460,MpD*100,SpD*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 
-legend('obs 1','obs 2','obs 3','obs 4','obs 5','average','Location','NorthWest')
+legend_obs = cell(numObs,1);
+for i=1:numObs
+    legend_obs{i} = ['obs ' num2str(i)];
+end
+legend_obs{numObs+1} = 'average';
+legend(legend_obs,'Location','NorthWest')
 
-ylim([20 100])
+ylim([0 100])
 xlim([0 500])
-set(gca,'YTick', 20:20:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+set(gca,'YTick', 0:20:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
 set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
 
 title([condition ' Probe Performance (n = ' num2str(numObs) ')'],'FontSize',18)
@@ -74,11 +79,16 @@ end
     
 errorbar(100:30:460,MpTP*100,SpTP*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 
-legend('obs 1','obs 2','obs 3','obs 4','obs 5','average','Location','NorthWest')
+legend_obs = cell(numObs,1);
+for i=1:numObs
+    legend_obs{i} = ['obs ' num2str(i)];
+end
+legend_obs{numObs+1} = 'average';
+legend(legend_obs,'Location','NorthWest')
 
-ylim([20 100])
+ylim([0 100])
 xlim([0 500])
-set(gca,'YTick', 20:20:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+set(gca,'YTick', 0:20:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
 set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
 
 title([condition ' Perf-target loc probed (n = ' num2str(numObs) ')'],'FontSize',18)
@@ -99,9 +109,9 @@ errorbar(100:30:460,MpTA*100,SpTA*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 
 
 legend('obs 1','obs 2','obs 3','obs 4','obs 5','average','Location','NorthWest')
 
-ylim([20 100])
+ylim([0 100])
 xlim([0 500])
-set(gca,'YTick', 20:20:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+set(gca,'YTick', 0:20:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
 set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
 
 title([condition ' Perf-target loc not probed (n = ' num2str(numObs) ')'],'FontSize',18)

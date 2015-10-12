@@ -44,9 +44,9 @@ if printFg
     figure; hold on;
     plot(100:30:460,p*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 
-    ylim([20 100])
+    ylim([0 100])
     xlim([0 500])
-    set(gca,'YTick', 20:20:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    set(gca,'YTick', 0:20:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
     set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
     
     title([condition ' Probe Performance (' obs ')'],'FontSize',18)
@@ -60,9 +60,9 @@ if printFg
     figure; hold on;
     plot(100:30:460,pTP*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 
-    ylim([20 100])
+    ylim([0 100])
     xlim([0 500])
-    set(gca,'YTick', 20:20:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    set(gca,'YTick', 0:20:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
     set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
     
     title([condition ' Performance-target loc probed (' obs ')'],'FontSize',15)
@@ -76,9 +76,9 @@ if printFg
     figure; hold on;
     plot(100:30:460,pTA*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 
-    ylim([20 100])
+    ylim([0 100])
     xlim([0 500])
-    set(gca,'YTick', 20:20:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    set(gca,'YTick', 0:20:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
     set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
     
     title([condition ' Performance-target loc not probed (' obs ')'],'FontSize',15)

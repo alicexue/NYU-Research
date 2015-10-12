@@ -51,30 +51,58 @@ pboth=pboth(theTrials);
 pnone=pnone(theTrials);
 pone=pone(theTrials);
 
-pbP=[];
-pnP=[];
-poP=[];
+% pbPD=[];
+% pnPD=[];
+% poPD=[];
+% 
+% pbAD=[];
+% pnAD=[];
+% poAD=[];  
 
-pbA=[];
-pnA=[];
-poA=[];  
+pbPD=NaN(13,50);
+pnPD=NaN(13,50);
+poPD=NaN(13,50);
+
+pbAD=NaN(13,50);
+pnAD=NaN(13,50);
+poAD=NaN(13,50); 
 
 for delays = unique(exp.randVars.delays)
     delayTrials = exp.randVars.delays(theTrials)==delays;
     targetPTrials = targetPA & delayTrials;
     targetATrials = ~targetPA & delayTrials;
-        
-    pbPD(delays,1) = mean(pboth(targetPTrials));
-    pnPD(delays,1) = mean(pnone(targetPTrials));
-    poPD(delays,1) = mean(pone(targetPTrials));
-    pbAD(delays,1) = mean(pboth(targetATrials));
-    pnAD(delays,1) = mean(pnone(targetATrials));
-    poAD(delays,1) = mean(pone(targetATrials));    
+    
+    pbP=pboth(targetPTrials);
+    pbPD(delays,1:size(pbP,2)) = pbP;
+    pnP=pnone(targetPTrials);
+    pnPD(delays,1:size(pnP,2)) = pnP;
+    poP=pone(targetPTrials);
+    poPD(delays,1:size(poP,2)) = poP;
+    pbA=pboth(targetATrials);
+    pbAD(delays,1:size(pbA,2)) = pbA;
+    pnA=pnone(targetATrials);
+    pnAD(delays,1:size(pnA,2)) = pnA;
+    poA=pone(targetATrials);
+    poAD(delays,1:size(poA,2)) = poA;
+      
+%     pbPD(delays,1) = pboth(targetPTrials);
+%     pnPD(delays,1) = pnone(targetPTrials);
+%     poPD(delays,1) = pone(targetPTrials);
+%     pbAD(delays,1) = pboth(targetATrials);
+%     pnAD(delays,1) = pnone(targetATrials);
+%     poAD(delays,1) = pone(targetATrials);      
+    
+    
+%     pbPD(delays,1) = mean(pboth(targetPTrials));
+%     pnPD(delays,1) = mean(pnone(targetPTrials));
+%     poPD(delays,1) = mean(pone(targetPTrials));
+%     pbAD(delays,1) = mean(pboth(targetATrials));
+%     pnAD(delays,1) = mean(pnone(targetATrials));
+%     poAD(delays,1) = mean(pone(targetATrials));    
 end
 
 for delays = unique(exp.randVars.delays)
     for pair = unique(exp.randVars.probePairsLoc)
-        delaysTrials = exp.randVars.delays(theTrials)==delays;
         pairTrials = exp.randVars.probePairsLoc(theTrials)==pair;    
         targetPDPTrials = targetPA & delayTrials & pairTrials;
         targetADPTrials = ~targetPA & delayTrials & pairTrials;        

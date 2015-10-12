@@ -51,8 +51,8 @@ if printFg
 
     errorbar(100:30:460,rt*1000,rt_sem*1000,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 
-    ylim([0 2000])
-    set(gca,'YTick', 0:500:2000,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    ylim([0 1200])
+    set(gca,'YTick', 0:200:1200,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
     title([condition ' Reaction Time (' obs ')'],'FontSize',20)
     xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
     ylabel('RT [ms] ','FontSize',15,'Fontname','Ariel')  
@@ -66,7 +66,7 @@ if printFg
     errorbar(100:30:460,p*100,p_sem*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 
     ylim([50 100])
-    set(gca,'YTick', 50:20:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    set(gca,'YTick', 50:10:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
 
     title([condition ' Performance (' obs ')'],'FontSize',20)
     xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')

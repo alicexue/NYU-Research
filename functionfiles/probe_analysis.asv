@@ -32,6 +32,12 @@ exp = getTaskParameters(myscreen,task);
 
 expProbe = task{1}.probeTask;
 
+% if strcmp(obs,'ld') && strcmp(file,'151103_stim02.mat')
+%     task{1,1}.randVars.fixBreak = task{1,1}.randVars.fixBreak(1:550);
+%     task{1,1}.randVars.targetOrientation = task{1,1}.randVars.targetOrientation(1:550);
+%     task{1,1}.randVars.presence = task{1,1}.randVars.presence(1:550);
+% end
+
 if expN == 1 || (expN == 2 && present == 3)
     theTrials = find(task{1}.randVars.fixBreak == 0);
 elseif expN == 2
@@ -61,7 +67,7 @@ pone = zeros(1,1000);
 
 q = 1;
 for n = theTrials
-    if n <= size(expProbe.probeResponse1,2)
+    if n < size(expProbe.probeResponse1,2)
         if ~isempty(expProbe.probeResponse1{n})
             idx1 = find(positions == expProbe.probeResponse1{n});
             idx2 = find(positions == expProbe.probeResponse2{n});
@@ -97,20 +103,20 @@ for n = theTrials
             end
 
             if (cor1 == 1) && (cor2 == 1)
-                pboth(q) = 1;pnone(q) = 0;pone(q) = 0;
+                pboth(i) = 1;pnone(i) = 0;pone(i) = 0;
             elseif ((cor1 == 1) && (cor2 == 0))||((cor1 == 0) && (cor2 == 1))
-                pboth(q) = 0;pnone(q) = 0;pone(q) = 1;
+                pboth(i) = 0;pnone(i) = 0;pone(i) = 1;
             elseif (cor1 == 0) && (cor2 == 0)
-                pboth(q) = 0;pnone(q) = 1;pone(q) = 0;
+                pboth(i) = 0;pnone(i) = 1;pone(n) = 0;
             end
         end       
     end   
-    q = q + 1;
+    i = i + 1;
 end
 
-pboth = pboth(1,1:nTrials);
-pnone = pnone(1,1:nTrials);
-pone = pone(1,1:nTrials);
+pboth = pboth(1,1:n);
+pnone = pnone(1,1:n);
+pone = pone(1,1:n);
 
 % t = nTrials/13;
 % pb = zeros(13,t);
@@ -168,5 +174,7 @@ for delays = unique(exp.randVars.delays)
 %         pnp(delays,:,pair) = nanmean(pnone(delaysTrials & pairTrials),2);
     end
 end
+
+keyboard
 end
 

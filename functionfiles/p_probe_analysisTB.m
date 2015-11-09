@@ -44,7 +44,7 @@ for i = 1:size(files,1)
     filename = files(i).name;
     fileL = size(filename,2);
     if fileL == 17 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')
-        [b,o,n,bp,op,np] = probe_analysis(obs,task,filename); 
+        [b,o,n,bp,op,np] = probe_analysis(obs,task,filename,1,1); 
         pbANDtb = horzcat(pbANDtb,bp(:,:,1),bp(:,:,2),bp(:,:,5),bp(:,:,6),bp(:,:,12));
         pnANDtb = horzcat(pnANDtb,np(:,:,1),np(:,:,2),np(:,:,5),np(:,:,6),np(:,:,12));
 
@@ -72,23 +72,23 @@ for i = 1:size(files,1)
     end
 end
         
-pbANDtbm = mean(pbANDtb,2);
-pnANDtbm = mean(pnANDtb,2);
-pbORtbm = mean(pbORtb,2);
-pnORtbm = mean(pnORtb,2);
-pbTOPm = mean(pbTOP,2);
-pnTOPm = mean(pnTOP,2);
-pbBOTTOMm = mean(pbBOTTOM,2);
-pnBOTTOMm = mean(pnBOTTOM,2);
+pbANDtbm = nanmean(pbANDtb,2);
+pnANDtbm = nanmean(pnANDtb,2);
+pbORtbm = nanmean(pbORtb,2);
+pnORtbm = nanmean(pnORtb,2);
+pbTOPm = nanmean(pbTOP,2);
+pnTOPm = nanmean(pnTOP,2);
+pbBOTTOMm = nanmean(pbBOTTOM,2);
+pnBOTTOMm = nanmean(pnBOTTOM,2);
 
-pbANDlrm = mean(pbANDlr,2);
-pnANDlrm = mean(pnANDlr,2);
-pbORlrm = mean(pbORlr,2);
-pnORlrm = mean(pnORlr,2);
-pbLEFTm = mean(pbLEFT,2);
-pnLEFTm = mean(pnLEFT,2);
-pbRIGHTm = mean(pbRIGHT,2);
-pnRIGHTm = mean(pnRIGHT,2);
+pbANDlrm = nanmean(pbANDlr,2);
+pnANDlrm = nanmean(pnANDlr,2);
+pbORlrm = nanmean(pbORlr,2);
+pnORlrm = nanmean(pnORlr,2);
+pbLEFTm = nanmean(pbLEFT,2);
+pnLEFTm = nanmean(pnLEFT,2);
+pbRIGHTm = nanmean(pbRIGHT,2);
+pnRIGHTm = nanmean(pnRIGHT,2);
 
 [p1ANDtb,p2ANDtb] = quadratic_analysis(pbANDtbm,pnANDtbm);  
 [p1ORtb,p2ORtb] = quadratic_analysis(pbORtbm,pnORtbm);

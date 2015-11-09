@@ -1,4 +1,4 @@
-function overall_search_slope(displayFg,displayStats)
+function overall_search_slope(expN,present,displayFg,displayStats)
 %% Example
 % overall_search_slope(true,true);
 
@@ -25,6 +25,21 @@ if displayFg
     numObs = 0;
 
     %% Load data
+    if expN == 1
+        saveFileLoc = '';
+        saveFileName = '';
+    elseif expN == 2
+        saveFileLoc = '\target present or absent';
+        if present == 1
+            saveFileName = '2TP';
+        elseif present == 2
+            saveFileName = '2TA';
+        elseif present == 3
+            saveFileName = '2';
+        end
+    end 
+           
+    
     files = dir('C:\Users\Alice\Documents\MATLAB\data');  
     for n = 1:size(files,1)
         obs = files(n).name;
@@ -36,7 +51,7 @@ if displayFg
                 else 
                     task = 'difficult';
                 end
-                [rt4,rt8,perf4,perf8] = p_search_slope(obs,task,false,false);
+                [rt4,rt8,perf4,perf8] = p_search_slope(obs,task,expN,present,false,false);
                     if ~isempty(rt4)
                         if strcmp(task,'easy')
                             easy_rt=horzcat(easy_rt,vertcat(median(rt4),median(rt8)));
@@ -83,13 +98,17 @@ if displayFg
 
     xlim([3 9])
     set(gca,'XTick',4:4:8,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
-    ylim([0 250])
-    set(gca,'YTick', 0:50:250,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
-
+    if expN == 1
+        ylim([0 250])
+        set(gca,'YTick', 0:50:250,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+    elseif expN == 2
+        ylim([0 400])
+        set(gca,'YTick', 0:100:400,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+    end
     title(['Feature Reaction Time (n = ' num2str(numObs) ')'],'FontSize',22)
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('RT [ms]','FontSize',20,'Fontname','Ariel')
-    namefig=sprintf('%s', 'C:\Users\Alice\Documents\MATLAB\data\figures\easy\Feature_rtSetSize');
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\easy\Feature_rtSetSize' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 
     %% Plot performance
@@ -118,7 +137,7 @@ if displayFg
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('Accuracy','FontSize',20,'Fontname','Ariel')
 
-    namefig=sprintf('%s', 'C:\Users\Alice\Documents\MATLAB\data\figures\easy\Feature_perfSetSize');
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\easy\Feature_perfSetSize' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 
     %% Plot reaction time
@@ -140,13 +159,17 @@ if displayFg
 
     xlim([3 9])
     set(gca,'XTick',4:4:8,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
-    ylim([0 250])
-    set(gca,'YTick', 0:50:250,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
-
+    if expN == 1
+        ylim([0 250])
+        set(gca,'YTick', 0:50:250,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+    elseif expN == 2
+        ylim([0 400])
+        set(gca,'YTick', 0:100:400,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+    end
     title(['Conjunction Reaction Time (n = ' num2str(numObs) ')'],'FontSize',22)
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('RT [ms]','FontSize',20,'Fontname','Ariel')
-    namefig=sprintf('%s', 'C:\Users\Alice\Documents\MATLAB\data\figures\difficult\Conjunction_rtSetSize');
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\difficult\Conjunction_rtSetSize' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 
     %% Plot performance
@@ -175,15 +198,15 @@ if displayFg
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('Accuracy','FontSize',20,'Fontname','Ariel')
 
-    namefig=sprintf('%s', 'C:\Users\Alice\Documents\MATLAB\data\figures\difficult\Conjunction_perfSetSize');
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\difficult\Conjunction_perfSetSize' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 end
 if displayStats
-    search_slope_stats();
+    search_slope_stats(expN,present);
 end
 end
 
-function search_slope_stats()
+function search_slope_stats(expN,present)
 % Find the ttest statistics for all observers' search slope print them in the
 % command window
 
@@ -198,6 +221,19 @@ p_difficult4=[];
 rt_difficult8=[];
 p_difficult8=[];
 
+all_easy_rt=[];
+all_difficult_rt=[];
+all_easy_perf=[];
+all_difficult_perf=[];
+
+
+pall_easy_rt=[];
+pall_difficult_rt=[];
+pall_easy_perf=[];
+pall_difficult_perf=[];
+
+numObs = 0;
+
 files = dir('C:\Users\Alice\Documents\MATLAB\data');  
 for n = 1:size(files,1)
     obs = files(n).name;
@@ -209,7 +245,7 @@ for n = 1:size(files,1)
             else 
                 task = 'difficult';
             end
-            [rt4,rt8,perf4,perf8] = p_search_slope(obs,task,false,false);
+            [rt4,rt8,perf4,perf8] = p_search_slope(obs,task,expN,present,false,false);
             rt_slope = (median(rt8) - median(rt4))/4*1000;
             p_slope = (mean(perf8) - mean(perf4))/4*100;               
             [rt_h,rt_p,rt_ci,rt_stats] = ttest(rt4,rt8);
@@ -220,12 +256,22 @@ for n = 1:size(files,1)
                     rt_easy4 = horzcat(rt_easy4,median(rt4));
                     p_easy4 = horzcat(p_easy4,mean(perf4));
                     rt_easy8 = horzcat(rt_easy8,median(rt8));
-                    p_easy8 = horzcat(p_easy8,mean(perf8));                    
+                    p_easy8 = horzcat(p_easy8,mean(perf8));   
+                    all_easy_rt = horzcat(all_easy_rt,(vertcat(median(rt4),median(rt8))));
+                    all_easy_perf = horzcat(all_easy_perf,(vertcat(mean(perf4),mean(perf8))));
+                    
+                    pall_easy_rt = horzcat(pall_easy_rt,rt_p);
+                    pall_easy_perf = horzcat(pall_easy_perf,p_p);
                 else
                     rt_difficult4 = horzcat(rt_difficult4,median(rt4));
                     p_difficult4 = horzcat(p_difficult4,mean(perf4));
                     rt_difficult8 = horzcat(rt_difficult8,median(rt8));
-                    p_difficult8 = horzcat(p_difficult8,mean(perf8));                    
+                    p_difficult8 = horzcat(p_difficult8,mean(perf8));  
+                    all_difficult_rt = horzcat(all_difficult_rt,(vertcat(median(rt4),median(rt8))));
+                    all_difficult_perf = horzcat(all_difficult_perf,(vertcat(mean(perf4),mean(perf8)))); 
+                    
+                    pall_difficult_rt = horzcat(pall_difficult_rt,rt_p);
+                    pall_difficult_perf = horzcat(pall_difficult_perf,p_p);                    
                 end                
                 rt_h = num2str(rt_h);
                 rt_p = num2str(rt_p);
@@ -237,62 +283,98 @@ for n = 1:size(files,1)
                 p_ci = num2str(p_ci);
                 p_tstat = num2str(p_stats.tstat);        
 
-                fprintf('------------------------------------------------------\n')
-                fprintf(['obs: ' obs ', task: ' task '\n'])
-                fprintf(['rt slope = ' num2str(rt_slope) '\n'])
-                fprintf(['t = ' rt_tstat '\n'])
-                fprintf(['p = ' rt_p '\n'])
-                fprintf(['ci = [' rt_ci ']\n'])        
-                fprintf(['perf slope = ' num2str(p_slope) '\n'])
-                fprintf(['t = ' p_tstat '\n'])
-                fprintf(['p = ' p_p '\n'])
-                fprintf(['ci = [' p_ci ']\n'])   
+%                 fprintf('------------------------------------------------------\n')
+%                 fprintf(['obs: ' obs ', task: ' task '\n'])
+%                 fprintf(['rt slope = ' num2str(rt_slope) '\n'])
+%                 fprintf(['t = ' rt_tstat '\n'])
+%                 fprintf(['p = ' rt_p '\n'])
+%                 fprintf(['ci = [' rt_ci ']\n'])        
+%                 fprintf(['perf slope = ' num2str(p_slope) '\n'])
+%                 fprintf(['t = ' p_tstat '\n'])
+%                 fprintf(['p = ' p_p '\n'])
+%                 fprintf(['ci = [' p_ci ']\n']) 
+                numObs = numObs +1;
             end
         end
     end
 end
 
-% rt_easy4 = mean(rt_easy4,2);
-% p_easy4 = mean(p_easy4,2);
-% rt_difficult4 = mean(rt_difficult4,2);
-% p_difficult4 = mean(p_difficult4,2);
-% 
-% rt_easy8 = mean(rt_easy8,2);
-% p_easy8 = mean(p_easy8,2);
-% rt_difficult8 = mean(rt_difficult8,2);
-% p_difficult8 = mean(p_difficult8,2);
+rt_easy4 = rt_easy4*1000;
+rt_easy8 = rt_easy8*1000;
+rt_difficult4 = rt_difficult4*1000;
+rt_difficult8 = rt_difficult8*1000;
+p_easy4 = p_easy4*100;
+p_easy8 = p_easy8*100;
+p_difficult4 = p_difficult4*100;
+p_difficult8 = p_difficult8*100;
 
-rt_easy_slope = (mean(rt_easy8)-mean(rt_easy4))/4*1000;
-p_easy_slope = (mean(p_easy8)-mean(p_easy4))/4*100;
-rt_difficult_slope = (mean(rt_difficult8)-mean(rt_difficult4))/4*1000;
-p_difficult_slope = (mean(p_difficult8)-mean(p_difficult4))/4*100;
+rt_easy_slope = (mean(rt_easy8-rt_easy4))/4;
+p_easy_slope = (mean(p_easy8-p_easy4))/4;
+rt_difficult_slope = (mean(rt_difficult8-rt_difficult4))/4;
+p_difficult_slope = (mean(p_difficult8-p_difficult4))/4;
 
-[rt_h,rt_p,rt_ci,rt_stats] = ttest(rt_easy4,rt_easy8);
-[p_h,p_p,p_ci,p_stats] = ttest(p_easy4,p_easy8);  
+
+[rt_h,rt_p,rt_ci,rt_stats] = ttest((rt_easy8-rt_easy4)/4);
+[p_h,p_p,p_ci,p_stats] = ttest((p_easy8-p_easy4)/4); 
+% [rt_h,rt_p,rt_ci,rt_stats] = ttest(vertcat(rt_easy4,rt_easy8)/4);
+% [p_h,p_p,p_ci,p_stats] = ttest(vertcat(p_easy4,p_easy8)/4);  
 fprintf('------------------------------------------------------\n')
 fprintf('overall, task: easy\n')
 fprintf(['rt slope = ' num2str(rt_easy_slope) '\n'])
-fprintf(['t = ' num2str(rt_tstat) '\n'])
-fprintf(['p = ' num2str(rt_p) '\n'])
-fprintf(['ci = [' num2str(rt_ci) ']\n'])        
+fprintf(['t = ' num2str(rt_stats.tstat) '\n'])
+fprintf(['p = ' num2str(mean(rt_p)) '\n'])
+rt_ci
+%rt_ci = mean(rt_ci,2)
+% fprintf(['ci = [' num2str(rt_ci(1,1)) num2str(rt_ci(2,1)) ']\n'])        
 fprintf(['perf slope = ' num2str(p_easy_slope) '\n'])
-fprintf(['t = ' num2str(p_tstat) '\n'])
-fprintf(['p = ' num2str(p_p) '\n'])
-fprintf(['ci = [' num2str(p_ci) ']\n'])   
+fprintf(['t = ' num2str(p_stats.tstat) '\n'])
+fprintf(['p = ' num2str(mean(p_p)) '\n'])
+p_ci
+%p_ci = mean(p_ci,2)
+%fprintf(['ci = [' num2str(rt_ci(1,1)) num2str(rt_ci(2,1)) ']\n'])  
 
 
-[rt_h,rt_p,rt_ci,rt_stats] = ttest(rt_difficult4,rt_difficult8);
-[p_h,p_p,p_ci,p_stats] = ttest(p_difficult4,p_difficult8);  
+[rt_h,rt_p,rt_ci,rt_stats] = ttest((rt_difficult8-rt_difficult4)/4);
+[p_h,p_p,p_ci,p_stats] = ttest((p_difficult8-p_difficult4)/4);  
 fprintf('------------------------------------------------------\n')
 fprintf('overall, task: difficult\n')
 fprintf(['rt slope = ' num2str(rt_difficult_slope) '\n'])
-fprintf(['t = ' num2str(rt_tstat) '\n'])
-fprintf(['p = ' num2str(rt_p) '\n'])
-fprintf(['ci = [' num2str(rt_ci) ']\n'])        
+fprintf(['t = ' num2str(rt_stats.tstat) '\n'])
+fprintf(['p = ' num2str(mean(rt_p)) '\n'])
+%rt_ci = mean(rt_ci,2)
+rt_ci
+% fprintf(['ci = [' num2str(mean(rt_ci,2)) ']\n'])        
 fprintf(['perf slope = ' num2str(p_difficult_slope) '\n'])
-fprintf(['t = ' num2str(p_tstat) '\n'])
-fprintf(['p = ' num2str(p_p) '\n'])
-fprintf(['ci = [' num2str(p_ci) ']\n'])  
+fprintf(['t = ' num2str(p_stats.tstat) '\n'])
+fprintf(['p = ' num2str(mean(p_p)) '\n'])
+p_ci
+%p_ci = mean(p_ci,2)
+% fprintf(['ci = [' num2str(mean(p_ci,2)) ']\n'])  
+
+
+% fprintf('-----------------------------------------------------------\n')
+% fprintf('easy\n')
+% [rt_h,rt_p,rt_ci,rt_stats] = ttest(all_easy_rt)
+% fprintf(['mean rt p value = ' num2str(mean(rt_p))])
+% fprintf(['\n' num2str(mean(pall_easy_rt))])
+% [p_h,p_p,p_ci,p_stats] = ttest(all_easy_perf)
+% fprintf(['mean perf p value = ' num2str(mean(p_p))])
+% fprintf(['\n' num2str(mean(pall_easy_perf))])
+% 
+% 
+% fprintf('difficult')
+% [rt_h,rt_p,rt_ci,rt_stats] = ttest(all_difficult_rt)
+% fprintf(['mean rt p value = ' num2str(mean(rt_p))])
+% fprintf(['\n' num2str(mean(pall_difficult_rt))])
+% [p_h,p_p,p_ci,p_stats] = ttest(all_difficult_perf)
+% fprintf(['mean perf p value = ' num2str(mean(p_p))])
+% fprintf(['\n' num2str(mean(pall_difficult_perf))])
+% fprintf('\n')
+
+feature_perf4 = mean(p_easy4)
+sem_easy_perf4 = std(p_easy4)./numObs
+difficult_perf4 = mean(p_difficult4)
+sem_difficult_perf4 = std(p_difficult4)./numObs
 
 end
 

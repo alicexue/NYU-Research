@@ -1,4 +1,4 @@
-function [p1,p2] = sampling(obs,pb,pn,task,targetpresent,n)
+function [p1,p2,minTrials] = sampling(obs,pb,pn,task,targetpresent,n,printFg)
 
 % if obs is 'all', then the no obs name will appear in the title of the
 % figure
@@ -48,40 +48,40 @@ while i<=n
     i = i + 1;    
 end
 
-% pb_mean = mean(pb_mean,2);
-% pn_mean = mean(pn_mean,2);
+pb_mean = mean(pb_mean,2);
+pn_mean = mean(pn_mean,2);
 
 [p1,p2] = quadratic_analysis(pb_mean,pn_mean);
 
-p1 = mean(p1,2);
-p2 = mean(p2,2);
+% p1 = mean(p1,2);
+% p2 = mean(p2,2);
+if printFg
+    figure;hold on;
+    plot(100:30:460,p1,'ro-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.96 .37 .15])
+    plot(100:30:460,p2,'go-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.13 .7 .15])
 
-figure;hold on;
-plot(100:30:460,p1,'ro-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.96 .37 .15])
-plot(100:30:460,p2,'go-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.13 .7 .15])
+    legend('p1','p2','Location','SouthEast')
 
-legend('p1','p2','Location','SouthEast')
+    set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
+    set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
 
-set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
-set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
+    ylabel('Probe report probabilities','FontSize',18,'Fontname','Ariel')
+    xlabel('Time from discrimination task onset [ms]','FontSize',18,'Fontname','Ariel')
+    ylim([0 1])
+    xlim([0 500])
 
-ylabel('Probe report probabilities','FontSize',18,'Fontname','Ariel')
-xlabel('Time from discrimination task onset [ms]','FontSize',18,'Fontname','Ariel')
-ylim([0 1])
-xlim([0 500])
-
-if strcmp(obs,'all')
-    if targetpresent
-        title([condition ' Search-Target Probed-' num2str(minTrials) ' Trials/Delay'],'FontSize',16,'Fontname','Ariel')
+    if strcmp(obs,'all')
+        if targetpresent
+            title([condition ' Search-Target Probed-' num2str(minTrials) ' Trials/Delay'],'FontSize',16,'Fontname','Ariel')
+        else
+            title([condition ' Search-Target Not Probed-' num2str(minTrials) ' Trials/Delay'],'FontSize',16,'Fontname','Ariel')
+        end
     else
-        title([condition ' Search-Target Not Probed-' num2str(minTrials) ' Trials/Delay'],'FontSize',16,'Fontname','Ariel')
+        if targetpresent
+            title([condition ' Search-Target Probed-' num2str(minTrials) ' Trials/Delay (' obs ')'],'FontSize',16,'Fontname','Ariel')
+        else
+            title([condition ' Search-Target Not Probed-' num2str(minTrials) ' Trials/Delay (' obs ')'],'FontSize',16,'Fontname','Ariel')
+        end    
     end
-else
-    if targetpresent
-        title([condition ' Search-Target Probed-' num2str(minTrials) ' Trials/Delay (' obs ')'],'FontSize',16,'Fontname','Ariel')
-    else
-        title([condition ' Search-Target Not Probed-' num2str(minTrials) ' Trials/Delay (' obs ')'],'FontSize',16,'Fontname','Ariel')
-    end    
 end
-
 end

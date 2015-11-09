@@ -1,4 +1,4 @@
-function [rt4,rt8,perf4,perf8] = p_search_slope(obs,task,training,printFg)
+function [rt4,rt8,perf4,perf8] = p_search_slope(obs,task,expN,present,training,printFg)
 %% Example
 %%% p_search_slope('ax','difficult',false,true);
 
@@ -16,11 +16,24 @@ else
     condition = 'Conjunction';
 end
 
-if training
-    tTask = [task '\training'];
-else 
-    tTask = task;
+saveFileName = '';
+if expN == 1
+    if training
+        tTask = [task '\training'];
+    else 
+        tTask = task;
+    end
+elseif expN == 2
+    tTask = ['target present or absent\' task];
+    if present == 1
+        saveFileName = '2TP';
+    elseif present == 2
+        saveFileName = '2TA';
+    elseif present == 3
+        saveFileName = '2';
+    end
 end
+    
 
 %% Obtain pboth, pone and pnone for each run and concatenate over run
 rt4 = zeros(1,1000);
@@ -29,12 +42,13 @@ perf4 = zeros(1,1000);
 perf8 = zeros(1,1000);
 c = 1;
 
+
 files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\', tTask]);  
 for n = 1:size(files,1)
     filename = files(n).name;
     fileL = size(filename,2);
     if fileL == 17 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')         
-        [RT4,RT8,Perf4,Perf8] = search_slope(obs,task,filename,training);
+        [RT4,RT8,Perf4,Perf8] = search_slope(obs,task,filename,expN,present,training);
 
         rt4(c) = RT4;
         rt8(c) = RT8;
@@ -69,13 +83,17 @@ if printFg == true
 
     xlim([3 9])
     set(gca,'XTick',4:4:8,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
-    ylim([0 300])
-    set(gca,'YTick', 0:50:300,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
-
+    if expN == 1
+        ylim([0 300])
+        set(gca,'YTick', 0:50:300,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+    elseif expN == 2
+        ylim([0 400])
+        set(gca,'YTick', 0:50:400,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+    end         
     title([condition ' Reaction Time (' obs ')'],'FontSize',22)
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('RT [ms]','FontSize',20,'Fontname','Ariel')
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' tTask '\figures\' obs '_' condition '_rtSetSize']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' tTask '\figures\' obs '_' condition '_rtSetSize' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 
     %% Plot performance
@@ -91,7 +109,7 @@ if printFg == true
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('Accuracy','FontSize',20,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' tTask '\figures\' obs '_' condition '_perfSetSize']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' tTask '\figures\' obs '_' condition '_perfSetSize' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 end
 end

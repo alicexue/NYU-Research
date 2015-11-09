@@ -1,4 +1,4 @@
-function [rt,p] = p_main_slope(obs,task,printFg)
+function [rt,p] = p_main_slope(obs,task,expN,present,printFg)
 %% Example
 % p_main_slope('ax','difficult');
 
@@ -18,12 +18,16 @@ perf_avg = zeros(13,10000);
 rt_median = [];
 c = 1;
 
-files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task]);    
+if expN == 1
+    files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task]);    
+elseif expN == 2
+    files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\target present or absent\main_', task]);    
+end
 for n = 1:size(files,1)
     filename = files(n).name;
     fileL = size(filename,2);
     if fileL > 4 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')
-        [perfDelays,rtDelays] = main_slope(obs,task,filename);
+        [perfDelays,rtDelays] = main_slope(obs,task,filename,expN,present);
         perf_avg(:,c) = perfDelays; 
         rt_median = horzcat(rt_median,rtDelays);
         c = c + 1;

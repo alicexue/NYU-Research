@@ -82,11 +82,11 @@ if printFg == true
             t2 = ORp2TB;
         end    
         
-        s_t1 = nanstd(t1,[],2)./sqrt(numObs);
-        s_t2 = nanstd(t2,[],2)./sqrt(numObs);
+        s_t1 = std(t1,[],2)./sqrt(numObs);
+        s_t2 = std(t2,[],2)./sqrt(numObs);
 
-        t1 = nanmean(t1,2);
-        t2 = nanmean(t2,2);
+        t1 = mean(t1,2);
+        t2 = mean(t2,2);
 
         subplot(1,2,i)
         hold on;
@@ -124,11 +124,11 @@ if printFg == true
             t2 = BOTTOMp2;
         end    
         
-        s_t1 = nanstd(t1,[],2)./sqrt(numObs);
-        s_t2 = nanstd(t2,[],2)./sqrt(numObs);
+        s_t1 = std(t1,[],2)./sqrt(numObs);
+        s_t2 = std(t2,[],2)./sqrt(numObs);
 
-        t1 = nanmean(nanmean(t1,2),3);
-        t2 = nanmean(nanmean(t2,2),3);
+        t1 = mean(mean(t1,2),3);
+        t2 = mean(mean(t2,2),3);
 
         subplot(1,2,i)
         hold on;
@@ -166,11 +166,11 @@ if printFg == true
             t2 = ORp2LR;
         end    
         
-        s_t1 = nanstd(t1,[],2)./sqrt(numObs);
-        s_t2 = nanstd(t2,[],2)./sqrt(numObs);
+        s_t1 = std(t1,[],2)./sqrt(numObs);
+        s_t2 = std(t2,[],2)./sqrt(numObs);
 
-        t1 = nanmean(t1,2);
-        t2 = nanmean(t2,2);
+        t1 = mean(t1,2);
+        t2 = mean(t2,2);
 
         subplot(1,2,i)
         hold on;
@@ -208,11 +208,11 @@ if printFg == true
             t2 = RIGHTp2;
         end    
         
-        s_t1 = nanstd(t1,[],2)./sqrt(numObs);
-        s_t2 = nanstd(t2,[],2)./sqrt(numObs);
+        s_t1 = std(t1,[],2)./sqrt(numObs);
+        s_t2 = std(t2,[],2)./sqrt(numObs);
 
-        t1 = nanmean(nanmean(t1,2),3);
-        t2 = nanmean(nanmean(t2,2),3);
+        t1 = mean(mean(t1,2),3);
+        t2 = mean(mean(t2,2),3);
 
         subplot(1,2,i)
         hold on;

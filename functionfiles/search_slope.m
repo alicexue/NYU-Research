@@ -1,4 +1,4 @@
-function [rt4,rt8,perf4,perf8] = search_slope(obs,task,file,training)
+function [rt4,rt8,perf4,perf8] = search_slope(obs,task,file,expN,present,training)
 %% Example
 % search_slope('ax','difficult','150827_stim07.mat',false);
 
@@ -8,10 +8,14 @@ function [rt4,rt8,perf4,perf8] = search_slope(obs,task,file,training)
 % file = '150701_stim05.mat';
 
 %% Load data
-if training
-    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\training\' file])
-else 
-    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\' file])
+if expN == 1
+    if training
+        load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\training\' file])
+    else 
+        load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\' file])
+    end
+elseif expN == 2
+    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\target present or absent\' task '\' file])
 end
 
 %% Transform data
@@ -20,8 +24,18 @@ exp = getTaskParameters(myscreen,task);
 %% Compute reaction time according to the set size
 % setsize = 4:4:8;
 
-size4 = exp.randVars.setsize==4;
-size8 = exp.randVars.setsize==8;
+if expN == 1 || (expN == 2 && present == 3)
+    size4 = exp.randVars.setsize==4;
+    size8 = exp.randVars.setsize==8;
+elseif expN == 2
+    if present == 1
+        size4 = exp.randVars.setsize == 4 & exp.randVars.presence == 1;
+        size8 = exp.randVars.setsize == 8 & exp.randVars.presence == 1;
+    elseif present == 2
+        size4 = exp.randVars.setsize == 4 & exp.randVars.presence == 2;
+        size8 = exp.randVars.setsize == 8 & exp.randVars.presence == 2;
+    end
+end
 
 rt4 = nanmedian(exp.reactionTime(size4));
 rt8 = nanmedian(exp.reactionTime(size8));
@@ -36,11 +50,20 @@ for n = 1:size(noFixBreakIndices,2)
     tmp = noFixBreakIndices(n);
     orientation = exp.randVars.targetOrientation(tmp);
     response = exp.response(tmp);
-    if (orientation == 1 && response == 1) || (orientation == 2 && response == 2)
-        perf(n) = 1;
-    else
-        perf(n) = 0;
-    end
+    if expN == 1
+        if (orientation == 1 && response == 1) || (orientation == 2 && response == 2)
+            perf(n) = 1;
+        else
+            perf(n) = 0;
+        end
+    elseif expN == 2
+        presence = exp.randVars.presence(tmp);
+        if (orientation == 1 && response == 1) || (orientation == 2 && response == 2) || (presence == 2 && response == 3)
+            perf(n) = 1;
+        else
+            perf(n) = 0;
+        end
+    end        
     s4(n) = size4(tmp);
     s8(n) = size8(tmp);
 end 

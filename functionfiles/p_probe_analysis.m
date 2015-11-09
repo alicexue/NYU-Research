@@ -1,6 +1,6 @@
-function [P1,P2,Mpb,Mpo,Mpn,Mpb_pair,Mpn_pair,SH,DH,di,si1,si2,dDi,P1C2,P2C2] = p_probe_analysis(obs,task,correct,printFg)
+function [P1,P2,Mpb,Mpo,Mpn,Mpb_pair,Mpn_pair,SH,DH,di,si1,si2,dDi,P1C2,P2C2] = p_probe_analysis(obs,task,expN,present,correct,printFg)
 %% Example
-%%% p_probe_analysis('ax','difficult',false,false);
+%%% p_probe_analysis('ax','difficult',2,2,false,false);
 
 %% Parameters
 % obs = 'ax';
@@ -12,6 +12,20 @@ if strcmp(task,'difficult')
     condition = 'Conjunction';
 else 
     condition = 'Feature';
+end
+
+if expN == 1
+    saveFileLoc1 = ['\main_' task '\figures\' obs '_' condition];
+    saveFileLoc2 = '';
+elseif expN == 2
+    saveFileLoc1 = ['\target present or absent\main_' task '\figures\' obs '_' condition];
+    if present == 1
+        saveFileLoc2 = '_2TP';
+    elseif present == 2
+        saveFileLoc2 = '_2TA';
+    elseif present == 3
+        saveFileLoc2 = '_2';
+    end
 end
 
 %% Obtain pboth, pone and pnone for each run and concatenate over run
@@ -37,12 +51,17 @@ pnDSi1=[];
 pnDSi2=[];
 pnDDg3=[];
 
-files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task]);  
+if expN == 1
+    files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task]);  
+elseif expN == 2
+    files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\target present or absent\main_', task]);  
+end
+
 for i = 1:size(files,1)
     filename = files(i).name;
     fileL = size(filename,2);
     if fileL == 17 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')
-        [b,o,n,bp,op,np] = probe_analysis(obs,task,filename); 
+        [b,o,n,bp,op,np] = probe_analysis(obs,task,filename,expN,present); 
         pb = horzcat(pb,b);
         po = horzcat(po,o);
         pn = horzcat(pn,n); 
@@ -68,32 +87,32 @@ for i = 1:size(files,1)
 end
 
 %% Averaging across runs pair by pair for hemifields and diagonals
-pbMsHemi = mean(mean(pbSH,2),3);
-pnMsHemi = mean(mean(pnSH,2),3);
-pbMdHemi = mean(mean(pbDH,2),3);
-pnMdHemi = mean(mean(pnDH,2),3);
-pbMsDiag = mean(mean(pbDg,2),3);
-pnMsDiag = mean(mean(pnDg,2),3);
-pbMdSide1 = mean(mean(pbDSi1,2),3);
-pnMdSide1 = mean(mean(pnDSi1,2),3);
-pbMdSide2 = mean(mean(pbDSi2,2),3);
-pnMdSide2 = mean(mean(pnDSi2,2),3);
-pbMdDiag3 = mean(mean(pbDDg3,2),3);
-pnMdDiag3 = mean(mean(pnDDg3,2),3);  
+pbMsHemi = nanmean(nanmean(pbSH,2),3);
+pnMsHemi = nanmean(nanmean(pnSH,2),3);
+pbMdHemi = nanmean(nanmean(pbDH,2),3);
+pnMdHemi = nanmean(nanmean(pnDH,2),3);
+pbMsDiag = nanmean(nanmean(pbDg,2),3);
+pnMsDiag = nanmean(nanmean(pnDg,2),3);
+pbMdSide1 = nanmean(nanmean(pbDSi1,2),3);
+pnMdSide1 = nanmean(nanmean(pnDSi1,2),3);
+pbMdSide2 = nanmean(nanmean(pbDSi2,2),3);
+pnMdSide2 = nanmean(nanmean(pnDSi2,2),3);
+pbMdDiag3 = nanmean(nanmean(pbDDg3,2),3);
+pnMdDiag3 = nanmean(nanmean(pnDDg3,2),3);  
 
-Mpb = mean(pb,2);
-Mpo = mean(po,2);
-Mpn = mean(pn,2);
-Spb = std(pb,[],2)./sqrt(size(pb,2));
-Spo = std(po,[],2)./sqrt(size(po,2));
-Spn = std(pn,[],2)./sqrt(size(pn,2));
+Mpb = nanmean(pb,2);
+Mpo = nanmean(po,2);
+Mpn = nanmean(pn,2);
+Spb = nanstd(pb,[],2)./sqrt(size(pb,2));
+Spo = nanstd(po,[],2)./sqrt(size(po,2));
+Spn = nanstd(pn,[],2)./sqrt(size(pn,2));
 
 %% Transform pboth and pnone into p1 and p2
 [P1,P2] = quadratic_analysis(Mpb,Mpn);
 
 %% Averaging across runs pair by pair
-Mpb_pair = mean(pbp,2);
-Mpn_pair = mean(pnp,2);
+Mpb_pair = nanmean(pbp,2);
+Mpn_pair = nanmean(pnp,2);
 
 %% Transform pboth and pnone into p1 and p2
 [p1,p2] = quadratic_analysis(Mpb_pair,Mpn_pair);
@@ -112,9 +131,9 @@ if printFg && ~correct
     xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
     ylim([0 1])
     
-    title([condition ' Search (' obs ')'],'FontSize',24,'Fontname','Ariel')
+    title([condition ' Search (' obs ')' saveFileLoc2],'FontSize',24,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_rawProbs']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc1 '_rawProbs' saveFileLoc2]);
 
     print ('-djpeg', '-r500',namefig);
 
@@ -134,9 +153,9 @@ if printFg && ~correct
     ylim([0 1])
     xlim([0 500])
 
-    title([condition ' Search (' obs ')'],'FontSize',24,'Fontname','Ariel')
+    title([condition ' Search (' obs ')' saveFileLoc2],'FontSize',24,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc1 '_p1p2_' saveFileLoc2]);
     print ('-djpeg', '-r500',namefig); 
   
     %% Plot p1 and p2 for each probe delay for each pair - square configuration
@@ -163,7 +182,7 @@ if printFg && ~correct
         title(['PAIR n' num2str(numPair) ' (' obs ')'],'FontSize',14,'Fontname','Ariel')  
     end
     
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2PAIR1']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc1 '_p1p2PAIR1' saveFileLoc2]);
     print ('-djpeg', '-r500',namefig);
 
     %% Plot p1 and p2 for each probe delay for each pair - diamond configuration
@@ -190,7 +209,7 @@ if printFg && ~correct
         title(['PAIR n' num2str(numPair+6) ' (' obs ')'],'FontSize',14,'Fontname','Ariel')  
     end
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2PAIR2']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc1 '_p1p2PAIR2_' saveFileLoc2]);
     print ('-djpeg', '-r500',namefig);     
 
     %% Graph same/different hemifields and diagonals for square configuration
@@ -226,7 +245,7 @@ if printFg && ~correct
             title(['Square Diagonals (' obs ')'],'FontSize',14,'Fontname','Ariel')
         end     
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2HemiDiagS']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc1 '_p1p2HemiDiagS_' saveFileLoc2]);
     print ('-djpeg', '-r500',namefig);
     %% Graph same/different hemifields and diagonals
     figure; hold on;
@@ -261,7 +280,7 @@ if printFg && ~correct
             title(['Diamond Diags (' obs ')'],'FontSize',14,'Fontname','Ariel')
         end 
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2HemiDiagD']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc1 '_p1p2HemiDiagD_' saveFileLoc2]);
     print ('-djpeg', '-r500',namefig);
 end
 
@@ -279,12 +298,12 @@ P2C3 = NaN(size(Mpb,1),1);
 
 if correct
     if ~isempty(Mpb)
-        global_averagePB = mean(Mpb);
-        global_averagePO = mean(Mpo);
-        global_averagePN = mean(Mpn);
-        global_averageP1 = mean(P1);
-        global_averageP2 = mean(P2); 
-        global_averageC3 = mean(vertcat(P1,P2));         
+        global_averagePB = nanmean(Mpb);
+        global_averagePO = nanmean(Mpo);
+        global_averagePN = nanmean(Mpn);
+        global_averageP1 = nanmean(P1);
+        global_averageP2 = nanmean(P2); 
+        global_averageC3 = nanmean(vertcat(P1,P2));         
         for i=1:13
             Mpb(i,1) = Mpb(i,1)-global_averagePB;
             Mpo(i,1) = Mpo(i,1)-global_averagePO;
@@ -315,7 +334,7 @@ if correct
 
         title([condition ' Search (' obs ')'],'FontSize',24,'Fontname','Ariel')
         
-        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_rawProbsC1']);
+        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc1 '_rawProbsC1' saveFileLoc2]);
         print ('-djpeg', '-r500',namefig);
 
         %% Plot p1 and p2 for each probe delay - getting p1 and p2 from the corrected Mpb and Mpn
@@ -335,7 +354,7 @@ if correct
 
         title([condition ' Search (' obs ')'],'FontSize',24,'Fontname','Ariel')
 
-        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2C1']);
+        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' saveFileLoc1 '_p1p2C1' saveFileLoc2]);
         print ('-djpeg', '-r500',namefig); 
 
         %% Plot p1 and p2 for each probe delay - p1 and p2 are corrected for the global average
@@ -355,7 +374,7 @@ if correct
 
         title([condition ' Search (' obs ')'],'FontSize',24,'Fontname','Ariel')
 
-        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2C2']);
+        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc1 '_p1p2C2' saveFileLoc2]);
         print ('-djpeg', '-r500',namefig);
         %% Plot p1 and p2 for each probe delay - p1 and p2 are corrected for the combined global average
         figure;hold on;
@@ -374,7 +393,7 @@ if correct
 
         title([condition ' Search (' obs ')'],'FontSize',24,'Fontname','Ariel')
 
-        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2C3']);
+        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc1 '_p1p2C3' saveFileLoc2]);
 
         print ('-djpeg', '-r500',namefig);        
     end

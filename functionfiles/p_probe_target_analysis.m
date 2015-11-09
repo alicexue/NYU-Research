@@ -1,4 +1,4 @@
-function [pbothPD,ponePD,pnonePD,pbothAD,poneAD,pnoneAD,p1P,p2P,p1A,p2A,nTrialsP,nTrialsA] = p_probe_target_analysis(obs, task, printFg)
+function [pbothPD,ponePD,pnonePD,pbothAD,poneAD,pnoneAD,p1P,p2P,p1A,p2A,nTrialsP,nTrialsA,p1PS,p2PS,p1AS,p2AS,minTrialsP,minTrialsA] = p_probe_target_analysis(obs,task,printFg)
 %% Example
 %%% p_probe_target_analysis('ax','difficult',false);
 
@@ -15,14 +15,6 @@ else
 end
 
 %% Obtain pboth, pone and pnone for each run and concatenate over run
-pbothP=[];
-poneP=[];
-pnoneP=[];
-
-pbothA=[];
-poneA=[];
-pnoneA=[];
-
 pbothPD=[];
 ponePD=[];
 pnonePD=[];
@@ -85,7 +77,7 @@ MpnADP = nanmean(pnoneADP,2);
 %% Transform pboth and pnone into p1 and p2
 [p1P,p2P] = quadratic_analysis(MpbPD,MpnPD);
 [p1A,p2A] = quadratic_analysis(MpbAD,MpnAD);
-
+    
 if printFg == true 
     %% Graph p1 p2 when target location is probed
     figure;hold on;
@@ -161,10 +153,19 @@ if printFg == true
 
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_TA_p1p2']);
     print ('-djpeg', '-r500',namefig); 
-    
-    %% Plot sampled data 
-    sampling(obs,pbothPD,pnonePD,task,true,100);
-    sampling(obs,pbothAD,pnoneAD,task,false,100);    
+        
+end
+
+p1PS=[];
+p2PS=[];
+p1AS=[];
+p2AS=[];
+minTrialsP = 0;
+minTrialsA = 0;
+%% Plot sampled data
+if ~isempty(pbothPD)
+    [p1PS,p2PS,minTrialsP] = sampling(obs,pbothPD,pnonePD,task,true,100,printFg);
+    [p1AS,p2AS,minTrialsA] = sampling(obs,pbothAD,pnoneAD,task,false,100,printFg); 
 end
 end
 

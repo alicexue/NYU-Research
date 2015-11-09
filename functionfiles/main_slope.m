@@ -1,4 +1,4 @@
-function [perfDelays,rtDelays] = main_slope(obs,task,file)
+function [perfDelays,rtDelays] = main_slope(obs,task,file,expN,present)
 %% Example
 % main_slope('ax','difficult','150716_stim01.mat');
 
@@ -8,7 +8,10 @@ function [perfDelays,rtDelays] = main_slope(obs,task,file)
 % file = '150716_stim01.mat';
 
 %% Load data
-load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\' file])
+if expN == 1
+    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\' file])
+elseif expN == 2
+    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\target present or absent\main_' task '\' file])
 
 %% Transform data
 exp = getTaskParameters(myscreen,task);
@@ -37,11 +40,20 @@ perfDelays = zeros(13,nTrials/13);
 for n = 1:size(exp.randVars.targetOrientation,2)
     orientation = exp.randVars.targetOrientation(n);
     response = exp.response(n);
-    if (orientation == 1 && response == 1) || (orientation == 2 && response == 2)
-        perfTmp(n) = 1;
-    else
-        perfTmp(n) = 0;
-    end
+    if expN == 1
+        if (orientation == 1 && response == 1) || (orientation == 2 && response == 2)
+            perfTmp(n) = 1;
+        else
+            perfTmp(n) = 0;
+        end
+    elseif expN == 2
+        presence = exp.randVars.presence(n);
+        if (orientation == 1 && response == 1) || (orientation == 2 && response == 2) || (presence == 2 && response == 3)
+            perfTmp(n) = 1;
+        else
+            perfTmp(n) = 0;
+        end
+    end 
 end
 perfTmp = perfTmp(1,1:n);
 

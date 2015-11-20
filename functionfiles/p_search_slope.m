@@ -1,13 +1,19 @@
 function [rt4,rt8,perf4,perf8] = p_search_slope(obs,task,expN,present,training,printFg)
 %% Example
-%%% p_search_slope('ax','difficult',false,true);
+% p_search_slope('ax','difficult',2,1,false,true);
 
 %% Parameters
-% obs = 'ax';
-% task = 'difficult';
-% training = false;
+% obs = 'ax'; (observer's initials)
+% task = 'difficult'; ('easy' or 'difficult')
+% expN = 1; (1 or 2)
+% present = 1; (only relevant for expN == 2; 1:target-present trials,
+% 2:target-absent trials, 3:all trials)
+% training = false; (if true, uses stim files in training folder)
+% printFg = true; (if true, prints and saves figures)
 
-% the training boolean is for the first two days of the pre-experiment
+%% Outputs
+% rt4 is a matrix of the median rt's for set size 4 for each stim file for obs
+% rt8 is a matrix of the median rt's for set size 8 for each stim file for obs
 
 %% Change task name to feature/conjunction
 if strcmp(task(1:4),'easy')
@@ -26,22 +32,20 @@ if expN == 1
 elseif expN == 2
     tTask = ['target present or absent\' task];
     if present == 1
-        saveFileName = '2TP';
+        saveFileName = '_2TP';
     elseif present == 2
-        saveFileName = '2TA';
+        saveFileName = '_2TA';
     elseif present == 3
-        saveFileName = '2';
+        saveFileName = '_2';
     end
 end
     
-
 %% Obtain pboth, pone and pnone for each run and concatenate over run
-rt4 = zeros(1,1000);
-rt8 = zeros(1,1000);
-perf4 = zeros(1,1000);
-perf8 = zeros(1,1000);
+rt4 = NaN(1,1000);
+rt8 = NaN(1,1000);
+perf4 = NaN(1,1000);
+perf8 = NaN(1,1000);
 c = 1;
-
 
 files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\', tTask]);  
 for n = 1:size(files,1)
@@ -88,7 +92,7 @@ if printFg == true
         set(gca,'YTick', 0:50:300,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
     elseif expN == 2
         ylim([0 400])
-        set(gca,'YTick', 0:50:400,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+        set(gca,'YTick', 0:100:400,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
     end         
     title([condition ' Reaction Time (' obs ')'],'FontSize',22)
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')

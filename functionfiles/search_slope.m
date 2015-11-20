@@ -1,11 +1,21 @@
 function [rt4,rt8,perf4,perf8] = search_slope(obs,task,file,expN,present,training)
 %% Example
-% search_slope('ax','difficult','150827_stim07.mat',false);
+% search_slope('ax','difficult','150827_stim07.mat',1,1,false);
 
 %% Parameters
-% obs = 'ax';
-% task = 'difficult';
-% file = '150701_stim05.mat';
+% obs = 'ax'; (observer's initials)
+% task = 'difficult'; ('easy' or 'difficult')
+% file = '150701_stim05.mat'; (name of stim file)
+% expN = 1; (1 or 2)
+% present = 1; (only relevant for expN == 2; 1:target-present trials,
+% 2:target-absent trials, 3:all trials)
+% training = false; (if true, uses stim files inside of training folder
+
+%% Outputs
+% rt4 is the median rt for trials in file with set size 4 (double)
+% rt8 is the median rt for trials in file with set size 8 (double)
+% perf4 is average performance for trials in file with set size 4 (double)
+% perf8 is average performance for trials in file with set size 8 (double)
 
 %% Load data
 if expN == 1
@@ -39,9 +49,6 @@ end
 
 rt4 = nanmedian(exp.reactionTime(size4));
 rt8 = nanmedian(exp.reactionTime(size8));
-
-% rt4_sd = nanstd(exp.reactionTime(size4))/sqrt(size(exp.reactionTime(size4),2));
-% rt8_sd = nanstd(exp.reactionTime(size8))/sqrt(size(exp.reactionTime(size8),2));
 
 %% Compute performance according to the set size
 noFixBreakIndices = find(~isnan(exp.reactionTime));

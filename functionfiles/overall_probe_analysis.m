@@ -1,14 +1,21 @@
 function [all_p1,all_p2] = overall_probe_analysis(task,expN,present,correct,printFg,printStats)
-%% This function gets p1 and p2 from all observers and averages them
+%% This function graphs raw probabilities and p1 & p2 for overall, pairs, and hemifields across all observers
 %% Example
-%%% overall_probe_analysis('difficult',2,2,false,true,false);
+%%% [all_p1,all_p2] = overall_probe_analysis('difficult',2,2,false,true,false);
 
 %% Parameters
-% task = 'difficult'
-% printFg = false;
-% correct = false;
+% task = 'difficult'; ('easy' or 'difficult')
+% expN = 1; (1 or 2) 
+% present = 1; (only valid for expN == 2; 1:target-present trials, 2:target-absent trials, 3:all trials)
+% correct = false; (if true, p1 and p2 are corrected for each individual and also by
+% the global average)
+% printFg = false; (if true, prints and saves the figures)
+% printStats = false; (if true, conducts ANOVA on overall p1 p2 data
 
-% if correct=true, the data will be corrected by the global average
+%% Outputs
+% all_p1 and all_p2 are matrices for the p1 and p2 values for all observers
+% (i.e. for 3 observers, a 13x3 matrix for p1 and p2)
+
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
     condition = 'Conjunction';
@@ -17,10 +24,10 @@ else
 end
 
 if expN == 1
-    saveFileLoc1 = ['\main_' task '\' condition];
-    saveFileName = '1';
+    saveFileLoc = ['\main_' task '\' condition];
+    saveFileName = '';
 elseif expN == 2
-    saveFileLoc1 = ['\target present or absent\main_' task '\' condition];
+    saveFileLoc = ['\target present or absent\main_' task '\' condition];
     if present == 1
         saveFileName = '_2TP';
     elseif present == 2
@@ -30,7 +37,7 @@ elseif expN == 2
     end
 end
 
-%% Obtain pboth, pone and pnone for each run and concatenate over run
+%% Obtain pboth, pone and pnone for each observer and concatenate over observer
 pboth=[];
 pone=[];
 pnone=[];
@@ -66,8 +73,6 @@ for n = 1:size(files,1)
     fileL = size(obs,2);
     if (fileL == 2 || fileL == 3) && ~strcmp(obs(1,1),'.')
         [P1,P2,pb,po,pn,pbp,pnp,SH,DH,di,si1,si2,diD,P1C2,P2C2] = p_probe_analysis(obs,task,expN,present,correct,false); 
-%         a = {SH,DH,di,si1,si2,diD};
-%         b = {SH_p1,DH_p1,di_p1,si1_p1,si2_p1,diD_p1,SH_p2,DH_p2,di_p2,si1_p2,si2_p2,diD_p2};
         if ~isempty(P1)            
             all_p1 = horzcat(all_p1,P1);
             all_p2 = horzcat(all_p2,P2);
@@ -160,12 +165,12 @@ if printFg
         ylim([0 1])
     end
     
-    title([condition ' Search (n = ' num2str(numObs) ')'],'FontSize',24,'Fontname','Ariel')
+    title([condition ' Search (n = ' num2str(numObs) ') ' saveFileName],'FontSize',24,'Fontname','Ariel')
 
     if correct
-         namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc1 '_rawProbsC1' saveFileName]);
+         namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_rawProbsC1' saveFileName]);
     else
-        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc1 '_rawProbs' saveFileName]);
+        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_rawProbs' saveFileName]);
     end
     print ('-djpeg', '-r500',namefig);
     %% Plot p1 and p2 for each probe delay    
@@ -185,14 +190,15 @@ if printFg
 
     xlim([0 500])
 
-    title([condition ' Search (n = ' num2str(numObs) ')'],'FontSize',24,'Fontname','Ariel')
+    title([condition ' Search (n = ' num2str(numObs) ') ' saveFileName],'FontSize',24,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc1 '_p1p2' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2' saveFileName]);
 
     print ('-djpeg', '-r500',namefig);
     
     if correct
 %         %% Plot p1 and p2 for each probe delay - p1 and p2 from corrected
+%         pboth and pnone
 %         %% pboth and pnone
 %         [P1C1,P2C1] = quadratic_analysis(pboth,pnone);
 %         Sp1C1 = nanstd(P1C1,[],2)/sqrt(numObs)*size(P1C1,1)/(size(P1C1,1)-1);
@@ -218,233 +224,250 @@ if printFg
 %         namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_p1p2C1']);
 %         print ('-djpeg', '-r500',namefig);
 %         
-        %% Plot p1 and p2 for each probe delay - average of corrected p1 and p2 for each observer 
-        Sp1C2 = nanstd(P1_C2,[],2)./sqrt(numObs)*size(P1_C2,1)/(size(P1_C2,1)-1);
-        Sp2C2 = nanstd(P2_C2,[],2)./sqrt(numObs)*size(P2_C2,1)/(size(P2_C2,1)-1);
-        P1_C2 = nanmean(P1_C2,2);
-        P2_C2 = nanmean(P2_C2,2);
-        figure;hold on;
-
-        errorbar(100:30:460,P1_C2,Sp1C2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-        errorbar(100:30:460,P2_C2,Sp2C2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
-
-        legend('p1','p2','Location','SouthEast')
-
-        set(gca,'YTick',-0.35:.35:0.35,'FontSize',18,'LineWidth',2','Fontname','Ariel')
-        set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
-
-        ylabel('Probe report probabilities','FontSize',20,'Fontname','Ariel')
-        xlabel('Time from discrimination task onset [ms]','FontSize',20,'Fontname','Ariel')
-        ylim([-0.35 0.35])        
-
-        xlim([0 500])
-
-        title([condition ' Search (n = ' num2str(numObs) ')'],'FontSize',24,'Fontname','Ariel')
-
-        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc1 '_p1p2C2' saveFileName]);
-        print ('-djpeg', '-r500',namefig);
-        
-        %% Plot p1 and p2 - corrected by combined global average
-        global_averageC3 = nanmean(vertcat(all_p1,all_p2),1);
-        for i=1:13
-            P1C3(i,:) = all_p1(i,:)-global_averageC3;
-            P2C3(i,:) = all_p2(i,:)-global_averageC3;
-        end
-        Sp1C3 = nanstd(P1C3,[],2)/sqrt(numObs)*size(P1C3,1)*2/(size(P1C3,1)*2-1);
-        Sp2C3 = nanstd(P2C3,[],2)/sqrt(numObs)*size(P2C3,1)/(size(P2C3,1)-1);        
-        P1C3 = nanmean(P1C3,2);
-        P2C3 = nanmean(P2C3,2);
-        
-        figure;hold on;
-        errorbar(100:30:460,P1C3,Sp1C3,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-        errorbar(100:30:460,P2C3,Sp2C3,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
-
-        legend('p1','p2','Location','SouthEast')
-
-        set(gca,'YTick',-0.4:.1:0.4,'FontSize',18,'LineWidth',2','Fontname','Ariel')
-        set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
-
-        ylabel('Probe report probabilities','FontSize',20,'Fontname','Ariel')
-        xlabel('Time from discrimination task onset [ms]','FontSize',20,'Fontname','Ariel')
-        ylim([-0.4 0.4])
-
-        title([condition ' Search (n = ' num2str(numObs) ')'],'FontSize',24,'Fontname','Ariel')
-
-        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc1 '_p1p2C3' saveFileName]);
-        print ('-djpeg', '-r500',namefig);
-    end
-    if ~correct
-        %% Plot p1 and p2 for each pair - square configuration
-        figure;
-        for numPair = 1:size(pair_p1,3)/2
-            subplot(2,3,numPair)
-            hold on;
-
-            errorbar(100:30:460,pair_p1(:,:,numPair),s_pair_p1(:,:,numPair),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-            errorbar(100:30:460,pair_p2(:,:,numPair),s_pair_p2(:,:,numPair),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
-
-            legend('p1','p2','Location','SouthEast')
-            set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
-            set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
-            ylim([0 1])
-            xlim([0 500])
-
-            if numPair == 1 || numPair == 4
-                ylabel('Percent correct','FontSize',16,'Fontname','Ariel')
-            end
-            if numPair == 5
-                xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
-            end
-
-            title(['PAIR n' num2str(numPair)],'FontSize',14,'Fontname','Ariel')  
-        end
-
-        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc1 '_p1p2PAIR1' saveFileName]);
-        print ('-djpeg', '-r500',namefig);
-
-        %% Plot p1 and p2 for each pair - diamond configuration
-        figure;
-        for numPair = 1:size(pair_p1,3)/2
-            subplot(2,3,numPair)
-            hold on;
-
-            errorbar(100:30:460,pair_p1(:,:,numPair+6),s_pair_p1(:,:,numPair+6),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-            errorbar(100:30:460,pair_p2(:,:,numPair+6),s_pair_p2(:,:,numPair+6),'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
-
-            legend('p1','p2','Location','SouthEast')
-            set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
-            set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
-            ylim([0 1])
-            xlim([0 500])
-
-            if numPair == 1 || numPair == 4
-                ylabel('Percent correct','FontSize',16,'Fontname','Ariel')
-            end
-            if numPair == 5
-                xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
-            end
-
-            title(['PAIR n' num2str(numPair+6)],'FontSize',14,'Fontname','Ariel')  
-        end
-
-        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc1 '_p1p2PAIR2' saveFileName]);
-        print ('-djpeg', '-r500',namefig);  
-
-        %% Graph same/different hemifields and diagonals for square configuration
-        figure; hold on;
-        for i = 1:3
-            if i == 1
-                t1 = SH_p1;
-                t2 = SH_p2;
-            elseif i == 2
-                t1 = DH_p1;
-                t2 = DH_p2;
-            elseif i == 3
-                t1 = di_p1;
-                t2 = di_p2;
-            end    
-
-            s_t1 = nanstd(t1,[],2)/sqrt(numObs);
-            s_t2 = nanstd(t2,[],2)/sqrt(numObs);
-
-            t1 = nanmean(t1,2);
-            t2 = nanmean(t2,2);
-
-            subplot(1,3,i)
-            hold on;
-
-            errorbar(100:30:460,t1,s_t1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-            errorbar(100:30:460,t2,s_t2,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
-
-            legend('p1','p2','Location','SouthEast')
-
-            set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
-            set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
-
-            ylim([0 1])
-            xlim([0 500])
-
-            if i == 1           
-                title('Same Hemifield','FontSize',14,'Fontname','Ariel')  
-                ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
-            elseif i == 2
-                title('Different Hemifield','FontSize',14,'Fontname','Ariel')  
-                xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
-            elseif i == 3
-                title('Square Diagonals','FontSize',14,'Fontname','Ariel')
-            end    
-        end
-        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc1 '_p1p2HemiDiagS' saveFileName]);
-        print ('-djpeg', '-r500',namefig);
-
-        %% Graph same/different hemifields and diagonals for diamond configuration
-        figure; hold on;
-        for i = 1:3
-            if i == 1
-                t1 = si1_p1;
-                t2 = si1_p2;
-            elseif i == 2
-                t1 = si2_p1;
-                t2 = si2_p2;
-            elseif i == 3
-                t1 = diD_p1;
-                t2 = diD_p2;
-            end    
-
-            s_t1 = nanstd(t1,[],2)/sqrt(numObs);
-            s_t2 = nanstd(t2,[],2)/sqrt(numObs);
-
-            t1 = nanmean(t1,2);
-            t2 = nanmean(t2,2);
-
-            subplot(1,3,i)
-            hold on;
-
-            errorbar(100:30:460,t1,s_t1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-            errorbar(100:30:460,t2,s_t2,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
-
-            legend('p1','p2','Location','SouthEast')
-
-            set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
-            set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
-
-            ylim([0 1])
-            xlim([0 500])
-
-            if i == 1 || i == 2
-                title(['Diamond Sides n' num2str(i)],'FontSize',14,'Fontname','Ariel')
-            elseif i == 3
-                title(['Diamond Diagonals n' num2str(i)],'FontSize',14,'Fontname','Ariel')
-            end
-
-            if i == 1
-                ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
-            elseif i == 2
-                xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
-            end
-
-        end
-        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc1 '_p1p2HemiDiagD' saveFileName]);
-        print ('-djpeg', '-r500',namefig);
-    end
+%         %% Plot p1 and p2 for each probe delay - average of corrected p1 and p2 for each observer 
+%         Sp1C2 = nanstd(P1_C2,[],2)./sqrt(numObs)*size(P1_C2,1)/(size(P1_C2,1)-1);
+%         Sp2C2 = nanstd(P2_C2,[],2)./sqrt(numObs)*size(P2_C2,1)/(size(P2_C2,1)-1);
+%         P1_C2 = nanmean(P1_C2,2);
+%         P2_C2 = nanmean(P2_C2,2);
+%         figure;hold on;
+% 
+%         errorbar(100:30:460,P1_C2,Sp1C2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
+%         errorbar(100:30:460,P2_C2,Sp2C2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+% 
+%         legend('p1','p2','Location','SouthEast')
+% 
+%         set(gca,'YTick',-0.35:.35:0.35,'FontSize',18,'LineWidth',2','Fontname','Ariel')
+%         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
+% 
+%         ylabel('Probe report probabilities','FontSize',20,'Fontname','Ariel')
+%         xlabel('Time from discrimination task onset [ms]','FontSize',20,'Fontname','Ariel')
+%         ylim([-0.35 0.35])        
+% 
+%         xlim([0 500])
+% 
+%         title([condition ' Search (n = ' num2str(numObs) ')' saveFileName],'FontSize',24,'Fontname','Ariel')
+% 
+%         namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2C2' saveFileName]);
+%         print ('-djpeg', '-r500',namefig);
+%         
+%         %% Plot p1 and p2 - corrected by combined global average
+%         global_averageC3 = nanmean(vertcat(all_p1,all_p2),1);
+%         for i=1:13
+%             P1C3(i,:) = all_p1(i,:)-global_averageC3;
+%             P2C3(i,:) = all_p2(i,:)-global_averageC3;
+%         end
+%         Sp1C3 = nanstd(P1C3,[],2)/sqrt(numObs)*size(P1C3,1)*2/(size(P1C3,1)*2-1);
+%         Sp2C3 = nanstd(P2C3,[],2)/sqrt(numObs)*size(P2C3,1)/(size(P2C3,1)-1);        
+%         P1C3 = nanmean(P1C3,2);
+%         P2C3 = nanmean(P2C3,2);
+%         
+%         figure;hold on;
+%         errorbar(100:30:460,P1C3,Sp1C3,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
+%         errorbar(100:30:460,P2C3,Sp2C3,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+% 
+%         legend('p1','p2','Location','SouthEast')
+% 
+%         set(gca,'YTick',-0.4:.1:0.4,'FontSize',18,'LineWidth',2','Fontname','Ariel')
+%         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
+% 
+%         ylabel('Probe report probabilities','FontSize',20,'Fontname','Ariel')
+%         xlabel('Time from discrimination task onset [ms]','FontSize',20,'Fontname','Ariel')
+%         ylim([-0.4 0.4])
+% 
+%         title([condition ' Search (n = ' num2str(numObs) ')' saveFileName],'FontSize',24,'Fontname','Ariel')
+% 
+%         namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2C3' saveFileName]);
+%         print ('-djpeg', '-r500',namefig);
+%     end
+%     if ~correct
+%         %% Plot p1 and p2 for each pair - square configuration
+%         figure;
+%         for numPair = 1:size(pair_p1,3)/2
+%             subplot(2,3,numPair)
+%             hold on;
+% 
+%             errorbar(100:30:460,pair_p1(:,:,numPair),s_pair_p1(:,:,numPair),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
+%             errorbar(100:30:460,pair_p2(:,:,numPair),s_pair_p2(:,:,numPair),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+% 
+%             legend('p1','p2','Location','SouthEast')
+%             set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+%             set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+%             ylim([0 1])
+%             xlim([0 500])
+% 
+%             if numPair == 1 || numPair == 4
+%                 ylabel('Percent correct','FontSize',16,'Fontname','Ariel')
+%             end
+%             if numPair == 5
+%                 xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
+%             end
+% 
+%             title(['PAIR n' num2str(numPair)],'FontSize',14,'Fontname','Ariel')  
+%         end
+% 
+%         namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2PAIR1' saveFileName]);
+%         print ('-djpeg', '-r500',namefig);
+% 
+%         %% Plot p1 and p2 for each pair - diamond configuration
+%         figure;
+%         for numPair = 1:size(pair_p1,3)/2
+%             subplot(2,3,numPair)
+%             hold on;
+% 
+%             errorbar(100:30:460,pair_p1(:,:,numPair+6),s_pair_p1(:,:,numPair+6),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
+%             errorbar(100:30:460,pair_p2(:,:,numPair+6),s_pair_p2(:,:,numPair+6),'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+% 
+%             legend('p1','p2','Location','SouthEast')
+%             set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+%             set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+%             ylim([0 1])
+%             xlim([0 500])
+% 
+%             if numPair == 1 || numPair == 4
+%                 ylabel('Percent correct','FontSize',16,'Fontname','Ariel')
+%             end
+%             if numPair == 5
+%                 xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
+%             end
+% 
+%             title(['PAIR n' num2str(numPair+6)],'FontSize',14,'Fontname','Ariel')  
+%         end
+% 
+%         namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2PAIR2' saveFileName]);
+%         print ('-djpeg', '-r500',namefig);  
+% 
+%         %% Graph same/different hemifields and diagonals for square configuration
+%         figure; hold on;
+%         for i = 1:3
+%             if i == 1
+%                 t1 = SH_p1;
+%                 t2 = SH_p2;
+%             elseif i == 2
+%                 t1 = DH_p1;
+%                 t2 = DH_p2;
+%             elseif i == 3
+%                 t1 = di_p1;
+%                 t2 = di_p2;
+%             end    
+% 
+%             s_t1 = nanstd(t1,[],2)/sqrt(numObs);
+%             s_t2 = nanstd(t2,[],2)/sqrt(numObs);
+% 
+%             t1 = nanmean(t1,2);
+%             t2 = nanmean(t2,2);
+% 
+%             subplot(1,3,i)
+%             hold on;
+% 
+%             errorbar(100:30:460,t1,s_t1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
+%             errorbar(100:30:460,t2,s_t2,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+% 
+%             legend('p1','p2','Location','SouthEast')
+% 
+%             set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+%             set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+% 
+%             ylim([0 1])
+%             xlim([0 500])
+% 
+%             if i == 1           
+%                 title('Same Hemifield','FontSize',14,'Fontname','Ariel')  
+%                 ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
+%             elseif i == 2
+%                 title('Different Hemifield','FontSize',14,'Fontname','Ariel')  
+%                 xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
+%             elseif i == 3
+%                 title('Square Diagonals','FontSize',14,'Fontname','Ariel')
+%             end    
+%         end
+%         namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2HemiDiagS' saveFileName]);
+%         print ('-djpeg', '-r500',namefig);
+% 
+%         %% Graph same/different hemifields and diagonals for diamond configuration
+%         figure; hold on;
+%         for i = 1:3
+%             if i == 1
+%                 t1 = si1_p1;
+%                 t2 = si1_p2;
+%             elseif i == 2
+%                 t1 = si2_p1;
+%                 t2 = si2_p2;
+%             elseif i == 3
+%                 t1 = diD_p1;
+%                 t2 = diD_p2;
+%             end    
+% 
+%             s_t1 = nanstd(t1,[],2)/sqrt(numObs);
+%             s_t2 = nanstd(t2,[],2)/sqrt(numObs);
+% 
+%             t1 = nanmean(t1,2);
+%             t2 = nanmean(t2,2);
+% 
+%             subplot(1,3,i)
+%             hold on;
+% 
+%             errorbar(100:30:460,t1,s_t1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
+%             errorbar(100:30:460,t2,s_t2,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+% 
+%             legend('p1','p2','Location','SouthEast')
+% 
+%             set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+%             set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+% 
+%             ylim([0 1])
+%             xlim([0 500])
+% 
+%             if i == 1 || i == 2
+%                 title(['Diamond Sides n' num2str(i)],'FontSize',14,'Fontname','Ariel')
+%             elseif i == 3
+%                 title(['Diamond Diagonals n' num2str(i)],'FontSize',14,'Fontname','Ariel')
+%             end
+% 
+%             if i == 1
+%                 ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
+%             elseif i == 2
+%                 xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
+%             end
+% 
+%         end
+%         namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2HemiDiagD' saveFileName]);
+%         print ('-djpeg', '-r500',namefig);
+%     end
+% end
+% 
+% %% Conducts ANOVA on P1 and P2
+% if printStats
+%     p1p2 = zeros(numObs*13*2,4);
+%     index = 0;
+%     for i = 1:numObs
+%         p1p2(index+1:index+13,1) = all_p1(:,i);
+%         p1p2(index+1:index+13,2) = rot90([13,12,11,10,9,8,7,6,5,4,3,2,1]);
+%         p1p2(index+1:index+13,3) = rot90([1,1,1,1,1,1,1,1,1,1,1,1,1]);
+%         p1p2(index+1:index+13,4) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
+%         index = index + 13;
+%         p1p2(index+1:index+13,1) = all_p2(:,i);
+%         p1p2(index+1:index+13,2) = rot90([13,12,11,10,9,8,7,6,5,4,3,2,1]);
+%         p1p2(index+1:index+13,3) = rot90([2,2,2,2,2,2,2,2,2,2,2,2,2]);
+%         p1p2(index+1:index+13,4) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
+%         index = index + 13;
+%     end
+%     RMAOV2(p1p2);    
 end
-
-if printStats
-    p1p2 = zeros(numObs*13*2,4);
-    index = 0;
-    for i = 1:numObs
-        p1p2(index+1:index+13,1) = all_p1(:,i);
-        p1p2(index+1:index+13,2) = rot90([13,12,11,10,9,8,7,6,5,4,3,2,1]);
-        p1p2(index+1:index+13,3) = rot90([1,1,1,1,1,1,1,1,1,1,1,1,1]);
-        p1p2(index+1:index+13,4) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
-        index = index + 13;
-        p1p2(index+1:index+13,1) = all_p2(:,i);
-        p1p2(index+1:index+13,2) = rot90([13,12,11,10,9,8,7,6,5,4,3,2,1]);
-        p1p2(index+1:index+13,3) = rot90([2,2,2,2,2,2,2,2,2,2,2,2,2]);
-        p1p2(index+1:index+13,4) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
-        index = index + 13;
-    end
-    RMAOV2(p1p2);    
-end
+% 
+% %% Bar graphs for PBOTH, PNONE, and PONE. Note that the graph is not saved.
+% figure;hold on;
+% y = [];
+% x = 1:numObs;
+% for i = 1:numObs
+%     y = [y;mean(pboth(:,i)),mean(pone(:,i)),mean(pnone(:,i))];
+% end
+% b = bar(x,y);
+% set(gca,'YTick',0:.2:1,'FontSize',15,'LineWidth',2','Fontname','Ariel')
+% ylabel('Percent correct','FontSize',15,'Fontname','Ariel')
+% xlabel('Observer','FontSize',15,'Fontname','Ariel')
+% title([condition ' Probe Performance' saveFileName],'FontSize',15,'Fontname','Ariel')
+% ylim([0 1])
+% set(gca,'XTick',1:1:numObs,'FontSize',15,'LineWidth',2','Fontname','Ariel')
+% legend('PBoth','POne','PNone')
 end
 

@@ -1,11 +1,25 @@
-function [p1ANDtb,p2ANDtb,p1ORtb,p2ORtb,p1TOP,p2TOP,p1BOTTOM,p2BOTTOM,p1ANDlr,p2ANDlr,p1ORlr,p2ORlr,p1LEFT,p2LEFT,p1RIGHT,p2RIGHT]=p_probe_analysisTB(obs, task, printFg)
+function [p1ANDtb,p2ANDtb,p1ORtb,p2ORtb,p1TOP,p2TOP,p1BOTTOM,p2BOTTOM,p1ANDlr,p2ANDlr,p1ORlr,p2ORlr,p1LEFT,p2LEFT,p1RIGHT,p2RIGHT]=p_probe_analysisTB(obs,task,expN,present,printFg)
 %% Example
-%%% p_probe_analysisTB('ax','difficult',false);
+%%% p_probe_analysisTB('ax','difficult',2,1,false);
 
 %% Parameters
-% obs = 'ax';
-% task = 'difficult'
-% multipleObs = true;
+% obs = 'ax'; (observer's initials)
+% task = 'difficult'; ('easy' or 'difficult')
+% expN = 1; (1 or 2)
+% present = 1; (only relevant for expN == 2; 1:target-present trials,
+% 2:target-absent trials, 3:all trials)
+% printFg = true; (if true, prints and saves figures)
+
+%% Outputs
+% p1ANDtb and p2ANDtb are 13x1 matrices for p1 and p2 when the probes are
+% on the top AND the bottom
+% p1ORtb and p2ORtb are 13x1 matrices for p1 and p2 when the probes are
+% on the top OR the bottom
+% p1TOP and p2TOP are 13x1 matrices for p1 and p2 when both probes are on
+% top
+% p1BOTTOM and p2BOTTOM are 13x1 matrices for p1 and p2 when both probes
+% are on the bottom
+% the remaining outputs are similar but for left and right
 
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
@@ -14,6 +28,19 @@ else
     condition = 'Feature';
 end
 
+if expN == 1
+    saveFileLoc = ['\main_' task '\figures\' obs '_' condition];
+    saveFileName = '';
+elseif expN == 2
+    saveFileLoc = ['\target present or absent\main_' task '\figures\' obs '_' condition];
+    if present == 1
+        saveFileName = '_2TP';
+    elseif present == 2
+        saveFileName = '_2TA';
+    elseif present == 3
+        saveFileName = '_2';
+    end
+end
 %% Obtain pboth, pone and pnone for each run and concatenate over run
 pbANDtb=[];
 pnANDtb=[];
@@ -39,12 +66,17 @@ pnLEFT=[];
 pbRIGHT=[];
 pnRIGHT=[];
 
-files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task]);  
+if expN == 1
+    files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task]);  
+elseif expN == 2
+    files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\target present or absent\main_', task]);  
+end
+
 for i = 1:size(files,1)
     filename = files(i).name;
     fileL = size(filename,2);
     if fileL == 17 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')
-        [b,o,n,bp,op,np] = probe_analysis(obs,task,filename,1,1); 
+        [b,o,n,bp,op,np] = probe_analysis(obs,task,filename,expN,present); 
         pbANDtb = horzcat(pbANDtb,bp(:,:,1),bp(:,:,2),bp(:,:,5),bp(:,:,6),bp(:,:,12));
         pnANDtb = horzcat(pnANDtb,np(:,:,1),np(:,:,2),np(:,:,5),np(:,:,6),np(:,:,12));
 
@@ -68,7 +100,6 @@ for i = 1:size(files,1)
         
         pbRIGHT = horzcat(pbRIGHT,bp(:,:,1),bp(:,:,8),bp(:,:,9));
         pnRIGHT = horzcat(pnRIGHT,np(:,:,1),np(:,:,8),np(:,:,9));        
-        
     end
 end
         
@@ -100,7 +131,7 @@ pnRIGHTm = nanmean(pnRIGHT,2);
 [p1LEFT,p2LEFT] = quadratic_analysis(pbLEFTm,pnLEFTm);
 [p1RIGHT,p2RIGHT] = quadratic_analysis(pbRIGHTm,pnRIGHTm);
 
-if printFg
+if printFg && ~isempty(pbANDtb)
     %% Graph TOP AND BOTTOM, TOP OR BOTTOM
     figure; hold on;
     for i = 1:2
@@ -125,14 +156,14 @@ if printFg
         xlim([0 500])
         
         if i == 1 
-            title([condition ' - Top and Bottom (' obs ')'],'FontSize',14,'Fontname','Ariel')
-            ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
+            title([condition ' - Top and Bottom' saveFileName],'FontSize',14,'Fontname','Ariel')
+            ylabel('Probe Report Probabilities','FontSize',16,'Fontname','Ariel') 
             xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
         elseif i == 2
-            title([condition ' - Top or Bottom (' obs ')'],'FontSize',14,'Fontname','Ariel')
+            title(['Top or Bottom' saveFileName '(' obs ')'],'FontSize',14,'Fontname','Ariel')
         end 
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2TB1']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_p1p2TB1' saveFileName]);
     print ('-djpeg', '-r500',namefig);
     %% Graph TOP and BOTTOM separately
     figure; hold on;
@@ -158,14 +189,14 @@ if printFg
         xlim([0 500])
         
         if i == 1 
-            title([condition ' - Top (' obs ')'],'FontSize',14,'Fontname','Ariel')
-            ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
+            title([condition ' - Top' saveFileName],'FontSize',14,'Fontname','Ariel')
+            ylabel('Probe Report Probabilities','FontSize',16,'Fontname','Ariel') 
             xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
         elseif i == 2
-            title([condition ' - Bottom (' obs ')'],'FontSize',14,'Fontname','Ariel')
+            title(['Bottom' saveFileName '(' obs ')'],'FontSize',14,'Fontname','Ariel')
         end 
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2TB2']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_p1p2TB2' saveFileName]);
     print ('-djpeg', '-r500',namefig);    
     
     %% Graph LEFT AND RIGHT, LEFT OR RIGHT
@@ -192,14 +223,14 @@ if printFg
         xlim([0 500])
         
         if i == 1 
-            title([condition ' - Left and Right (' obs ')'],'FontSize',14,'Fontname','Ariel')
-            ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
+            title([condition ' - Left and Right' saveFileName],'FontSize',14,'Fontname','Ariel')
+            ylabel('Probe Report Probabilities','FontSize',16,'Fontname','Ariel') 
             xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
         elseif i == 2
-            title([condition ' - Left or Right (' obs ')'],'FontSize',14,'Fontname','Ariel')
+            title(['Left or Right' saveFileName '(' obs ')'],'FontSize',14,'Fontname','Ariel')
         end 
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2LR1']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_p1p2LR1' saveFileName]);
     print ('-djpeg', '-r500',namefig);
     %% Graph TOP and BOTTOM separately
     figure; hold on;
@@ -225,14 +256,14 @@ if printFg
         xlim([0 500])
         
         if i == 1 
-            title([condition ' - Left (' obs ')'],'FontSize',14,'Fontname','Ariel')
-            ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
+            title([condition ' - Left' saveFileName],'FontSize',14,'Fontname','Ariel')
+            ylabel('Probe Report Probabilities','FontSize',16,'Fontname','Ariel') 
             xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
         elseif i == 2
-            title([condition ' - Right (' obs ')'],'FontSize',14,'Fontname','Ariel')
+            title(['Right' saveFileName '(' obs ')'],'FontSize',14,'Fontname','Ariel')
         end 
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_p1p2LR2']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_p1p2LR2' saveFileName]);
     print ('-djpeg', '-r500',namefig);       
 end
 end

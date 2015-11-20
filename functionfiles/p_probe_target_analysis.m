@@ -1,17 +1,34 @@
-function [pbothPD,ponePD,pnonePD,pbothAD,poneAD,pnoneAD,p1P,p2P,p1A,p2A,nTrialsP,nTrialsA,p1PS,p2PS,p1AS,p2AS,minTrialsP,minTrialsA] = p_probe_target_analysis(obs,task,printFg)
+function [pbothPD,ponePD,pnonePD,pbothAD,poneAD,pnoneAD,p1P,p2P,p1A,p2A,nTrialsP,nTrialsA,p1PS,p2PS,p1AS,p2AS,minTrialsP,minTrialsA] = p_probe_target_analysis(obs,task,expN,present,printFg)
 %% Example
-%%% p_probe_target_analysis('ax','difficult',false);
+%%% p_probe_target_analysis('ax','difficult',2,1,false);
 
 %% Parameters
-% obs = 'ax';
-% task = 'difficult'
-% multipleObs = true;
+% obs = 'ax'; (observer's initials)
+% task = 'difficult'; ('easy' or 'difficult')
+% expN = 1; (1 or 2)
+% present = 1; (only relevant for expN == 2; 1:target-present trials,
+% 2:target-absent trials, 3:all trials)
+% printFg = true; (if true, prints and saves figures)
 
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
     condition = 'Conjunction';
 else 
     condition = 'Feature';
+end
+
+if expN == 1
+    saveFileLoc = ['\main_' task '\figures\' obs '_' condition];
+    saveFileName = '';
+elseif expN == 2
+    saveFileLoc = ['\target present or absent\main_' task '\figures\' obs '_' condition];
+    if present == 1
+        saveFileName = '_2TP';
+    elseif present == 2
+        saveFileName = '_2TA';
+    elseif present == 3
+        saveFileName = '_2';
+    end
 end
 
 %% Obtain pboth, pone and pnone for each run and concatenate over run
@@ -29,12 +46,17 @@ pnoneADP=[];
 nTrialsP=0;
 nTrialsA=0;
 
-files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task]);  
+if expN == 1
+    files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task]);  
+elseif expN == 2
+    files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\target present or absent\main_', task]);  
+end
+
 for i = 1:size(files,1)
     filename = files(i).name;
     fileL = size(filename,2);
     if fileL == 17 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')
-        [pbPD,poPD,pnPD,pbAD,poAD,pnAD,pbPDP,pnPDP,pbADP,pnADP,numTrialsP,numTrialsA] = probe_target_analysis(obs,task,filename);
+        [pbPD,poPD,pnPD,pbAD,poAD,pnAD,pbPDP,pnPDP,pbADP,pnADP,numTrialsP,numTrialsA] = probe_target_analysis(obs,task,filename,expN,present);
         
         pbothPD=horzcat(pbothPD,pbPD);
         ponePD=horzcat(ponePD,poPD);
@@ -92,9 +114,9 @@ if printFg == true
     xlabel('Time from search array onset [ms]','FontSize',18,'Fontname','Ariel')
     ylim([0 1])
 
-    title([condition ' Search - Target Probed (' obs ')'],'FontSize',16,'Fontname','Ariel')
+    title([condition ' Search - Target Probed (' obs ')' saveFileName],'FontSize',16,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_TP' '_rawProbs']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_TP' '_rawProbs' saveFileName]);
     print ('-djpeg', '-r500',namefig);
     %% Plot p1 and p2 for each probe delay
 
@@ -112,9 +134,9 @@ if printFg == true
     ylim([0 1])
     xlim([0 500])
 
-    title([condition ' Search - Target Probed - ' num2str(nTrialsP) ' Trials (' obs ')'],'FontSize',16,'Fontname','Ariel')
+    title([condition ' Search - Target Probed - ' num2str(nTrialsP) ' Trials (' obs ')' saveFileName],'FontSize',16,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_TP_p1p2']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_TP_p1p2' saveFileName]);
     print ('-djpeg', '-r500',namefig); 
     %% Graph p1 p2 when target location is not probed
     figure;hold on;
@@ -129,9 +151,9 @@ if printFg == true
     xlabel('Time from search array onset [ms]','FontSize',18,'Fontname','Ariel')
     ylim([0 1])
 
-    title([condition ' Search - Target Not Probed (' obs ')'],'FontSize',16,'Fontname','Ariel')
+    title([condition ' Search - Target Not Probed (' obs ')' saveFileName],'FontSize',16,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_TA' '_rawProbs']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_TA' '_rawProbs' saveFileName]);
     print ('-djpeg', '-r500',namefig);
     
     %% Plot p1 and p2 for each probe delay
@@ -149,9 +171,9 @@ if printFg == true
     ylim([0 1])
     xlim([0 500])
 
-    title([condition ' Search - Target Not Probed - ' num2str(nTrialsA) ' Trials (' obs ')'],'FontSize',16,'Fontname','Ariel')
+    title([condition ' Search - Target Not Probed - ' num2str(nTrialsA) ' Trials (' obs ')' saveFileName],'FontSize',16,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_TA_p1p2']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_TA_p1p2' saveFileName]);
     print ('-djpeg', '-r500',namefig); 
         
 end

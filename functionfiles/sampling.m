@@ -1,10 +1,14 @@
 function [p1,p2,minTrials] = sampling(obs,pb,pn,task,targetpresent,n,printFg)
-
-% if obs is 'all', then the no obs name will appear in the title of the
-% figure
-% targetpresent is a boolean
-
-% figure is not saved
+%% This function samples the data in pb and pn (when the target is or is not probed) n times
+%% Parameters
+% obs = 'ax'; (obs must either be the observer's initials, or 'all', for
+% which there are no initials present in the title of the figure)
+% pb and pn are matrices for pboth and pnone performance at each delay
+% task = 'easy'; ('easy' or 'difficult')
+% targetpresent = true; (if true, it is noted in the title of the graph
+% that the pb and pn represent trials for when the target's location is probed)
+% n = 100; (number of times that the data is sampled)
+% printFg = true; (if true, prints figures (does not save figures))
 
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
@@ -53,8 +57,6 @@ pn_mean = mean(pn_mean,2);
 
 [p1,p2] = quadratic_analysis(pb_mean,pn_mean);
 
-% p1 = mean(p1,2);
-% p2 = mean(p2,2);
 if printFg
     figure;hold on;
     plot(100:30:460,p1,'ro-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.96 .37 .15])
@@ -71,17 +73,14 @@ if printFg
     xlim([0 500])
 
     if strcmp(obs,'all')
-        if targetpresent
-            title([condition ' Search-Target Probed-' num2str(minTrials) ' Trials/Delay'],'FontSize',16,'Fontname','Ariel')
-        else
-            title([condition ' Search-Target Not Probed-' num2str(minTrials) ' Trials/Delay'],'FontSize',16,'Fontname','Ariel')
-        end
+        titleName = '';
     else
-        if targetpresent
-            title([condition ' Search-Target Probed-' num2str(minTrials) ' Trials/Delay (' obs ')'],'FontSize',16,'Fontname','Ariel')
-        else
-            title([condition ' Search-Target Not Probed-' num2str(minTrials) ' Trials/Delay (' obs ')'],'FontSize',16,'Fontname','Ariel')
-        end    
+        titleName = [' (' obs ')'];
     end
+    if targetpresent
+        title([condition ' Search-Target Probed-' num2str(minTrials) ' Trials/Delay' titleName],'FontSize',16,'Fontname','Ariel')
+    else
+        title([condition ' Search-Target Not Probed-' num2str(minTrials) ' Trials/Delay' titleName],'FontSize',16,'Fontname','Ariel')
+    end    
 end
 end

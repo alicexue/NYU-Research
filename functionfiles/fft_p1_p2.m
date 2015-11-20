@@ -1,12 +1,24 @@
 function fft_p1_p2(p1,p2,expN,present,task,note)
+%% This function does an FFT on the difference between p1 and p2 
 %% Example
-% fft_p1_p2(p1,p2,'easy','TB');
+% fft_p1_p2(p1,p2,2,1,'easy','TB');
 
-%% Notes about parameters
-% p1 and p2 must be 13xnumObs matrices (call the function first and save the p1
-% and p2 outputs
-% The "note" parameter is used to save the file
-% e.g. the "note" can be 'overall','top','bottom','left','right'). Must be a string.
+%% Parameters
+% p1 and p2 must be 13 x numObs matrices (ex. all_p1 and all_p2 from
+% overall_probe_analysis)
+% expN = 1; (1 or 2)
+% present = 1; (only relevant for expN == 2; 1:target-present trials,
+% 2:target-absent trials, 3:all trials)
+% task = 'easy'; ('easy' or 'difficult')
+% note = 'TB' (must be a string; used for saving the file)
+
+%% Figure outputs
+% prints the following figures:
+% 1: difference between p1 and p2
+% 2: amplitude spectrum of FFT on average difference between p1 and p2 for
+% all observers
+% 3: average amplitude spectrum for FFT on each observer
+% 4: individual amplitude spectrums for all observers
 
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
@@ -15,6 +27,7 @@ else
     condition = 'Feature';
 end
 
+%% Load data
 if expN == 1
     saveFileLoc = '';
     saveFileName = '';
@@ -29,17 +42,20 @@ elseif expN == 2
     end
 end
 
-% [diff] = p1p2_difference(p1,p2,'',task,true);
 diff = p1 - p2;
 m_diff = mean(diff,2);
 std_diff = std(diff,[],2)./size(diff,2);
 
+%% Plot difference of p1 and p2
 figure; hold on;
+for i = 1:size(diff,2)
+    plot(100:30:460,diff(:,i),'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8)
+end
 errorbar(100:30:460,m_diff,std_diff,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
-set(gca,'YTick',0:.2:0.8,'FontSize',15,'LineWidth',2','Fontname','Ariel')
+set(gca,'YTick',-0.6:.2:0.6,'FontSize',15,'LineWidth',2','Fontname','Ariel')
 ylabel('P1 - P2','FontSize',15,'Fontname','Ariel')
 xlabel('Time from discrimination task onset [ms]','FontSize',15,'Fontname','Ariel')
-ylim([0 0.8])
+ylim([-0.6 0.6])
 xlim([0 500])
 title([condition ' Search (n = ' num2str(size(p1,2)) ') ' note],'FontSize',18,'Fontname','Ariel')
 namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\time\' condition '_p1p2_difference' note saveFileName]); 
@@ -53,29 +69,47 @@ for i=1:size(p1,2)
 end
 
 a_fft_results=abs(a_fft_r);
-i_fft_results=mean(abs(i_fft_r),2);
+i_fft_results=abs(i_fft_r);
 
+%% Plot amplitude spectrum for FFT on average difference between p1 and p2 across all observers
 figure; hold on;
 plot([2.8 5.6 8.3 11.1 13.9 16.7],a_fft_results(2:7),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 ylabel('Amplitude (au)','FontSize',15,'Fontname','Ariel')
 xlabel('Frequency (Hz)','FontSize',15,'Fontname','Ariel')
 set(gca,'XTick',[2.8 5.6 8.3 11.1 13.9 16.7],'FontSize',12,'LineWidth',2','Fontname','Ariel')
-set(gca,'YTick',0:.1:.4,'FontSize',12,'LineWidth',2','Fontname','Ariel')
-ylim([0 .4])
+set(gca,'YTick',0:.2:1.2,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+ylim([0 1.2])
 title([condition ' Search - FFT on the average data-' note],'FontSize',18,'Fontname','Ariel')
 
 namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\time\' condition '_FFTavg_' note saveFileName]);
 print ('-djpeg', '-r500',namefig); 
 
+%% Plots average amplitude spectrum for FFT on each observer's p1 p2 difference
 figure; hold on;
 plot([2.8 5.6 8.3 11.1 13.9 16.7],i_fft_results(2:7),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 ylabel('Amplitude (au)','FontSize',15,'Fontname','Ariel')
 xlabel('Frequency (Hz)','FontSize',15,'Fontname','Ariel')
 set(gca,'XTick',[2.8 5.6 8.3 11.1 13.9 16.7],'FontSize',12,'LineWidth',2','Fontname','Ariel')
-set(gca,'YTick',0:.2:0.6,'FontSize',12,'LineWidth',2','Fontname','Ariel')
-ylim([0 0.6])
+set(gca,'YTick',0:.2:1.6,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+ylim([0 1.6])
+title([condition ' Search - FFT on the individual data-' note],'FontSize',18,'Fontname','Ariel')
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\time\' condition '_FFTindiv_' note saveFileName]);
+print ('-djpeg', '-r500',namefig);
+
+%% Plots individual amplitude spectrums for each observer
+figure; hold on;
+for i = 1:size(diff,2)
+    fft_results = i_fft_results(:,i);
+    plot([2.8 5.6 8.3 11.1 13.9 16.7],fft_results(2:7),'o-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8)
+end
+ylabel('Amplitude (au)','FontSize',15,'Fontname','Ariel')
+xlabel('Frequency (Hz)','FontSize',15,'Fontname','Ariel')
+set(gca,'XTick',[2.8 5.6 8.3 11.1 13.9 16.7],'FontSize',12,'LineWidth',2','Fontname','Ariel')
+set(gca,'YTick',0:.4:2.4,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+ylim([0 2.4])
 title([condition ' Search - FFT on the individual data-' note],'FontSize',18,'Fontname','Ariel')
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\time\' condition '_FFTindv_' note saveFileName]);
-print ('-djpeg', '-r500',namefig); 
+namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\time\' condition '_FFTindividuals_' note saveFileName]);
+print ('-djpeg', '-r500',namefig);
+
 end

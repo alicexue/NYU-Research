@@ -1,6 +1,13 @@
 function overall_main_slope(task,expN,present,printFg)
 %% Example
-% overall_main_slope('easy');
+%%% overall_main_slope('easy',2,2,true);
+
+%% Parameters
+% task = 'easy'; ('easy' or 'difficult')
+% expN = 1; (1 or 2)
+% present = 1; (only relevant for expN == 2; 1:target-present trials,
+% 2:target-absent trials, 3:all trials)
+% printFg = true; (if true, prints and saves figures)
 
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
@@ -29,11 +36,11 @@ for n = 1:size(files,1)
     end
 end
 
-rt_m = mean(all_rt,2);
-p_m = mean(all_p,2);
+rt_m = nanmean(all_rt,2);
+p_m = nanmean(all_p,2);
 
-rt_sem = std(all_rt,[],2)./sqrt(numObs);
-p_sem = std(all_p,[],2)./sqrt(numObs);
+rt_sem = nanstd(all_rt,[],2)./sqrt(numObs);
+p_sem = nanstd(all_p,[],2)./sqrt(numObs);
 
 if printFg
     %% Plot rt
@@ -51,14 +58,19 @@ if printFg
     legend_obs{numObs+1} = 'average';
     legend(legend_obs,'Location','NorthEast')
 
-    ylim([0 1200])
-    set(gca,'YTick', 0:200:1200,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    if expN == 1
+        ylim([0 1200])
+        set(gca,'YTick', 0:200:1200,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    elseif expN == 2
+        ylim([0 1400])
+        set(gca,'YTick', 0:200:1400,'FontSize',15,'LineWidth',2,'Fontname','Ariel')     
+    end
     title([condition ' Reaction Time (n = ' num2str(numObs) ')'],'FontSize',20)
     xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
     ylabel('RT [ms] ','FontSize',15,'Fontname','Ariel')  
 
-%     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_rtDelays']);
-%     print ('-djpeg', '-r500',namefig);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_rtDelays']);
+    print ('-djpeg', '-r500',namefig);
 
     %% Plot performance
     figure; hold on;
@@ -70,19 +82,18 @@ if printFg
 
     legend('obs 1','obs 2','obs 3','obs 4','obs 5','average','Location','SouthEast')
 
-    ylim([50 100])
-    set(gca,'YTick', 50:10:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
-
+    if expN == 1
+        ylim([50 100])
+        set(gca,'YTick', 50:10:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    elseif expN == 2
+        ylim([30 100])
+        set(gca,'YTick', 30:10:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    end
     title([condition ' Performance (n = ' num2str(numObs) ')'],'FontSize',20)
     xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
     ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
 
-%     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_PerfDelays']);
-%     print ('-djpeg', '-r500',namefig);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_PerfDelays']);
+    print ('-djpeg', '-r500',namefig);
 end
-mean(p_m*100)
-std(p_m)./numObs
-
-mean(all_p,1)
-keyboard
 end

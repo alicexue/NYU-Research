@@ -1,17 +1,33 @@
-function overall_probe_analysisTB(task, printFg)
-%% This function graphs the probe analysis for probes on the top, bottom, left, and right
+function overall_probe_analysisTB(task,expN,present,printFg)
+%% This function graphs the probe analysis for probes presented on the top, bottom, left, and right
 %% Example
-%%% overall_probe_analysisTB('difficult',true);
+%%% overall_probe_analysisTB('difficult',2,1,true);
 
 %% Parameters
-% task = 'difficult'
-% printFg = true;
+% task = 'difficult'; ('easy' or 'difficult')
+% expN = 1; (only relevant for expN == 2; 1:target-present trials,
+% 2:target-absent trials, 3:all trials)
+% printFg = true; (if true, prints and saves figures)
 
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
     condition = 'Conjunction';
 else 
     condition = 'Feature';
+end
+
+if expN == 1
+    saveFileLoc = ['\main_' task '\' condition];
+    saveFileName = '';
+elseif expN == 2
+    saveFileLoc = ['\target present or absent\main_' task '\' condition];
+    if present == 1
+        saveFileName = '_2TP';
+    elseif present == 2
+        saveFileName = '_2TA';
+    elseif present == 3
+        saveFileName = '_2';
+    end
 end
 
 %% Obtain pboth, pone and pnone for each run and concatenate over run
@@ -46,7 +62,7 @@ for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
     if (fileL == 2 || fileL == 3) && ~strcmp(obs(1,1),'.')
-        [p1ANDtb,p2ANDtb,p1ORtb,p2ORtb,p1TOP,p2TOP,p1BOTTOM,p2BOTTOM,p1ANDlr,p2ANDlr,p1ORlr,p2ORlr,p1LEFT,p2LEFT,p1RIGHT,p2RIGHT] = p_probe_analysisTB(obs,task,false); 
+        [p1ANDtb,p2ANDtb,p1ORtb,p2ORtb,p1TOP,p2TOP,p1BOTTOM,p2BOTTOM,p1ANDlr,p2ANDlr,p1ORlr,p2ORlr,p1LEFT,p2LEFT,p1RIGHT,p2RIGHT] = p_probe_analysisTB(obs,task,expN,present,true); 
         
         if ~isempty(p1ANDtb) 
             ANDp1TB = horzcat(ANDp1TB,p1ANDtb);
@@ -102,16 +118,16 @@ if printFg == true
         xlim([0 500])
 
         if i == 1 
-            title([condition ' - Top and Bottom'],'FontSize',14,'Fontname','Ariel')
+            title([condition ' - Top and Bottom' saveFileName],'FontSize',14,'Fontname','Ariel')
             ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
             xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
         elseif i == 2
-            title([condition ' - Top or Bottom'],'FontSize',14,'Fontname','Ariel')
+            title(['Top or Bottom (n = ' num2str(numObs) ')' saveFileName],'FontSize',14,'Fontname','Ariel')
         end 
 
     end
-%     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_p1p2TB1']);
-%     print ('-djpeg', '-r500',namefig);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2TB1' saveFileName]);
+    print ('-djpeg', '-r500',namefig);
     
     %% Graph TOP and BOTTOM separately
     figure; hold on;
@@ -144,16 +160,16 @@ if printFg == true
         xlim([0 500])
 
         if i == 1 
-            title([condition ' - Top'],'FontSize',14,'Fontname','Ariel')
+            title([condition ' - Top' saveFileName],'FontSize',14,'Fontname','Ariel')
             ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
             xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
         elseif i == 2
-            title([condition ' - Bottom'],'FontSize',14,'Fontname','Ariel')
+            title(['Bottom (n = ' num2str(numObs) ')' saveFileName],'FontSize',14,'Fontname','Ariel')
         end 
 
     end
-%     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_p1p2TB2']);
-%     print ('-djpeg', '-r500',namefig);    
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2TB2' saveFileName]);
+    print ('-djpeg', '-r500',namefig);    
 
     %% Graph LEFT AND RIGHT, LEFT OR RIGHT
     figure; hold on;
@@ -186,16 +202,16 @@ if printFg == true
         xlim([0 500])
 
         if i == 1 
-            title([condition ' - Left and Right'],'FontSize',14,'Fontname','Ariel')
+            title([condition ' - Left and Right' saveFileName],'FontSize',14,'Fontname','Ariel')
             ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
             xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
         elseif i == 2
-            title([condition ' - Left or Right'],'FontSize',14,'Fontname','Ariel')
+            title(['Left or Right (n = ' num2str(numObs) ')' saveFileName],'FontSize',14,'Fontname','Ariel')
         end 
 
     end
-%     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_p1p2LR1']);
-%     print ('-djpeg', '-r500',namefig);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2LR1' saveFileName]);
+    print ('-djpeg', '-r500',namefig);
     
     %% Graph LEFT and RIGHT separately
     figure; hold on;
@@ -228,16 +244,16 @@ if printFg == true
         xlim([0 500])
 
         if i == 1 
-            title([condition ' - Left'],'FontSize',14,'Fontname','Ariel')
+            title([condition ' - Left' saveFileName],'FontSize',14,'Fontname','Ariel')
             ylabel('Percent correct','FontSize',16,'Fontname','Ariel') 
             xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
         elseif i == 2
-            title([condition ' - Right'],'FontSize',14,'Fontname','Ariel')
+            title(['Right (n = ' num2str(numObs) ')' saveFileName],'FontSize',14,'Fontname','Ariel')
         end 
 
     end
-%     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_p1p2LR2']);
-%     print ('-djpeg', '-r500',namefig);       
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2LR2' saveFileName]);
+    print ('-djpeg', '-r500',namefig);       
     
 end
 end

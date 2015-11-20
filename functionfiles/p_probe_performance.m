@@ -1,10 +1,21 @@
-function [perf,pTP,pTA] = p_probe_performance(obs,task,printFg)
+function [perf,pTP,pTA] = p_probe_performance(obs,task,expN,present,printFg)
 %% Example
-% p_probe_performance('ax','difficult',true);
+%%% p_probe_performance('ax','difficult',2,2,true);
 
 %% Parameters
-% obs = 'ax';
-% task = 'difficult';
+% obs = 'ax'; (observer's initials)
+% task = 'difficult'; ('easy' or 'difficult')
+% expN = 1; (1 or 2)
+% present = 1; (only relevant for expN == 2; 1:target-present trials,
+% 2:target-absent trials, 3:all trials)
+% printFg = false; (if true, prints and saves figures
+
+%% Outputs
+% perf is a 13x1 matrix for overall probe performance at each delay
+% pTP is a 13x1 matrix for overall probe performance at each delay when the
+% target location is probed
+% pTA is a 13x1 matrix for overal probe performance at each delay when the
+% target location is not probed
 
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
@@ -14,17 +25,22 @@ else
 end
 
 %% Obtain perf for each run and concatenate over each run
-perf = zeros(13,10000);
-pTP = zeros(13,10000);
-pTA = zeros(13,10000);
+perf = NaN(13,10000);
+pTP = NaN(13,10000);
+pTA = NaN(13,10000);
 c = 1;
 
-files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task]);    
+if expN == 1
+    files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task]);  
+elseif expN == 2
+    files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\target present or absent\main_', task]);  
+end
+
 for n = 1:size(files,1)
     filename = files(n).name;
     fileL = size(filename,2);
     if fileL > 4 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')
-        [p,pTargetP,pTargetA] = probe_performance(obs,task,filename);
+        [p,pTargetP,pTargetA] = probe_performance(obs,task,filename,expN,present);
         perf(:,c) = p; 
         pTP(:,c) = pTargetP;
         pTA(:,c) = pTargetA;
@@ -35,9 +51,9 @@ perf = perf(:,1:c-1);
 pTP = pTP(:,1:c-1);
 pTA = pTA(:,1:c-1);
 
-perf = mean(perf,2);
-pTP = mean(pTP,2);
-pTA = mean(pTA,2);
+perf = nanmean(perf,2);
+pTP = nanmean(pTP,2);
+pTA = nanmean(pTA,2);
 
 if printFg
     %% Plot performance
@@ -86,7 +102,6 @@ if printFg
     ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
 
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_probePerfTA']);
-    print ('-djpeg', '-r500',namefig);    
-    
+    print ('-djpeg', '-r500',namefig);       
 end
 end

@@ -1,17 +1,34 @@
-function [p1P,p2P,p1A,p2A,pbP,pnP,pbA,pnA,p1PS,p2PS,p1AS,p2AS] = overall_probe_target_analysis(task,printFg)
+function [p1P,p2P,p1A,p2A,pbP,pnP,pbA,pnA,p1PS,p2PS,p1AS,p2AS] = overall_probe_target_analysis(task,expN,present,printFg)
 %% This function gets p1 and p2 from all observers and averages them
 %% Example
-%%% overall_probe_target_analysis('difficult',true);
+%%% overall_probe_target_analysis('difficult',2,1,true);
 
 %% Parameters
-% task = 'difficult'
-% printFg = false;
+% task = 'difficult'; ('easy' or 'difficult')
+% expN = 1; (1 or 2)
+% present = 1; (only relevant for expN == 2; 1:target-present trials,
+% 2:target-absent trials, 3:all trials)
+% printFg = false; (if true, prints and saves figures)
 
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
     condition = 'Conjunction';
 else 
     condition = 'Feature';
+end
+
+if expN == 1
+    saveFileLoc = ['\main_' task '\' condition];
+    saveFileName = '1';
+elseif expN == 2
+    saveFileLoc = ['\target present or absent\main_' task '\' condition];
+    if present == 1
+        saveFileName = '_2TP';
+    elseif present == 2
+        saveFileName = '_2TA';
+    elseif present == 3
+        saveFileName = '_2';
+    end
 end
 
 %% Obtain pboth, pone and pnone for each run and concatenate over run
@@ -46,7 +63,7 @@ for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
     if (fileL == 2 || fileL == 3) && ~strcmp(obs(1,1),'.')
-        [pbothP,poneP,pnoneP,pbothA,poneA,pnoneA,P1P,P2P,P1A,P2A,nTrialsP,nTrialsA,p1Ps,p2Ps,p1As,p2As,minTrialsP,minTrialsA] = p_probe_target_analysis(obs,task,false); 
+        [pbothP,poneP,pnoneP,pbothA,poneA,pnoneA,P1P,P2P,P1A,P2A,nTrialsP,nTrialsA,p1Ps,p2Ps,p1As,p2As,minTrialsP,minTrialsA] = p_probe_target_analysis(obs,task,expN,present,false); 
         
         if ~isempty(pbothP) 
             pbP=horzcat(pbP,nanmean(pbothP,2));
@@ -56,13 +73,6 @@ for n = 1:size(files,1)
             pbA=horzcat(pbA,nanmean(pbothA,2));
             pnA=horzcat(pnA,nanmean(pnoneA,2));
             poA=horzcat(poA,nanmean(poneA,2));            
-%             pbP=horzcat(pbP,pbothP);
-%             pnP=horzcat(pnP,pnoneP);
-%             poP=horzcat(poP,poneP);
-%             
-%             pbA=horzcat(pbA,pbothA);
-%             pnA=horzcat(pnA,pnoneA);
-%             poA=horzcat(poA,poneA);
 
             p1P=horzcat(p1P,P1P);
             p2P=horzcat(p2P,P2P);
@@ -133,9 +143,9 @@ if printFg
     xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
     ylim([0 1])
 
-    title([condition ' Search - Target Probed'],'FontSize',18,'Fontname','Ariel')
+    title([condition ' Search - Target Probed' saveFileName],'FontSize',18,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_TP_rawProbs']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_TP_rawProbs1' saveFileName]);
     print ('-djpeg', '-r500',namefig);
    
     %% Plot p1 and p2 for each probe delay
@@ -152,10 +162,10 @@ if printFg
     ylim([0 1])
     xlim([0 500])
     
-    title([condition ' Search-Target Probed (n = ' num2str(numObs) ')'],'FontSize',18,'Fontname','Ariel')
-    % title([condition ' Search - Target Probed - ' num2str(numTrialsP) ' Trials'],'FontSize',18,'Fontname','Ariel')
+    title([condition ' Search-Target Probed (n = ' num2str(numObs) ')' saveFileName],'FontSize',18,'Fontname','Ariel')
+    % title([condition ' Search-Target Probed-' num2str(numTrialsP) ' Trials'],'FontSize',18,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_TP_p1p2']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_TP_p1p21' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 
     %% Averaging across runs
@@ -174,7 +184,7 @@ if printFg
 
     title([condition ' Search - Target Not Probed'],'FontSize',18,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_TA_rawProbs']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_TA_rawProbs1' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 
     %% Plot p1 and p2 for each probe delay
@@ -191,10 +201,10 @@ if printFg
     ylim([0 1])
     xlim([0 500])
 
-    title([condition ' Search-Target Not Probed (n = ' num2str(numObs) ')'],'FontSize',18,'Fontname','Ariel')
-    % title([condition ' Search - Target Not Probed - ' num2str(numTrialsA) ' Trials'],'FontSize',18,'Fontname','Ariel')
+    title([condition ' Search-Target Not Probed (n = ' num2str(numObs) ')' saveFileName],'FontSize',18,'Fontname','Ariel')
+    % title([condition ' Search-Target Not Probed - ' num2str(numTrialsA) ' Trials'],'FontSize',18,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_TA_p1p2']);
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_TA_p1p21' saveFileName]);
     print ('-djpeg', '-r500',namefig);
     
     %% Plot sampled data figures - target present
@@ -211,7 +221,7 @@ if printFg
     ylim([0 1])
     xlim([0 500])
 
-    title([condition ' Search-Target Probed-' num2str(numTrialsPS) ' Trials/Delay'],'FontSize',18,'Fontname','Ariel')
+    title([condition ' Search-Target Probed-' num2str(numTrialsPS) ' Trials/Delay' saveFileName],'FontSize',18,'Fontname','Ariel')
     
     %% Plot sampled data figures - target not present
     figure;hold on;
@@ -227,6 +237,6 @@ if printFg
     ylim([0 1])
     xlim([0 500])
 
-    title([condition ' Search-Target Not Probed-' num2str(numTrialsAS) ' Trials/Delay'],'FontSize',18,'Fontname','Ariel')
+    title([condition ' Search-Target Not Probed-' num2str(numTrialsAS) ' Trials/Delay' saveFileName],'FontSize',18,'Fontname','Ariel')
 end
 end

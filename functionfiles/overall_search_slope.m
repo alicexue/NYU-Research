@@ -1,13 +1,14 @@
 function overall_search_slope(expN,present,displayFg,displayStats)
 %% Example
-% overall_search_slope(true,true);
+%%% overall_search_slope(1,1,true,true);
 
 %% Parameters
-% displayFg = true;
-% displayStats = true;
-
-% if displayStats is true, then search_slope_stats() is called at the end
-% must manually add observers to the legend
+% expN = 1; (1 or 2)
+% present = 1; (only relevant for expN == 2; 1:target-present trials,
+% 2:target-absent trials, 3:all trials)
+% displayFg = true; (if true, prints and saves figures)
+% displayStats = true; (if true, calls search_slope_stats(expN,present) and
+% prints slope and performance ttest results)
 
 if displayFg
     easy_rt=[];
@@ -23,7 +24,6 @@ if displayFg
     s_difficult_perf=[];
 
     numObs = 0;
-
     %% Load data
     if expN == 1
         saveFileLoc = '';
@@ -31,15 +31,14 @@ if displayFg
     elseif expN == 2
         saveFileLoc = '\target present or absent';
         if present == 1
-            saveFileName = '2TP';
+            saveFileName = '_2TP';
         elseif present == 2
-            saveFileName = '2TA';
+            saveFileName = '_2TA';
         elseif present == 3
-            saveFileName = '2';
+            saveFileName = '_2';
         end
     end 
-           
-    
+             
     files = dir('C:\Users\Alice\Documents\MATLAB\data');  
     for n = 1:size(files,1)
         obs = files(n).name;
@@ -93,7 +92,7 @@ if displayFg
         legend_obs{i} = ['obs ' num2str(i)];
     end
     legend_obs{numObs+1} = 'average';
-    l = legend(legend_obs,'Location','SouthWest');    
+    l = legend(legend_obs,'Location','NorthWest');    
     set(l,'FontSize',12);    
 
     xlim([3 9])
@@ -105,7 +104,7 @@ if displayFg
         ylim([0 400])
         set(gca,'YTick', 0:100:400,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
     end
-    title(['Feature Reaction Time (n = ' num2str(numObs) ')'],'FontSize',22)
+    title(['Feature Reaction Time (n = ' num2str(numObs) ')' saveFileName],'FontSize',22)
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('RT [ms]','FontSize',20,'Fontname','Ariel')
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\easy\Feature_rtSetSize' saveFileName]);
@@ -130,10 +129,14 @@ if displayFg
 
     xlim([3 9])
     set(gca,'XTick', 4:4:8,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
-    ylim([50 100])
-    set(gca,'YTick', 50:10:100,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
-
-    title(['Feature Accuracy (n = ' num2str(numObs) ')'],'FontSize',22)
+    if expN == 1
+        set(gca,'YTick', 50:10:100,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+        ylim([50 100])
+    elseif expN == 2
+        set(gca,'YTick', 40:20:100,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+        ylim([40 100])
+    end
+    title(['Feature Accuracy (n = ' num2str(numObs) ')' saveFileName],'FontSize',22)
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('Accuracy','FontSize',20,'Fontname','Ariel')
 
@@ -166,7 +169,7 @@ if displayFg
         ylim([0 400])
         set(gca,'YTick', 0:100:400,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
     end
-    title(['Conjunction Reaction Time (n = ' num2str(numObs) ')'],'FontSize',22)
+    title(['Conjunction Reaction Time (n = ' num2str(numObs) ')' saveFileName],'FontSize',22)
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('RT [ms]','FontSize',20,'Fontname','Ariel')
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\difficult\Conjunction_rtSetSize' saveFileName]);
@@ -186,15 +189,19 @@ if displayFg
         legend_obs{i} = ['obs ' num2str(i)];
     end
     legend_obs{numObs+1} = 'average';
-    l = legend(legend_obs,'Location','SouthWest');    
+    l = legend(legend_obs,'Location','SouthEast');    
     set(l,'FontSize',12); 
 
     xlim([3 9])
     set(gca,'XTick', 4:4:8,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
-    ylim([50 100])
-    set(gca,'YTick', 50:10:100,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
-
-    title(['Conjunction Accuracy (n = ' num2str(numObs) ')'],'FontSize',22)
+    if expN == 1
+        set(gca,'YTick', 50:10:100,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+        ylim([50 100])
+    elseif expN == 2
+        set(gca,'YTick', 40:20:100,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+        ylim([40 100])
+    end
+    title(['Conjunction Accuracy (n = ' num2str(numObs) ')' saveFileName],'FontSize',22)
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('Accuracy','FontSize',20,'Fontname','Ariel')
 
@@ -207,8 +214,8 @@ end
 end
 
 function search_slope_stats(expN,present)
-% Find the ttest statistics for all observers' search slope print them in the
-% command window
+% Conducts ttests and prints statistics for all observers' search slopes in
+% the command window
 
 %% Conduct ttest and print results
 rt_easy4=[];
@@ -225,7 +232,6 @@ all_easy_rt=[];
 all_difficult_rt=[];
 all_easy_perf=[];
 all_difficult_perf=[];
-
 
 pall_easy_rt=[];
 pall_difficult_rt=[];
@@ -316,23 +322,16 @@ p_difficult_slope = (mean(p_difficult8-p_difficult4))/4;
 
 [rt_h,rt_p,rt_ci,rt_stats] = ttest((rt_easy8-rt_easy4)/4);
 [p_h,p_p,p_ci,p_stats] = ttest((p_easy8-p_easy4)/4); 
-% [rt_h,rt_p,rt_ci,rt_stats] = ttest(vertcat(rt_easy4,rt_easy8)/4);
-% [p_h,p_p,p_ci,p_stats] = ttest(vertcat(p_easy4,p_easy8)/4);  
+
 fprintf('------------------------------------------------------\n')
 fprintf('overall, task: easy\n')
 fprintf(['rt slope = ' num2str(rt_easy_slope) '\n'])
 fprintf(['t = ' num2str(rt_stats.tstat) '\n'])
 fprintf(['p = ' num2str(mean(rt_p)) '\n'])
-rt_ci
-%rt_ci = mean(rt_ci,2)
-% fprintf(['ci = [' num2str(rt_ci(1,1)) num2str(rt_ci(2,1)) ']\n'])        
+        
 fprintf(['perf slope = ' num2str(p_easy_slope) '\n'])
 fprintf(['t = ' num2str(p_stats.tstat) '\n'])
 fprintf(['p = ' num2str(mean(p_p)) '\n'])
-p_ci
-%p_ci = mean(p_ci,2)
-%fprintf(['ci = [' num2str(rt_ci(1,1)) num2str(rt_ci(2,1)) ']\n'])  
-
 
 [rt_h,rt_p,rt_ci,rt_stats] = ttest((rt_difficult8-rt_difficult4)/4);
 [p_h,p_p,p_ci,p_stats] = ttest((p_difficult8-p_difficult4)/4);  
@@ -341,13 +340,11 @@ fprintf('overall, task: difficult\n')
 fprintf(['rt slope = ' num2str(rt_difficult_slope) '\n'])
 fprintf(['t = ' num2str(rt_stats.tstat) '\n'])
 fprintf(['p = ' num2str(mean(rt_p)) '\n'])
-%rt_ci = mean(rt_ci,2)
-rt_ci
-% fprintf(['ci = [' num2str(mean(rt_ci,2)) ']\n'])        
+       
 fprintf(['perf slope = ' num2str(p_difficult_slope) '\n'])
 fprintf(['t = ' num2str(p_stats.tstat) '\n'])
 fprintf(['p = ' num2str(mean(p_p)) '\n'])
-p_ci
+
 %p_ci = mean(p_ci,2)
 % fprintf(['ci = [' num2str(mean(p_ci,2)) ']\n'])  
 
@@ -375,6 +372,13 @@ feature_perf4 = mean(p_easy4)
 sem_easy_perf4 = std(p_easy4)./numObs
 difficult_perf4 = mean(p_difficult4)
 sem_difficult_perf4 = std(p_difficult4)./numObs
+
+p_easy4
+p_difficult4
+
+% pf = rot90(rot90(rot90((p_easy4+p_easy8)/2)));
+% pc = rot90(rot90(rot90((p_difficult4+p_difficult8)/2)));
+% [p_h,p_p,p_ci,p_stats] = ttest(pf,pc)
 
 end
 

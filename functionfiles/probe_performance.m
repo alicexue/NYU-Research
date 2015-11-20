@@ -1,22 +1,29 @@
-function [p,pTargetP,pTargetA] = probe_performance(obs,task,file)
+function [p,pTargetP,pTargetA] = probe_performance(obs,task,file,expN,present)
 %% This program analyzes general performance on the probe task
 %% Example
-%%% probe_performance('ax', 'difficult','150820_stim01.mat');
+%%% probe_performance('ax', 'difficult','150820_stim01.mat',1,1);
 
 %% Parameters
-% obs = 'ax';
-% task = 'difficult';
-% file = '150716_stim01.mat';
+% obs = 'ax'; (observer's initials)
+% task = 'difficult'; ('easy' or 'difficult')
+% file = '150716_stim01.mat'; (name of stim file)
+% expN = 1; (1 or 2)
+% present = 1; (only relevant for exp 2; 1:target-present trials,
+% 2:target-absent trials, 3:all trials)
 
-%% Change task filename to feature/conjunction
-if strcmp(task,'difficult')
-    condition = 'Conjunction';
-else 
-    condition = 'Feature';
-end
+%% Outputs
+% p is a 13x1 matrix for average overall probe performance 
+% pTargetP is a 13x1 matrix for average probe performance when the target
+% location is probed 
+% pTargetA is is a 13x1 matrix for average probe performance when the target
+% location is not probed 
 
 %% Load the data
-load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\' file])
+if expN == 1
+    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\' file])
+elseif expN == 2
+    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\target present or absent\main_' task '\' file])
+end
 
 %% Get Probe data
 %%% Probe identity
@@ -29,12 +36,24 @@ exp = getTaskParameters(myscreen,task);
 
 expProbe = task{1}.probeTask;
 
-theTrials = find(task{1}.randVars.fixBreak == 0);
-
-nTrials = size(theTrials,2);
+if expN == 1 || (expN == 2 && present == 3)
+    theTrials = find(task{1}.randVars.fixBreak == 0);
+elseif expN == 2
+    if present == 1       
+        theTrials1 = find(task{1}.randVars.fixBreak == 0);
+        theTrials2 = find(task{1}.randVars.presence == 1);
+        tmp = ismember(theTrials2,theTrials1);
+        theTrials = theTrials2(tmp);
+    elseif present == 2
+        theTrials1 = find(task{1}.randVars.fixBreak == 0);
+        theTrials2 = find(task{1}.randVars.presence == 2);
+        tmp = ismember(theTrials2,theTrials1);
+        theTrials = theTrials2(tmp); 
+    end
+end
 
 %% Revert the order of the list
-perf = zeros(2,size(theTrials,2));
+perf = NaN(2,size(theTrials,2));
 
 for n = theTrials
     if ~isempty(expProbe.probeResponse1{n})
@@ -88,38 +107,23 @@ end
 targetPA = logical(targetPA);
 targetPA = targetPA(theTrials);
 
-perfDelays=zeros(13,nTrials/13*2);
+perfDelays=NaN(13,100);
 perfTargetP=[];
 perfTargetA=[];
 
-theTrials = task{1}.randVars.fixBreak == 0; 
 for delays = unique(exp.randVars.delays)
     delayTrials = exp.randVars.delays(theTrials)==delays;
     trialPerf = horzcat(perf(1,delayTrials),perf(2,delayTrials));
     targetPTrials = targetPA & delayTrials;
-    targetATrials = ~targetPA & delayTrials;    
-    perfDelays(delays,:) = trialPerf;
+    targetATrials = ~targetPA & delayTrials;
+    tmp = trialPerf;
+    perfDelays(delays,1:size(tmp,2)) = tmp;
     perfTargetP(delays) = mean(perf(targetPTrials));
     perfTargetA(delays) = mean(perf(targetATrials));
 end
 
-p = mean(perfDelays,2);
+p = nanmean(perfDelays,2);
 pTargetP = rot90(perfTargetP,-1);
 pTargetA = rot90(perfTargetA,-1);
-
-% perfPairs=zeros(13,nTrials/13,12);
-% 
-% theTrials = find(task{1}.randVars.fixBreak == 0); 
-% for delays = unique(exp.randVars.delays)
-%     for pair = unique(exp.randVars.probePairsLoc)
-%         delaysTrials = exp.randVars.delays(theTrials)==delays;
-%         pairTrials = exp.randVars.probePairsLoc(theTrials)==pair;
-%         a = perf(delaysTrials & pairTrials);
-%         keyboard
-%         pbp(delays,:,pair) = pboth(delaysTrials & pairTrials);
-%         pop(delays,:,pair) = pone(delaysTrials & pairTrials);
-%         pnp(delays,:,pair) = pnone(delaysTrials & pairTrials);
-%     end
-% end
 end
 

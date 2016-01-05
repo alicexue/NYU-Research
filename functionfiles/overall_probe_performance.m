@@ -8,6 +8,8 @@ function overall_probe_performance(expN,present,task,grouping)
 % present = 1; (only relevant for expN == 2; 1:target-present trials,
 % 2:target-absent trials, 3:all trials)
 % task = 'difficult'; ('easy' or 'difficult')
+% grouping = 1; (if 1, probes must be exactly correct; if 2, probes must
+% match by shape; if 3, probes must match by aperture)
 
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
@@ -101,7 +103,7 @@ if grouping == 1
     set(gca,'YTick', 0:20:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
     set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
 
-    title([condition ' Probe Performance' saveFileName],'FontSize',18)
+    title([condition ' Probe Performance (n = ' num2str(numObs) ') ' titleName],'FontSize',18)
     xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
     ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
 

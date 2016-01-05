@@ -202,5 +202,25 @@ m_probe_locations_perf = nanmean(probe_loc_perf,1);
 m_perf_locations_discri = nanmean(search_perf_loc_discri,1);
 m_perf_locations_detect = nanmean(search_perf_loc_detect,1);
 
+
+
+
+pb = NaN(13,200);
+po = NaN(13,200);
+pn = NaN(13,200);
+
+for delays = unique(exp.randVars.delays)
+    delayTrials = exp.randVars.delays(theTrials)==delays;
+    tmp = pboth(delayTrials);
+    pb(delays,1:size(tmp,2)) = tmp;
+    tmp = pone(delayTrials);
+    po(delays,1:size(tmp,2)) = tmp;
+    tmp = pnone(delayTrials);
+    pn(delays,1:size(tmp,2)) = tmp;
+end
+
+
+
+
 end
 

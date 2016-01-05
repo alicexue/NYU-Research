@@ -1,14 +1,14 @@
 function [rt4,rt8,perf4,perf8] = search_slope(obs,task,file,expN,present,training)
 %% Example
-% search_slope('ax','difficult','150827_stim07.mat',1,1,false);
+%%% search_slope('ax','difficult','150827_stim07.mat',1,1,false);
 
 %% Parameters
 % obs = 'ax'; (observer's initials)
 % task = 'difficult'; ('easy' or 'difficult')
 % file = '150701_stim05.mat'; (name of stim file)
 % expN = 1; (1 or 2)
-% present = 1; (only relevant for expN == 2; 1:target-present trials,
-% 2:target-absent trials, 3:all trials)
+% present = 1; (only relevant for expN == 2; 1:target-present trials - discrimination,
+% 2:target-absent trials, 3:all trials - detection)
 % training = false; (if true, uses stim files inside of training folder
 
 %% Outputs
@@ -51,8 +51,8 @@ rt4 = nanmedian(exp.reactionTime(size4));
 rt8 = nanmedian(exp.reactionTime(size8));
 
 %% Compute performance according to the set size
-noFixBreakIndices = find(~isnan(exp.reactionTime));
-perf = zeros(1,size(noFixBreakIndices,2));
+noFixBreakIndices = find(task{1}.randVars.fixBreak == 0);
+perf = NaN(1,size(noFixBreakIndices,2));
 for n = 1:size(noFixBreakIndices,2)
     tmp = noFixBreakIndices(n);
     orientation = exp.randVars.targetOrientation(tmp);
@@ -64,17 +64,26 @@ for n = 1:size(noFixBreakIndices,2)
             perf(n) = 0;
         end
     elseif expN == 2
-        presence = exp.randVars.presence(tmp);
-        if (orientation == 1 && response == 1) || (orientation == 2 && response == 2) || (presence == 2 && response == 3)
-            perf(n) = 1;
+        if present == 1 || present == 2
+            presence = exp.randVars.presence(tmp);
+            if (presence == 1 && orientation == 1 && response == 1) || (presence == 1 && orientation == 2 && response == 2) || (presence == 2 && response == 3)
+                perf(n) = 1;
+            else
+                perf(n) = 0;
+            end
         else
-            perf(n) = 0;
+            presence = exp.randVars.presence(tmp);
+            if (presence == 1 && orientation == 1 && response == 1) || (presence == 1 && orientation == 2 && response == 2) || (presence == 1 && orientation == 1 && response == 2)  || (presence == 1 && orientation == 2 && response == 1) || (presence == 2 && response == 3)
+                perf(n) = 1;
+            else
+                perf(n) = 0;
+            end       
         end
     end        
     s4(n) = size4(tmp);
     s8(n) = size8(tmp);
 end 
-   
+
 i4 = 1;
 i8 = 1;
 
@@ -82,12 +91,13 @@ for n = 1:size(noFixBreakIndices,2)
     if s4(n)
         perf4(i4) = perf(n);
         i4 = i4 + 1;
-    elseif s8(n)
+    end
+    if s8(n)
         perf8(i8) = perf(n);
         i8 = i8 + 1;
     end
 end
 
-perf4 = mean(perf4);
-perf8 = mean(perf8);
+perf4 = nanmean(perf4);
+perf8 = nanmean(perf8);
 end

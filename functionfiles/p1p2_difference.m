@@ -1,4 +1,4 @@
-function [diff] = p1p2_difference(p1,p2,obs,task,displayFg)
+function [diff] = p1p2_difference(p1,p2,obs,exp,task,displayFg)
 % This function finds the difference of p1 and p2 for each observer and then
 % takes the average across observers
 
@@ -68,15 +68,29 @@ if displayFg
     ylim([-0.6 0.8])
     xlim([0 500])
 
+    plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
+    
     if strcmp(obs,'')
         title([condition ' Search '],'FontSize',18,'Fontname','Ariel')
-        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\time\' condition '_p1p2_diff_tmp']);
+        if exp == 1
+            namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\time\' condition '_p1p2_diff_tmp']);
+        elseif exp == 2
+            namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\target present or absent\time\' condition '_p1p2_diff_tmp']);
+        end
     elseif strcmp(obs,'all')
         title([condition ' Search (n = ' num2str(size(diff,2)) ')'],'FontSize',18,'Fontname','Ariel')
-        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' condition '_p1p2_difference']);       
+        if exp == 1
+            namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' condition '_p1p2_difference']);       
+        elseif exp == 2
+            namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\target present or absent\' condition '_p1p2_difference']);       
+        end
     else
         title([condition ' Search (' obs ')'],'FontSize',18,'Fontname','Ariel')
-        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\time\' obs '_' condition '_p1p2_difference']);
+        if exp == 1
+            namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\target present or absent\main_' task '\figures\time\' obs '_' condition '_p1p2_difference']);
+        elseif exp == 2
+            namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\target present or absent\main_' task '\figures\time\' obs '_' condition '_p1p2_difference']);
+        end
     end
     print ('-djpeg', '-r500',namefig);
 end

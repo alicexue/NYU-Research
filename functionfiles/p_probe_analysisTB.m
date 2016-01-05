@@ -1,6 +1,6 @@
-function [p1ANDtb,p2ANDtb,p1ORtb,p2ORtb,p1TOP,p2TOP,p1BOTTOM,p2BOTTOM,p1ANDlr,p2ANDlr,p1ORlr,p2ORlr,p1LEFT,p2LEFT,p1RIGHT,p2RIGHT]=p_probe_analysisTB(obs,task,expN,present,printFg)
+function [p1ANDtb,p2ANDtb,p1ORtb,p2ORtb,p1TOP,p2TOP,p1BOTTOM,p2BOTTOM,p1ANDlr,p2ANDlr,p1ORlr,p2ORlr,p1LEFT,p2LEFT,p1RIGHT,p2RIGHT]=p_probe_analysisTB(obs,task,expN,present,difference,printFg)
 %% Example
-%%% p_probe_analysisTB('ax','difficult',2,1,false);
+%%% p_probe_analysisTB('ax','difficult',2,1,false,false);
 
 %% Parameters
 % obs = 'ax'; (observer's initials)
@@ -8,6 +8,7 @@ function [p1ANDtb,p2ANDtb,p1ORtb,p2ORtb,p1TOP,p2TOP,p1BOTTOM,p2BOTTOM,p1ANDlr,p2
 % expN = 1; (1 or 2)
 % present = 1; (only relevant for expN == 2; 1:target-present trials,
 % 2:target-absent trials, 3:all trials)
+% difference = false; (if true, plots difference of p1 and p2)
 % printFg = true; (if true, prints and saves figures)
 
 %% Outputs
@@ -131,7 +132,7 @@ pnRIGHTm = nanmean(pnRIGHT,2);
 [p1LEFT,p2LEFT] = quadratic_analysis(pbLEFTm,pnLEFTm);
 [p1RIGHT,p2RIGHT] = quadratic_analysis(pbRIGHTm,pnRIGHTm);
 
-if printFg && ~isempty(pbANDtb)
+if printFg && ~isempty(pbANDtb) && ~difference
     %% Graph TOP AND BOTTOM, TOP OR BOTTOM
     figure; hold on;
     for i = 1:2
@@ -150,7 +151,7 @@ if printFg && ~isempty(pbANDtb)
         legend('p1','p2','Location','SouthEast')
 
         set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
-        set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+        set(gca,'XTick',0:200:500,'FontSize',16,'LineWidth',2','Fontname','Ariel')
 
         ylim([0 1])
         xlim([0 500])
@@ -183,7 +184,7 @@ if printFg && ~isempty(pbANDtb)
         legend('p1','p2','Location','SouthEast')
 
         set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
-        set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+        set(gca,'XTick',0:200:500,'FontSize',16,'LineWidth',2','Fontname','Ariel')
 
         ylim([0 1])
         xlim([0 500])
@@ -217,7 +218,7 @@ if printFg && ~isempty(pbANDtb)
         legend('p1','p2','Location','SouthEast')
 
         set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
-        set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+        set(gca,'XTick',0:200:500,'FontSize',16,'LineWidth',2','Fontname','Ariel')
 
         ylim([0 1])
         xlim([0 500])
@@ -250,7 +251,7 @@ if printFg && ~isempty(pbANDtb)
         legend('p1','p2','Location','SouthEast')
 
         set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
-        set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+        set(gca,'XTick',0:200:500,'FontSize',16,'LineWidth',2','Fontname','Ariel')
 
         ylim([0 1])
         xlim([0 500])
@@ -266,6 +267,139 @@ if printFg && ~isempty(pbANDtb)
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_p1p2LR2' saveFileName]);
     print ('-djpeg', '-r500',namefig);       
 end
+
+if printFg && difference
+    %% Graph TOP AND BOTTOM, TOP OR BOTTOM
+    figure; hold on;
+    for i = 1:2
+        if i == 1
+            p1 = p1ANDtb;
+            p2 = p2ANDtb;
+        elseif i == 2
+            p1 = p1ORtb;
+            p2 = p2ORtb;
+        end
+        subplot(1,2,i)
+        hold on;
+        plot(100:30:460,p1-p2,'ro-','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',6,'Color',[0 0 0])
+
+        set(gca,'YTick',-1:.5:1,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
+        set(gca,'XTick',0:200:500,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+
+        ylim([-1 1])
+        xlim([0 500])
+        
+        plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
+        
+        if i == 1 
+            title([condition ' - Top and Bottom' saveFileName],'FontSize',14,'Fontname','Ariel')
+            ylabel('P1 - P2','FontSize',16,'Fontname','Ariel') 
+            xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
+        elseif i == 2
+            title(['Top or Bottom' saveFileName '(' obs ')'],'FontSize',14,'Fontname','Ariel')
+        end 
+    end
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_p1p2TB1diff' saveFileName]);
+    print ('-djpeg', '-r500',namefig);
+    %% Graph TOP and BOTTOM separately
+    figure; hold on;
+    for i = 1:2
+        if i == 1
+            p1 = p1TOP;
+            p2 = p2TOP;
+        elseif i == 2
+            p1 = p1BOTTOM;
+            p2 = p2BOTTOM;
+        end
+        subplot(1,2,i)
+        hold on;
+        plot(100:30:460,p1-p2,'ro-','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',6,'Color',[0 0 0])
+              
+        set(gca,'YTick',-1:.5:1,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
+        set(gca,'XTick',0:200:500,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+
+        ylim([-1 1])
+        xlim([0 500])
+        
+        plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
+        
+        if i == 1 
+            title([condition ' - Top' saveFileName],'FontSize',14,'Fontname','Ariel')
+            ylabel('P1 - P2','FontSize',16,'Fontname','Ariel') 
+            xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
+        elseif i == 2
+            title(['Bottom' saveFileName '(' obs ')'],'FontSize',14,'Fontname','Ariel')
+        end 
+    end
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_p1p2TB2diff' saveFileName]);
+    print ('-djpeg', '-r500',namefig);    
+    
+    %% Graph LEFT AND RIGHT, LEFT OR RIGHT
+    figure; hold on;
+    for i = 1:2
+        if i == 1
+            p1 = p1ANDlr;
+            p2 = p2ANDlr;
+        elseif i == 2
+            p1 = p1ORlr;
+            p2 = p2ORlr;
+        end
+        subplot(1,2,i)
+        hold on;
+        plot(100:30:460,p1-p2,'ro-','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',6,'Color',[0 0 0])
+      
+        set(gca,'YTick',-1:.5:1,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
+        set(gca,'XTick',0:200:500,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+
+        ylim([-1 1])
+        xlim([0 500])
+        
+        plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
+        
+        if i == 1 
+            title([condition ' - Left and Right' saveFileName],'FontSize',14,'Fontname','Ariel')
+            ylabel('P1 - P2','FontSize',16,'Fontname','Ariel') 
+            xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
+        elseif i == 2
+            title(['Left or Right' saveFileName '(' obs ')'],'FontSize',14,'Fontname','Ariel')
+        end 
+    end
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_p1p2LR1diff' saveFileName]);
+    print ('-djpeg', '-r500',namefig);
+    %% Graph TOP and BOTTOM separately
+    figure; hold on;
+    for i = 1:2
+        if i == 1
+            p1 = p1LEFT;
+            p2 = p2LEFT;
+        elseif i == 2
+            p1 = p1RIGHT;
+            p2 = p2RIGHT;
+        end
+        subplot(1,2,i)
+        hold on;
+        plot(100:30:460,p1-p2,'ro-','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',6,'Color',[0 0 0])
+
+        set(gca,'YTick',-1:.5:1,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
+        set(gca,'XTick',0:200:500,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+
+        ylim([-1 1])
+        xlim([0 500])
+        
+        plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
+        
+        if i == 1 
+            title([condition ' - Left' saveFileName],'FontSize',14,'Fontname','Ariel')
+            ylabel('P1 - P2','FontSize',16,'Fontname','Ariel') 
+            xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
+        elseif i == 2
+            title(['Right' saveFileName '(' obs ')'],'FontSize',14,'Fontname','Ariel')
+        end 
+    end
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_p1p2LR2diff' saveFileName]);
+    print ('-djpeg', '-r500',namefig);       
+end
+
 end
 
         

@@ -90,4 +90,5 @@ for delays = unique(exp.randVars.delays)
 end
 perfDelays = nanmean(perfDelays,2); 
 rtDelays = nanmedian(rtDelays,2);
+
 end

@@ -1,13 +1,15 @@
-function overall_probe_analysisTB(task,expN,present,printFg)
+function overall_probe_analysisTB(task,expN,present,difference,printFg,observers)
 %% This function graphs the probe analysis for probes presented on the top, bottom, left, and right
 %% Example
-%%% overall_probe_analysisTB('difficult',2,1,true);
+%%% overall_probe_analysisTB('difficult',2,1,false,true,{'ax','ld'});
 
 %% Parameters
 % task = 'difficult'; ('easy' or 'difficult')
 % expN = 1; (only relevant for expN == 2; 1:target-present trials,
 % 2:target-absent trials, 3:all trials)
+% difference = false; (if true, plots difference of p1 and p2)
 % printFg = true; (if true, prints and saves figures)
+% observers is a cell of the initials of all observers (if empty, all 
 
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
@@ -61,8 +63,8 @@ files = dir('C:\Users\Alice\Documents\MATLAB\data');
 for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
-    if (fileL == 2 || fileL == 3) && ~strcmp(obs(1,1),'.')
-        [p1ANDtb,p2ANDtb,p1ORtb,p2ORtb,p1TOP,p2TOP,p1BOTTOM,p2BOTTOM,p1ANDlr,p2ANDlr,p1ORlr,p2ORlr,p1LEFT,p2LEFT,p1RIGHT,p2RIGHT] = p_probe_analysisTB(obs,task,expN,present,true); 
+    if (fileL == 2 || fileL == 3) && ~strcmp(obs(1,1),'.') && (ismember(obs,observers) || isempty(observers))
+        [p1ANDtb,p2ANDtb,p1ORtb,p2ORtb,p1TOP,p2TOP,p1BOTTOM,p2BOTTOM,p1ANDlr,p2ANDlr,p1ORlr,p2ORlr,p1LEFT,p2LEFT,p1RIGHT,p2RIGHT] = p_probe_analysisTB(obs,task,expN,present,false,false); 
         
         if ~isempty(p1ANDtb) 
             ANDp1TB = horzcat(ANDp1TB,p1ANDtb);
@@ -86,7 +88,7 @@ for n = 1:size(files,1)
         end
     end
 end
-if printFg == true
+if printFg && ~difference
     %% Graph TOP AND BOTTOM, TOP OR BOTTOM
     figure; hold on;
     for i = 1:2
@@ -254,7 +256,177 @@ if printFg == true
     end
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2LR2' saveFileName]);
     print ('-djpeg', '-r500',namefig);       
-    
 end
+
+if printFg && difference
+    %% Graph TOP AND BOTTOM, TOP OR BOTTOM
+    figure; hold on;
+    for i = 1:2
+        if i == 1
+            t1 = ANDp1TB;
+            t2 = ANDp2TB;
+        elseif i == 2
+            t1 = ORp1TB;
+            t2 = ORp2TB;
+        end    
+        
+        s_diff = nanstd(t1-t2,[],2)./sqrt(numObs);
+
+        t1 = nanmean(t1,2);
+        t2 = nanmean(t2,2);
+
+        diff = t1 - t2;
+        
+        subplot(1,2,i)
+        hold on;
+        errorbar(100:30:460,diff,s_diff,'ro-','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',6,'Color',[0 0 0])
+
+        set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
+        set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
+
+        ylim([-0.8 0.8])
+        xlim([0 500])
+
+        plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
+        
+        if i == 1 
+            title([condition ' - Top and Bottom' saveFileName],'FontSize',14,'Fontname','Ariel')
+            ylabel('P1 - P2','FontSize',16,'Fontname','Ariel') 
+            xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
+        elseif i == 2
+            title(['Top or Bottom (n = ' num2str(numObs) ')' saveFileName],'FontSize',14,'Fontname','Ariel')
+        end 
+
+    end
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2TB1diff' saveFileName]);
+    print ('-djpeg', '-r500',namefig);
+    
+    %% Graph TOP and BOTTOM separately
+    figure; hold on;
+    for i = 1:2
+        if i == 1
+            t1 = TOPp1;
+            t2 = TOPp2;
+        elseif i == 2
+            t1 = BOTTOMp1;
+            t2 = BOTTOMp2;
+        end    
+        
+        s_diff = nanstd(t1-t2,[],2)./sqrt(numObs);
+
+        t1 = nanmean(nanmean(t1,2),3);
+        t2 = nanmean(nanmean(t2,2),3);
+
+        diff = t1-t2;
+        
+        subplot(1,2,i)
+        hold on;
+        errorbar(100:30:460,diff,s_diff,'ro-','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',6,'Color',[0 0 0])
+
+        set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
+        set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
+
+        ylim([-0.8 0.8])
+        xlim([0 500])
+
+        plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
+        
+        if i == 1 
+            title([condition ' - Top' saveFileName],'FontSize',14,'Fontname','Ariel')
+            ylabel('P1 - P2','FontSize',16,'Fontname','Ariel') 
+            xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
+        elseif i == 2
+            title(['Bottom (n = ' num2str(numObs) ')' saveFileName],'FontSize',14,'Fontname','Ariel')
+        end 
+
+    end
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2TB2diff' saveFileName]);
+    print ('-djpeg', '-r500',namefig);    
+
+    %% Graph LEFT AND RIGHT, LEFT OR RIGHT
+    figure; hold on;
+    for i = 1:2
+        if i == 1
+            t1 = ANDp1LR;
+            t2 = ANDp2LR;
+        elseif i == 2
+            t1 = ORp1LR;
+            t2 = ORp2LR;
+        end    
+        
+        s_diff = nanstd(t1-t2,[],2)./sqrt(numObs);
+
+        t1 = nanmean(t1,2);
+        t2 = nanmean(t2,2);
+
+        diff = t1 - t2;
+        
+        subplot(1,2,i)
+        hold on;
+        errorbar(100:30:460,diff,s_diff,'ro-','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',6,'Color',[0 0 0])
+
+        set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
+        set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
+
+        ylim([-0.8 0.8])
+        xlim([0 500])
+
+        plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
+        
+        if i == 1 
+            title([condition ' - Left and Right' saveFileName],'FontSize',14,'Fontname','Ariel')
+            ylabel('P1 - P2','FontSize',16,'Fontname','Ariel') 
+            xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
+        elseif i == 2
+            title(['Left or Right (n = ' num2str(numObs) ')' saveFileName],'FontSize',14,'Fontname','Ariel')
+        end 
+
+    end
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2LR1diff' saveFileName]);
+    print ('-djpeg', '-r500',namefig);
+    
+    %% Graph LEFT and RIGHT separately
+    figure; hold on;
+    for i = 1:2
+        if i == 1
+            t1 = LEFTp1;
+            t2 = LEFTp2;
+        elseif i == 2
+            t1 = RIGHTp1;
+            t2 = RIGHTp2;
+        end    
+        
+        s_diff = nanstd(t1-t2,[],2)./sqrt(numObs);
+
+        t1 = nanmean(nanmean(t1,2),3);
+        t2 = nanmean(nanmean(t2,2),3);
+
+        diff = t1 - t2;
+        
+        subplot(1,2,i)
+        hold on;
+        errorbar(100:30:460,diff,s_diff,'ro-','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',6,'Color',[0 0 0])
+
+        set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
+        set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
+
+        ylim([-0.8 0.8])
+        xlim([0 500])
+            
+        plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
+        
+        if i == 1 
+            title([condition ' - Left' saveFileName],'FontSize',14,'Fontname','Ariel')
+            ylabel('P1 - P2','FontSize',16,'Fontname','Ariel') 
+            xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
+        elseif i == 2
+            title(['Right (n = ' num2str(numObs) ')' saveFileName],'FontSize',14,'Fontname','Ariel')
+        end 
+
+    end
+    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2LR2diff' saveFileName]);
+    print ('-djpeg', '-r500',namefig);       
+end
+
 end
 

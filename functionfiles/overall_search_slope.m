@@ -1,11 +1,11 @@
 function overall_search_slope(expN,present,displayFg,displayStats)
 %% Example
-%%% overall_search_slope(1,1,true,true);
+%%% overall_search_slope(2,1,true,true);
 
 %% Parameters
 % expN = 1; (1 or 2)
-% present = 1; (only relevant for expN == 2; 1:target-present trials,
-% 2:target-absent trials, 3:all trials)
+% present = 1; (only relevant for expN == 2; 1:target-present trials (discrimination),
+% 2:target-absent trials, 3:all trials (detection))
 % displayFg = true; (if true, prints and saves figures)
 % displayStats = true; (if true, calls search_slope_stats(expN,present) and
 % prints slope and performance ttest results)
@@ -27,18 +27,22 @@ if displayFg
     %% Load data
     if expN == 1
         saveFileLoc = '';
+        titleName = '';
         saveFileName = '';
     elseif expN == 2
         saveFileLoc = '\target present or absent';
         if present == 1
+            titleName = 'TP';
             saveFileName = '_2TP';
         elseif present == 2
+            titleName = 'TA';
             saveFileName = '_2TA';
         elseif present == 3
+            titleName = '';
             saveFileName = '_2';
         end
     end 
-             
+   
     files = dir('C:\Users\Alice\Documents\MATLAB\data');  
     for n = 1:size(files,1)
         obs = files(n).name;
@@ -68,7 +72,7 @@ if displayFg
             end
         end
     end
-
+    
     m_easy_rt=mean(easy_rt,2);
     m_easy_perf=mean(easy_perf,2);
     ms_easy_rt=std(easy_rt,[],2)./sqrt(numObs);
@@ -82,7 +86,7 @@ if displayFg
     %% Plot reaction time
     figure;hold on;
     for i=1:numObs
-        errorbar(4:4:8,easy_rt(:,i)*1000,s_easy_rt(:,i),'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
+        errorbar(4:4:8,easy_rt(:,i)*1000,s_easy_rt(:,i),'-o','LineWidth',1.6,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
     end
 
     errorbar(4:4:8,m_easy_rt*1000,ms_easy_rt*1000,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',9,'Color',[0 0 0])
@@ -92,7 +96,7 @@ if displayFg
         legend_obs{i} = ['obs ' num2str(i)];
     end
     legend_obs{numObs+1} = 'average';
-    l = legend(legend_obs,'Location','NorthWest');    
+    l = legend(legend_obs,'Location','SouthWest');    
     set(l,'FontSize',12);    
 
     xlim([3 9])
@@ -104,7 +108,7 @@ if displayFg
         ylim([0 400])
         set(gca,'YTick', 0:100:400,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
     end
-    title(['Feature Reaction Time (n = ' num2str(numObs) ')' saveFileName],'FontSize',22)
+    title(['Feature Reaction Time (n = ' num2str(numObs) ') ' titleName],'FontSize',20)
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('RT [ms]','FontSize',20,'Fontname','Ariel')
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\easy\Feature_rtSetSize' saveFileName]);
@@ -114,7 +118,7 @@ if displayFg
     figure;hold on;
 
     for i=1:numObs
-        errorbar(4:4:8,easy_perf(:,i)*100,s_easy_perf(:,i),'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
+        errorbar(4:4:8,easy_perf(:,i)*100,s_easy_perf(:,i),'-o','LineWidth',1.6,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
     end
 
     errorbar(4:4:8,m_easy_perf*100,ms_easy_perf*100,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
@@ -136,7 +140,7 @@ if displayFg
         set(gca,'YTick', 40:20:100,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
         ylim([40 100])
     end
-    title(['Feature Accuracy (n = ' num2str(numObs) ')' saveFileName],'FontSize',22)
+    title(['Feature Accuracy (n = ' num2str(numObs) ') ' titleName],'FontSize',20)
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('Accuracy','FontSize',20,'Fontname','Ariel')
 
@@ -147,7 +151,7 @@ if displayFg
     figure;hold on;
 
     for i=1:numObs
-        errorbar(4:4:8,difficult_rt(:,i)*1000,s_difficult_rt(:,i),'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
+        errorbar(4:4:8,difficult_rt(:,i)*1000,s_difficult_rt(:,i),'-o','LineWidth',1.6,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
     end
 
     errorbar(4:4:8,m_difficult_rt*1000,ms_difficult_rt*1000,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
@@ -169,7 +173,7 @@ if displayFg
         ylim([0 400])
         set(gca,'YTick', 0:100:400,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
     end
-    title(['Conjunction Reaction Time (n = ' num2str(numObs) ')' saveFileName],'FontSize',22)
+    title(['Conjunction Reaction Time (n = ' num2str(numObs) ') ' titleName],'FontSize',20)
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('RT [ms]','FontSize',20,'Fontname','Ariel')
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\difficult\Conjunction_rtSetSize' saveFileName]);
@@ -179,7 +183,7 @@ if displayFg
     figure;hold on;
 
     for i=1:numObs
-        errorbar(4:4:8,difficult_perf(:,i)*100,s_difficult_perf(:,i),'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
+        errorbar(4:4:8,difficult_perf(:,i)*100,s_difficult_perf(:,i),'-o','LineWidth',1.6,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
     end
 
     errorbar(4:4:8,m_difficult_perf*100,ms_difficult_perf*100,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
@@ -189,7 +193,7 @@ if displayFg
         legend_obs{i} = ['obs ' num2str(i)];
     end
     legend_obs{numObs+1} = 'average';
-    l = legend(legend_obs,'Location','SouthEast');    
+    l = legend(legend_obs,'Location','SouthWest');    
     set(l,'FontSize',12); 
 
     xlim([3 9])
@@ -201,7 +205,7 @@ if displayFg
         set(gca,'YTick', 40:20:100,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
         ylim([40 100])
     end
-    title(['Conjunction Accuracy (n = ' num2str(numObs) ')' saveFileName],'FontSize',22)
+    title(['Conjunction Accuracy (n = ' num2str(numObs) ') ' titleName],'FontSize',20)
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('Accuracy','FontSize',20,'Fontname','Ariel')
 

@@ -1,4 +1,4 @@
-function [perf,pTP,pTA] = p_probe_performance(obs,task,expN,present,printFg)
+function [perf,pTP,pTA] = p_probe_performance(obs,task,expN,present,printFg,grouping)
 %% Example
 %%% p_probe_performance('ax','difficult',2,2,true);
 
@@ -40,7 +40,7 @@ for n = 1:size(files,1)
     filename = files(n).name;
     fileL = size(filename,2);
     if fileL > 4 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')
-        [p,pTargetP,pTargetA] = probe_performance(obs,task,filename,expN,present);
+        [p,pTargetP,pTargetA] = probe_performance(obs,task,filename,expN,present,grouping);
         perf(:,c) = p; 
         pTP(:,c) = pTargetP;
         pTA(:,c) = pTargetA;
@@ -68,7 +68,9 @@ if printFg
     title([condition ' Probe Performance (' obs ')'],'FontSize',18)
     xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
     ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
-
+    
+    plot([0 500],[8.33 8.33],'Color',[0 0 0],'LineStyle','--')
+    
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_probePerf']);
     print ('-djpeg', '-r500',namefig);
     
@@ -85,6 +87,8 @@ if printFg
     xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
     ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
 
+    plot([0 500],[8.33 8.33],'Color',[0 0 0],'LineStyle','--')
+    
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_probePerfTP']);
     print ('-djpeg', '-r500',namefig);    
     
@@ -100,7 +104,9 @@ if printFg
     title([condition ' Performance-target loc not probed (' obs ')'],'FontSize',15)
     xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
     ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
-
+    
+    plot([0 500],[8.33 8.33],'Color',[0 0 0],'LineStyle','--')
+    
     namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_probePerfTA']);
     print ('-djpeg', '-r500',namefig);       
 end

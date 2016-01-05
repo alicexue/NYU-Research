@@ -1,7 +1,7 @@
-function [pb,po,pn,pbp,pop,pnp,pboth,pone,pnone] = probe_analysis(obs,task,file,expN,present)
+function [pb,po,pn,pbp,pop,pnp,pboth,pone,pnone] = probe_analysis(obs,task,file,expN,present,grouping)
 %% This program analyzes the probe task for individual stim files
 %% Example
-%%% probe_analysis('ax','difficult','150820_stim01.mat',1,1);
+%%% probe_analysis('ax','difficult','150820_stim01.mat',1,1,1);
 
 %% Parameters
 % obs = 'ax'; (observer's initials)
@@ -10,6 +10,8 @@ function [pb,po,pn,pbp,pop,pnp,pboth,pone,pnone] = probe_analysis(obs,task,file,
 % expN = 2; (1 or 2)
 % present = 1; (only relevant for exp == 2; 1:target-present trials,
 % 2:target-absent trials, 3:all trials) 
+% grouping = 1; (if 1, probes must be exactly correct; if 2, probes must
+% match by shape; if 3, probes must match by aperture)
 
 %% Load the data
 if expN == 1
@@ -73,21 +75,104 @@ for n = theTrials
 
             cor1 = 0;
             cor2 = 0;
-            if (reported1(1)==presented1(1))&&((reported1(2)==presented1(2)))...
-                    || (reported1(1)==presented2(1))&&((reported1(2)==presented2(2)))
-                cor1 = 1;
-            elseif (reported2(1)==presented1(1))&&((reported2(2)==presented1(2)))...
-                    || (reported2(1)==presented2(1))&&((reported2(2)==presented2(2)))
-                cor2 = 1;
-            else
-                cor1 = 0;
-                cor2 = 0;
+            
+            if grouping == 1
+                if (reported1(1)==presented1(1))&&((reported1(2)==presented1(2)))...
+                        || (reported1(1)==presented2(1))&&((reported1(2)==presented2(2)))
+                    cor1 = 1;
+                elseif (reported2(1)==presented1(1))&&((reported2(2)==presented1(2)))...
+                        || (reported2(1)==presented2(1))&&((reported2(2)==presented2(2)))
+                    cor2 = 1;
+                else
+                    cor1 = 0;
+                    cor2 = 0;
+                end
+                if (reported2(1)==presented1(1))&&((reported2(2)==presented1(2)))...
+                        || (reported2(1)==presented2(1))&&((reported2(2)==presented2(2)))
+                    cor2 = 1;
+                end
+            elseif grouping == 2
+                for i = 1:3
+                    if i == 1
+                        min = 1;
+                        max = 4;
+                    elseif i == 2
+                        min = 5;
+                        max = 8;
+                    else
+                        min = 9;
+                        max = 12;
+                    end
+                    match11 = false;
+                    match12 = false;
+                    if (reported1(1)>=min && reported1(1)<=max)
+                        if (presented1(1)>=min && presented1(1)<=max)
+                            cor1 = 1;
+                            match11 = true;
+                        elseif (presented2(1)>=min && presented2(1)<=max)
+                            match12 = true;
+                            cor1 = 1;
+                        end                                            
+                    end
+                    if (reported2(1)>=min && reported2(1)<=max)
+                        if match12 || (~match11&&~match12)
+                            if (presented1(1)>=min && presented1(1)<=max)
+                                cor2 = 1;
+                            end
+                        end
+                        if match11 || (~match11&&~match12)
+                            if (presented2(1)>=min && presented2(1)<=max)
+                                cor2 = 1;
+                            end                                           
+                        end
+                    end
+                end
+            elseif grouping == 3
+                for i = 1:4
+                    if i == 1
+                        x1 = 1;
+                        x2 = 5;
+                        x3 = 9;
+                    elseif i == 2
+                        x1 = 2;
+                        x2 = 6;
+                        x3 = 10;
+                    elseif i == 3
+                        x1 = 3;
+                        x2 = 7;
+                        x3 = 11;
+                    elseif i == 4
+                        x1 = 4;
+                        x2 = 8;
+                        x3 = 12;
+                    end
+                    match11 = false;
+                    match12 = false;
+                    if (reported1(1)==x1 || reported1(1)==x2 || reported1(1)==x3)
+                        if (presented1(1)==x1 || presented1(1)==x2 || presented1(1)==x3)
+                            cor1 = 1;
+                            match11 = true;
+                        elseif (presented2(1)==x1 || presented2(1)==x2 || presented2(1)==x3)
+                            match12 = true;
+                            cor1 = 1;
+                        end                                            
+                    end
+                    if (reported2(1)==x1 || reported2(1)==x2 || reported2(1)==x3)
+                        if match12 || (~match11&&~match12)
+                            if (presented1(1)==x1 || presented1(1)==x2 || presented1(1)==x3)
+                                cor2 = 1;
+                            end
+                        end
+                        if match11 || (~match11&&~match12)
+                            if (presented2(1)==x1 || presented2(1)==x2 || presented2(1)==x3)
+                                cor2 = 1;
+                            end                                           
+                        end
+                    end
+                end
             end
-            if (reported2(1)==presented1(1))&&((reported2(2)==presented1(2)))...
-                    || (reported2(1)==presented2(1))&&((reported2(2)==presented2(2)))
-                cor2 = 1;
-            end
-
+                        
+            
             if (cor1 == 1) && (cor2 == 1)
                 pboth(index) = 1;pnone(index) = 0;pone(index) = 0;
             elseif ((cor1 == 1) && (cor2 == 0))||((cor1 == 0) && (cor2 == 1))

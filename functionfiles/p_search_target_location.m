@@ -27,9 +27,9 @@ search_perf_loc_detect = [];
 probe_perf_loc = [];
 
 if expN == 1
-    files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task]);  
+    files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\main_', task]);  
 elseif expN == 2
-    files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\target present or absent\main_', task]);  
+    files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\target present or absent\main_', task]);  
 end
 
 for n = 1:size(files,1)

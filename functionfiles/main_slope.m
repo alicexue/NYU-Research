@@ -18,9 +18,9 @@ function [perfDelays,rtDelays] = main_slope(obs,task,file,expN,present)
 
 %% Load data
 if expN == 1
-    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\' file])
+    load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\main_' task '\' file])
 elseif expN == 2
-    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\target present or absent\main_' task '\' file])
+    load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\target present or absent\main_' task '\' file])
 end
 
 %% Transform data

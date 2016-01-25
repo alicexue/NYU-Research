@@ -43,7 +43,7 @@ if displayFg
         end
     end 
    
-    files = dir('C:\Users\Alice\Documents\MATLAB\data');  
+    files = dir('C:\Users\alice_000\Documents\MATLAB\data');  
     for n = 1:size(files,1)
         obs = files(n).name;
         fileL = size(obs,2);
@@ -111,7 +111,7 @@ if displayFg
     title(['Feature Reaction Time (n = ' num2str(numObs) ') ' titleName],'FontSize',20)
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('RT [ms]','FontSize',20,'Fontname','Ariel')
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\easy\Feature_rtSetSize' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\easy\Feature_rtSetSize' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 
     %% Plot performance
@@ -144,7 +144,7 @@ if displayFg
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('Accuracy','FontSize',20,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\easy\Feature_perfSetSize' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\easy\Feature_perfSetSize' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 
     %% Plot reaction time
@@ -176,7 +176,7 @@ if displayFg
     title(['Conjunction Reaction Time (n = ' num2str(numObs) ') ' titleName],'FontSize',20)
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('RT [ms]','FontSize',20,'Fontname','Ariel')
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\difficult\Conjunction_rtSetSize' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\difficult\Conjunction_rtSetSize' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 
     %% Plot performance
@@ -209,7 +209,7 @@ if displayFg
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('Accuracy','FontSize',20,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\difficult\Conjunction_perfSetSize' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\difficult\Conjunction_perfSetSize' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 end
 if displayStats
@@ -244,7 +244,7 @@ pall_difficult_perf=[];
 
 numObs = 0;
 
-files = dir('C:\Users\Alice\Documents\MATLAB\data');  
+files = dir('C:\Users\alice_000\Documents\MATLAB\data');  
 for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);

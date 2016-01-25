@@ -47,9 +47,9 @@ nTrialsP=0;
 nTrialsA=0;
 
 if expN == 1
-    files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task]);  
+    files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\main_', task]);  
 elseif expN == 2
-    files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\target present or absent\main_', task]);  
+    files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\target present or absent\main_', task]);  
 end
 
 for i = 1:size(files,1)
@@ -116,7 +116,7 @@ if printFg == true
 
     title([condition ' Search - Target Probed (' obs ')' saveFileName],'FontSize',16,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_TP' '_rawProbs' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs saveFileLoc '_TP' '_rawProbs' saveFileName]);
     print ('-djpeg', '-r500',namefig);
     %% Plot p1 and p2 for each probe delay
 
@@ -136,7 +136,7 @@ if printFg == true
 
     title([condition ' Search - Target Probed - ' num2str(nTrialsP) ' Trials (' obs ')' saveFileName],'FontSize',16,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_TP_p1p2' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs saveFileLoc '_TP_p1p2' saveFileName]);
     print ('-djpeg', '-r500',namefig); 
     %% Graph p1 p2 when target location is not probed
     figure;hold on;
@@ -153,7 +153,7 @@ if printFg == true
 
     title([condition ' Search - Target Not Probed (' obs ')' saveFileName],'FontSize',16,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_TA' '_rawProbs' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs saveFileLoc '_TA' '_rawProbs' saveFileName]);
     print ('-djpeg', '-r500',namefig);
     
     %% Plot p1 and p2 for each probe delay
@@ -173,7 +173,7 @@ if printFg == true
 
     title([condition ' Search - Target Not Probed - ' num2str(nTrialsA) ' Trials (' obs ')' saveFileName],'FontSize',16,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_TA_p1p2' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs saveFileLoc '_TA_p1p2' saveFileName]);
     print ('-djpeg', '-r500',namefig); 
         
 end

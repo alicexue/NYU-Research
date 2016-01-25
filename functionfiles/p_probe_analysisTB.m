@@ -68,9 +68,9 @@ pbRIGHT=[];
 pnRIGHT=[];
 
 if expN == 1
-    files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task]);  
+    files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\main_', task]);  
 elseif expN == 2
-    files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\target present or absent\main_', task]);  
+    files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\target present or absent\main_', task]);  
 end
 
 for i = 1:size(files,1)
@@ -164,7 +164,7 @@ if printFg && ~isempty(pbANDtb) && ~difference
             title(['Top or Bottom' saveFileName '(' obs ')'],'FontSize',14,'Fontname','Ariel')
         end 
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_p1p2TB1' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs saveFileLoc '_p1p2TB1' saveFileName]);
     print ('-djpeg', '-r500',namefig);
     %% Graph TOP and BOTTOM separately
     figure; hold on;
@@ -197,7 +197,7 @@ if printFg && ~isempty(pbANDtb) && ~difference
             title(['Bottom' saveFileName '(' obs ')'],'FontSize',14,'Fontname','Ariel')
         end 
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_p1p2TB2' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs saveFileLoc '_p1p2TB2' saveFileName]);
     print ('-djpeg', '-r500',namefig);    
     
     %% Graph LEFT AND RIGHT, LEFT OR RIGHT
@@ -231,7 +231,7 @@ if printFg && ~isempty(pbANDtb) && ~difference
             title(['Left or Right' saveFileName '(' obs ')'],'FontSize',14,'Fontname','Ariel')
         end 
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_p1p2LR1' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs saveFileLoc '_p1p2LR1' saveFileName]);
     print ('-djpeg', '-r500',namefig);
     %% Graph TOP and BOTTOM separately
     figure; hold on;
@@ -264,7 +264,7 @@ if printFg && ~isempty(pbANDtb) && ~difference
             title(['Right' saveFileName '(' obs ')'],'FontSize',14,'Fontname','Ariel')
         end 
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_p1p2LR2' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs saveFileLoc '_p1p2LR2' saveFileName]);
     print ('-djpeg', '-r500',namefig);       
 end
 
@@ -299,7 +299,7 @@ if printFg && difference
             title(['Top or Bottom' saveFileName '(' obs ')'],'FontSize',14,'Fontname','Ariel')
         end 
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_p1p2TB1diff' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs saveFileLoc '_p1p2TB1diff' saveFileName]);
     print ('-djpeg', '-r500',namefig);
     %% Graph TOP and BOTTOM separately
     figure; hold on;
@@ -331,7 +331,7 @@ if printFg && difference
             title(['Bottom' saveFileName '(' obs ')'],'FontSize',14,'Fontname','Ariel')
         end 
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_p1p2TB2diff' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs saveFileLoc '_p1p2TB2diff' saveFileName]);
     print ('-djpeg', '-r500',namefig);    
     
     %% Graph LEFT AND RIGHT, LEFT OR RIGHT
@@ -364,7 +364,7 @@ if printFg && difference
             title(['Left or Right' saveFileName '(' obs ')'],'FontSize',14,'Fontname','Ariel')
         end 
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_p1p2LR1diff' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs saveFileLoc '_p1p2LR1diff' saveFileName]);
     print ('-djpeg', '-r500',namefig);
     %% Graph TOP and BOTTOM separately
     figure; hold on;
@@ -396,7 +396,7 @@ if printFg && difference
             title(['Right' saveFileName '(' obs ')'],'FontSize',14,'Fontname','Ariel')
         end 
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs saveFileLoc '_p1p2LR2diff' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs saveFileLoc '_p1p2LR2diff' saveFileName]);
     print ('-djpeg', '-r500',namefig);       
 end
 

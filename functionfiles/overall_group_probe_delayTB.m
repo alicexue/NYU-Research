@@ -59,7 +59,7 @@ RIGHTp2=[];
 
 numObs = 0;
 
-files = dir('C:\Users\Alice\Documents\MATLAB\data');  
+files = dir('C:\Users\alice_000\Documents\MATLAB\data');  
 for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
@@ -147,7 +147,7 @@ if printFg == true
         end 
 
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2TB1G' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2TB1G' saveFileName]);
     print ('-djpeg', '-r500',namefig);
     
     %% Graph TOP and BOTTOM separately
@@ -189,7 +189,7 @@ if printFg == true
         end 
 
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2TB2G' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2TB2G' saveFileName]);
     print ('-djpeg', '-r500',namefig);    
 
     %% Graph LEFT AND RIGHT, LEFT OR RIGHT
@@ -231,7 +231,7 @@ if printFg == true
         end 
 
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2LR1G' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2LR1G' saveFileName]);
     print ('-djpeg', '-r500',namefig);
     
     %% Graph LEFT and RIGHT separately
@@ -273,7 +273,7 @@ if printFg == true
         end 
 
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2LR2G' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2LR2G' saveFileName]);
     print ('-djpeg', '-r500',namefig);       
     
 end

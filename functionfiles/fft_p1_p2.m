@@ -50,7 +50,7 @@ if ~isempty(p1)
     diff = p1 - p2;
 end
 m_diff = mean(diff,2);
-std_diff = std(diff,[],2)./size(diff,2);
+std_diff = std(diff,[],2)./sqrt(size(diff,2));
 
 %% Plot difference of p1 and p2
 figure; hold on;
@@ -65,7 +65,7 @@ ylim([-1 1])
 xlim([0 500])
 plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 title([condition ' Search (n = ' num2str(size(diff,2)) ') ' note ' ' titleName],'FontSize',18,'Fontname','Ariel')
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\time\' condition '_p1p2_difference' note saveFileName]); 
+namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\time\' condition '_p1p2_difference' note saveFileName]); 
 print ('-djpeg', '-r500',namefig); 
 
 a_m_diff = mean(diff,2);
@@ -88,7 +88,7 @@ set(gca,'YTick',0:.2:1.4,'FontSize',12,'LineWidth',2','Fontname','Ariel')
 ylim([0 1.4])
 title([condition ' Search-FFT on the average data-' note ' ' titleName],'FontSize',18,'Fontname','Ariel')
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\time\' condition '_FFTavg_' note saveFileName]);
+namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\time\' condition '_FFTavg_' note saveFileName]);
 print ('-djpeg', '-r500',namefig); 
 
 %% Plots average amplitude spectrum for FFT on each observer's p1 p2 difference
@@ -102,7 +102,7 @@ set(gca,'XTick',[2.8 5.6 8.3 11.1 13.9 16.7],'FontSize',12,'LineWidth',2','Fontn
 set(gca,'YTick',0:.5:3.5,'FontSize',12,'LineWidth',2','Fontname','Ariel')
 ylim([0 3.5])
 title([condition ' Search-FFT on the individual data-' note ' ' titleName],'FontSize',18,'Fontname','Ariel')
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\time\' condition '_FFTindiv_' note saveFileName]);
+namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\time\' condition '_FFTindiv_' note saveFileName]);
 print ('-djpeg', '-r500',namefig);
 
 %% Plots individual amplitude spectrums for each observer
@@ -118,7 +118,7 @@ set(gca,'YTick',0:0.5:4,'FontSize',12,'LineWidth',2','Fontname','Ariel')
 ylim([0 4])
 title([condition ' Search-FFT on the individual data-' note ' ' titleName],'FontSize',18,'Fontname','Ariel')
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\time\' condition '_FFTindividuals_' note saveFileName]);
+namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\time\' condition '_FFTindividuals_' note saveFileName]);
 print ('-djpeg', '-r500',namefig);
 
 end

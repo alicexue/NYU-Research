@@ -28,7 +28,7 @@ difficult_RT = [];
 difficult_false_alarmRT = [];
 
 %% Load data
-files = dir('C:\Users\Alice\Documents\MATLAB\data');  
+files = dir('C:\Users\alice_000\Documents\MATLAB\data');  
 for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
@@ -120,7 +120,7 @@ else
     ylabel('d prime','FontSize',18,'Fontname','Ariel')
 end
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\easy\Feature_dprime_slope' num2str(type) saveFileName]);
+namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\easy\Feature_dprime_slope' num2str(type) saveFileName]);
 print ('-djpeg', '-r500',namefig);
 
 %% Plot dprime
@@ -159,7 +159,7 @@ else
     ylabel('d prime','FontSize',18,'Fontname','Ariel')
 end
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures' saveFileLoc '\difficult\Conjunction_dprime_slope' num2str(type) saveFileName]);
+namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\difficult\Conjunction_dprime_slope' num2str(type) saveFileName]);
 print ('-djpeg', '-r500',namefig);
 end
 

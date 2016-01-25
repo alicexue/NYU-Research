@@ -28,7 +28,7 @@ if displayFg
     all_p1=[];
     all_p2=[];
     if strcmp(obs,'all')
-        files = dir('C:\Users\Alice\Documents\MATLAB\data');  
+        files = dir('C:\Users\alice_000\Documents\MATLAB\data');  
         for n = 1:size(files,1)
             obs_name = files(n).name;
             fileL = size(obs_name,2);
@@ -73,23 +73,23 @@ if displayFg
     if strcmp(obs,'')
         title([condition ' Search '],'FontSize',18,'Fontname','Ariel')
         if exp == 1
-            namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\time\' condition '_p1p2_diff_tmp']);
+            namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\time\' condition '_p1p2_diff_tmp']);
         elseif exp == 2
-            namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\target present or absent\time\' condition '_p1p2_diff_tmp']);
+            namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\target present or absent\time\' condition '_p1p2_diff_tmp']);
         end
     elseif strcmp(obs,'all')
         title([condition ' Search (n = ' num2str(size(diff,2)) ')'],'FontSize',18,'Fontname','Ariel')
         if exp == 1
-            namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' condition '_p1p2_difference']);       
+            namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' condition '_p1p2_difference']);       
         elseif exp == 2
-            namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\target present or absent\' condition '_p1p2_difference']);       
+            namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\target present or absent\' condition '_p1p2_difference']);       
         end
     else
         title([condition ' Search (' obs ')'],'FontSize',18,'Fontname','Ariel')
         if exp == 1
-            namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\target present or absent\main_' task '\figures\time\' obs '_' condition '_p1p2_difference']);
+            namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\target present or absent\main_' task '\figures\time\' obs '_' condition '_p1p2_difference']);
         elseif exp == 2
-            namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\target present or absent\main_' task '\figures\time\' obs '_' condition '_p1p2_difference']);
+            namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\target present or absent\main_' task '\figures\time\' obs '_' condition '_p1p2_difference']);
         end
     end
     print ('-djpeg', '-r500',namefig);

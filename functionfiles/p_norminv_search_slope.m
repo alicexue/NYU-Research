@@ -25,7 +25,7 @@ false_alarmRT = [];
 hitRT8 = [];
 false_alarmRT8 = [];
 
-files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\target present or absent\' task]);  
+files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\target present or absent\' task]);  
 for n = 1:size(files,1)
     filename = files(n).name;
     fileL = size(filename,2);

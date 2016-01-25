@@ -89,10 +89,10 @@ pn_pairs = [];
 
 %% Load data
 if expN == 1
-    thisdir = ['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task];
+    thisdir = ['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\main_', task];
     files = dir(thisdir);  
 elseif expN == 2
-    thisdir = ['C:\Users\Alice\Documents\MATLAB\data\', obs, '\target present or absent\main_', task];
+    thisdir = ['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\target present or absent\main_', task];
     files = dir(thisdir);  
 end
 
@@ -229,7 +229,7 @@ if printFg && ~correct && ~isempty(Mpb) && ~difference
     
     title([condition ' Search (' obs ')' saveFileName],'FontSize',24,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc '_rawProbs' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_rawProbs' saveFileName]);
 
     print ('-djpeg', '-r500',namefig);
 
@@ -251,7 +251,7 @@ if printFg && ~correct && ~isempty(Mpb) && ~difference
 
     title([condition ' Search (' obs ')' saveFileName],'FontSize',24,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2' saveFileName]);
     print ('-djpeg', '-r500',namefig); 
   
     %% Plot p1 and p2 for each probe delay for each pair - square configuration
@@ -278,7 +278,7 @@ if printFg && ~correct && ~isempty(Mpb) && ~difference
         title(['PAIR n' num2str(numPair) ' (' obs ')'],'FontSize',14,'Fontname','Ariel')  
     end
     
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2PAIR1' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2PAIR1' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 
     %% Plot p1 and p2 for each probe delay for each pair - diamond configuration
@@ -305,7 +305,7 @@ if printFg && ~correct && ~isempty(Mpb) && ~difference
         title(['PAIR n' num2str(numPair+6) ' (' obs ')'],'FontSize',14,'Fontname','Ariel')  
     end
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2PAIR2' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2PAIR2' saveFileName]);
     print ('-djpeg', '-r500',namefig);     
 
     %% Graph same/different hemifields and diagonals for square configuration
@@ -341,7 +341,7 @@ if printFg && ~correct && ~isempty(Mpb) && ~difference
             title(['Square Diagonals (' obs ')'],'FontSize',14,'Fontname','Ariel')
         end     
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2HemiDiagS' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2HemiDiagS' saveFileName]);
     print ('-djpeg', '-r500',namefig);
     %% Graph same/different hemifields and diagonals
     figure; hold on;
@@ -376,7 +376,7 @@ if printFg && ~correct && ~isempty(Mpb) && ~difference
             title(['Diamond Diags (' obs ')'],'FontSize',14,'Fontname','Ariel')
         end 
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2HemiDiagD' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2HemiDiagD' saveFileName]);
     print ('-djpeg', '-r500',namefig);
     
     
@@ -415,7 +415,7 @@ if printFg && ~correct && ~isempty(Mpb) && ~difference
         
         title([condition ' Search - Pair ' name ' (' obs ')' saveFileName],'FontSize',20,'Fontname','Ariel')
 
-        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFilePairsLoc '_p1p2_' name saveFileName]);
+        namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFilePairsLoc '_p1p2_' name saveFileName]);
         print ('-djpeg', '-r500',namefig);       
         
     end    
@@ -472,7 +472,7 @@ if correct
 
         title([condition ' Search (' obs ')'],'FontSize',24,'Fontname','Ariel')
         
-        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc '_rawProbsC1' saveFileName]);
+        namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_rawProbsC1' saveFileName]);
         print ('-djpeg', '-r500',namefig);
 
         %% Plot p1 and p2 for each probe delay - getting p1 and p2 from the corrected Mpb and Mpn
@@ -492,7 +492,7 @@ if correct
 
         title([condition ' Search (' obs ')'],'FontSize',24,'Fontname','Ariel')
 
-        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' saveFileLoc '_p1p2C1' saveFileName]);
+        namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' saveFileLoc '_p1p2C1' saveFileName]);
         print ('-djpeg', '-r500',namefig); 
 
         %% Plot p1 and p2 for each probe delay - p1 and p2 are corrected for the global average
@@ -512,7 +512,7 @@ if correct
 
         title([condition ' Search (' obs ')'],'FontSize',24,'Fontname','Ariel')
 
-        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2C2' saveFileName]);
+        namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2C2' saveFileName]);
         print ('-djpeg', '-r500',namefig);
         %% Plot p1 and p2 for each probe delay - p1 and p2 are corrected for the combined global average
         figure;hold on;
@@ -531,7 +531,7 @@ if correct
 
         title([condition ' Search (' obs ')'],'FontSize',24,'Fontname','Ariel')
 
-        namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2C3' saveFileName]);
+        namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2C3' saveFileName]);
 
         print ('-djpeg', '-r500',namefig);        
     end
@@ -559,7 +559,7 @@ if printFg && difference
     
     title([condition ' Search (' obs ')' saveFileName],'FontSize',24,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2diff' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2diff' saveFileName]);
     print ('-djpeg', '-r500',namefig); 
   
     %% Plot p1 and p2 for each probe delay for each pair - square configuration
@@ -586,7 +586,7 @@ if printFg && difference
         title(['PAIR n' num2str(numPair) ' (' obs ')'],'FontSize',14,'Fontname','Ariel')  
     end
     
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2PAIR1diff' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2PAIR1diff' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 
     %% Plot p1 and p2 for each probe delay for each pair - diamond configuration
@@ -613,7 +613,7 @@ if printFg && difference
         title(['PAIR n' num2str(numPair+6) ' (' obs ')'],'FontSize',14,'Fontname','Ariel')  
     end
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2PAIR2diff' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2PAIR2diff' saveFileName]);
     print ('-djpeg', '-r500',namefig);     
 
     %% Graph same/different hemifields and diagonals for square configuration
@@ -648,7 +648,7 @@ if printFg && difference
             title(['Square Diagonals (' obs ')'],'FontSize',14,'Fontname','Ariel')
         end     
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2HemiDiagSdiff' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2HemiDiagSdiff' saveFileName]);
     print ('-djpeg', '-r500',namefig);
     %% Graph same/different hemifields and diagonals
     figure; hold on;
@@ -682,7 +682,7 @@ if printFg && difference
             title(['Diamond Diags (' obs ')'],'FontSize',14,'Fontname','Ariel')
         end 
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2HemiDiagDdiff' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2HemiDiagDdiff' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 end
 end    

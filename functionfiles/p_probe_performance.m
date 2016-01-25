@@ -24,6 +24,22 @@ else
     condition = 'Feature';
 end
 
+if expN == 1
+    saveFileLoc = ['\main_' task '\figures\' obs '_' condition];
+    saveFilePairsLoc = ['\main_' task '\figures\pairs\' obs '_' condition];
+    saveFileName = '';
+elseif expN == 2
+    saveFileLoc = ['\target present or absent\main_' task '\figures\' obs '_' condition];
+    saveFilePairsLoc = ['\target present or absent\main_' task '\figures\pairs\' obs '_' condition];
+    if present == 1
+        saveFileName = '_2TP';
+    elseif present == 2
+        saveFileName = '_2TA';
+    elseif present == 3
+        saveFileName = '_2';
+    end
+end
+
 %% Obtain perf for each run and concatenate over each run
 perf = NaN(13,10000);
 pTP = NaN(13,10000);
@@ -31,9 +47,9 @@ pTA = NaN(13,10000);
 c = 1;
 
 if expN == 1
-    files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task]);  
+    files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\main_', task]);  
 elseif expN == 2
-    files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\target present or absent\main_', task]);  
+    files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\target present or absent\main_', task]);  
 end
 
 for n = 1:size(files,1)
@@ -58,7 +74,7 @@ pTA = nanmean(pTA,2);
 if printFg
     %% Plot performance
     figure; hold on;
-    plot(100:30:460,p*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+    plot(100:30:460,perf*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 
     ylim([0 100])
     xlim([0 500])
@@ -71,7 +87,7 @@ if printFg
     
     plot([0 500],[8.33 8.33],'Color',[0 0 0],'LineStyle','--')
     
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_probePerf']);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_probePerf']);
     print ('-djpeg', '-r500',namefig);
     
     %% Plot performance when target location is probed
@@ -89,7 +105,7 @@ if printFg
 
     plot([0 500],[8.33 8.33],'Color',[0 0 0],'LineStyle','--')
     
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_probePerfTP']);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_probePerfTP']);
     print ('-djpeg', '-r500',namefig);    
     
     %% Plot performance when target location is not probed
@@ -107,7 +123,7 @@ if printFg
     
     plot([0 500],[8.33 8.33],'Color',[0 0 0],'LineStyle','--')
     
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\figures\' obs '_' condition '_probePerfTA']);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_probePerfTA']);
     print ('-djpeg', '-r500',namefig);       
 end
 end

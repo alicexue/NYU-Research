@@ -47,7 +47,7 @@ perf4 = NaN(1,1000);
 perf8 = NaN(1,1000);
 c = 1;
 
-files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\', tTask]);  
+files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\', tTask]);  
 for n = 1:size(files,1)
     filename = files(n).name;
     fileL = size(filename,2);
@@ -97,7 +97,7 @@ if printFg == true
     title([condition ' Reaction Time (' obs ')'],'FontSize',22)
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('RT [ms]','FontSize',20,'Fontname','Ariel')
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' tTask '\figures\' obs '_' condition '_rtSetSize' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' tTask '\figures\' obs '_' condition '_rtSetSize' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 
     %% Plot performance
@@ -113,7 +113,7 @@ if printFg == true
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('Accuracy','FontSize',20,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' tTask '\figures\' obs '_' condition '_perfSetSize' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' tTask '\figures\' obs '_' condition '_perfSetSize' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 end
 end

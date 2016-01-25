@@ -59,9 +59,9 @@ pnDDg3=[];
 
 %% Load data
 if expN == 1
-    files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\main_', task]);  
+    files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\main_', task]);  
 elseif expN == 2
-    files = dir(['C:\Users\Alice\Documents\MATLAB\data\', obs, '\target present or absent\main_', task]);  
+    files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\target present or absent\main_', task]);  
 end
 
 for i = 1:size(files,1)
@@ -191,7 +191,7 @@ if printFg && ~isempty(Mpb)
     
     title([condition ' Search (' obs ')' saveFileName],'FontSize',24,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc '_rawProbsG' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_rawProbsG' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 
     %% Plot p1 and p2 for each probe delay
@@ -211,7 +211,7 @@ if printFg && ~isempty(Mpb)
 
     title([condition ' Search (' obs ')' saveFileName],'FontSize',24,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2G' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2G' saveFileName]);
     print ('-djpeg', '-r500',namefig); 
     %% Establish x-axis labels 
     nGroups = 12/delaysPerGroup;
@@ -244,7 +244,7 @@ if printFg && ~isempty(Mpb)
 
         title(['PAIR n' num2str(numPair) ' (' obs ')'],'FontSize',14,'Fontname','Ariel')  
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2PAIR1G' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2PAIR1G' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 
     %% Plot p1 and p2 for each probe delay for each pair - diamond configuration
@@ -271,7 +271,7 @@ if printFg && ~isempty(Mpb)
         title(['PAIR n' num2str(numPair+6) ' (' obs ')'],'FontSize',14,'Fontname','Ariel')  
     end
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2PAIR2G' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2PAIR2G' saveFileName]);
     print ('-djpeg', '-r500',namefig);     
 
     %% Graph same/different hemifields and diagonals for square configuration
@@ -306,7 +306,7 @@ if printFg && ~isempty(Mpb)
             title(['Square Diagonals (' obs ')'],'FontSize',14,'Fontname','Ariel')
         end     
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2HemiDiagSG' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2HemiDiagSG' saveFileName]);
     print ('-djpeg', '-r500',namefig);
     %% Graph same/different hemifields and diagonals
     figure; hold on;
@@ -341,7 +341,7 @@ if printFg && ~isempty(Mpb)
             title(['Diamond Diags (' obs ')'],'FontSize',14,'Fontname','Ariel')
         end 
     end
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2HemiDiagDG' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_p1p2HemiDiagDG' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 end
 SH = horzcat(pbMsHemi,pnMsHemi);

@@ -37,7 +37,7 @@ pnDDg=[];
 
 numObs = 0;
 
-files = dir('C:\Users\Alice\Documents\MATLAB\data');  
+files = dir('C:\Users\alice_000\Documents\MATLAB\data');  
 for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
@@ -92,7 +92,7 @@ ylim([0 1])
 
 title([condition ' Search'],'FontSize',24,'Fontname','Ariel')
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_rawProbs']);
+namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\main_' task '\' condition '_rawProbs']);
 print ('-djpeg', '-r500',namefig);
 
 %% Transform pboth and pnone into p1 and p2
@@ -113,7 +113,7 @@ xlim([0 500])
 
 title([condition ' Search'],'FontSize',24,'Fontname','Ariel')
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_2p1p2']);
+namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\main_' task '\' condition '_2p1p2']);
 print ('-djpeg', '-r500',namefig);
 
 %% Averaging across runs pair by pair
@@ -147,7 +147,7 @@ for numPair = 1:size(Mpb_pair,3)/2
     title(['PAIR n' num2str(numPair)],'FontSize',14,'Fontname','Ariel')  
 end
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_2p1p2PAIR1']);
+namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\main_' task '\' condition '_2p1p2PAIR1']);
 print ('-djpeg', '-r500',namefig);
 
 %% Plot p1 and p2 for each pair - diamond configuration
@@ -174,7 +174,7 @@ for numPair = 1:size(Mpb_pair,3)/2
     title(['PAIR n' num2str(numPair+6)],'FontSize',14,'Fontname','Ariel')  
 end
 
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_2p1p2PAIR2']);
+namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\main_' task '\' condition '_2p1p2PAIR2']);
 print ('-djpeg', '-r500',namefig);
 
 %% Averaging across runs pair by pair for hemifields and diagonals
@@ -224,7 +224,7 @@ for i = 1:3
         title('Square Diagonals','FontSize',14,'Fontname','Ariel')
     end    
 end
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_2p1p2HemiDiagS']);
+namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\main_' task '\' condition '_2p1p2HemiDiagS']);
 print ('-djpeg', '-r500',namefig);
 
 %% Graph same/different hemifields and diagonals for diamond configuration
@@ -263,7 +263,7 @@ for i = 1:3
     end
 
 end
-namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\main_' task '\' condition '_2p1p2HemiDiagD']);
+namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\main_' task '\' condition '_2p1p2HemiDiagD']);
 print ('-djpeg', '-r500',namefig);
 end
 

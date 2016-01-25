@@ -20,12 +20,12 @@ function [rt4,rt8,perf4,perf8] = search_slope(obs,task,file,expN,present,trainin
 %% Load data
 if expN == 1
     if training
-        load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\training\' file])
+        load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' task '\training\' file])
     else 
-        load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\' task '\' file])
+        load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' task '\' file])
     end
 elseif expN == 2
-    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\target present or absent\' task '\' file])
+    load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\target present or absent\' task '\' file])
 end
 
 %% Transform data

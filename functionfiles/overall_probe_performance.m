@@ -42,7 +42,7 @@ perfTP=[];
 perfTA=[];
 numObs = 0;
 
-files = dir('C:\Users\Alice\Documents\MATLAB\data');  
+files = dir('C:\Users\alice_000\Documents\MATLAB\data');  
 for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
@@ -109,7 +109,7 @@ if grouping == 1
 
     plot([0 500],[8.33 8.33],'Color',[0 0 0],'LineStyle','--')
 
-    namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_probePerf' saveFileName]);
+    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_probePerf' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 
     % Check for outliers
@@ -144,7 +144,7 @@ if grouping == 1
     % 
     % plot([0 500],[8.33 8.33],'Color',[0 0 0],'LineStyle','--')
     % 
-    % namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_probePerfTP' saveFileName]);
+    % namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_probePerfTP' saveFileName]);
     % print ('-djpeg', '-r500',namefig);
     % 
     % %% Plot average across observers - target loc not probed
@@ -172,7 +172,7 @@ if grouping == 1
     % 
     % plot([0 500],[8.33 8.33],'Color',[0 0 0],'LineStyle','--')
     % 
-    % namefig=sprintf('%s', ['C:\Users\Alice\Documents\MATLAB\data\figures\' saveFileLoc '_probePerfTA' saveFileName]);
+    % namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_probePerfTA' saveFileName]);
     % print ('-djpeg', '-r500',namefig);
 
     

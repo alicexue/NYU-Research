@@ -26,7 +26,7 @@ perf_loc_discri = [];
 perf_loc_detect = [];
 probe_perf = [];
 
-files = dir('C:\Users\Alice\Documents\MATLAB\data');  
+files = dir('C:\Users\alice_000\Documents\MATLAB\data');  
 for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);

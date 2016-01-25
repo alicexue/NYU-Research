@@ -13,9 +13,9 @@ function [pbPD,poPD,pnPD,pbAD,poAD,pnAD,pbPDP,pnPDP,pbADP,pnADP,numTrialsP,numTr
 [pb,po,pn,pbp,pop,pnp,pboth,pone,pnone] = probe_analysis(obs,task,file,expN,present);
 
 if expN == 1
-    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\main_' task '\' file])
+    load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\main_' task '\' file])
 elseif expN == 2
-    load(['C:\Users\Alice\Documents\MATLAB\data\' obs '\target present or absent\main_' task '\' file])
+    load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\target present or absent\main_' task '\' file])
 end
 
 exp = getTaskParameters(myscreen,task);

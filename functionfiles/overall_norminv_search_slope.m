@@ -1,6 +1,8 @@
 function [easy_dprime,difficult_dprime] = overall_norminv_search_slope(type,divideRT)
 %% Example
 %%% overall_norminv_search_slope(1,false);
+% type = 1 for detection
+% type = 2 for discrimination
 
 if type == 1
     typeName = 'Detection';

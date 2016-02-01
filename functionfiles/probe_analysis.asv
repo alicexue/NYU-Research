@@ -1,4 +1,4 @@
-function [pb,po,pn,pbp,pop,pnp,pboth,pone,pnone] = probe_analysis(obs,task,file,expN,trialType,grouping)
+function [pb,po,pn,pbp,pop,pnp,pboth,pone,pnone] = probe_analysis(obs,task,file,expN,present,grouping)
 %% This program analyzes the probe task for individual stim files
 %% Example
 %%% probe_analysis('ax','difficult','150820_stim01.mat',1,1,1);
@@ -8,14 +8,8 @@ function [pb,po,pn,pbp,pop,pnp,pboth,pone,pnone] = probe_analysis(obs,task,file,
 % task = 'difficult'; ('easy' or 'difficult')
 % file = '150716_stim01.mat'; (name of stim file)
 % expN = 2; (1 or 2)
-% trialType = 1; (only valid for expN == 2; all possible options below)
-% 1:target-present trials
-% 2:target-absent trials 
-% 3:all trials
-% 4:correct rejection trials
-% 5:BOTH probes answered correctly in previous trial
-% 6:ONE probe answered correctly in previous trial
-% 7:NONE of the probes answered correctly in previous trial
+% present = 1; (only relevant for exp == 2; 1:target-present trials,
+% 2:target-absent trials, 3:all trials) 
 % grouping = 1; (if 1, probes must be exactly correct; if 2, probes must
 % match by shape; if 3, probes must match by aperture)
 
@@ -37,25 +31,23 @@ exp = getTaskParameters(myscreen,task);
 
 expProbe = task{1}.probeTask;
 
-if expN == 1 || (expN == 2 && trialType == 3) 
+if expN == 1 || (expN == 2 && present == 3)
     theTrials = find(task{1}.randVars.fixBreak == 0);
 elseif expN == 2
-    if trialType == 1       
+    if present == 1       
         theTrials1 = find(task{1}.randVars.fixBreak == 0);
         theTrials2 = find(task{1}.randVars.presence == 1);
         tmp = ismember(theTrials2,theTrials1);
         theTrials = theTrials2(tmp);
-    elseif trialType == 2 || trialType == 4
+    elseif present == 2 || present == 4
         theTrials1 = find(task{1}.randVars.fixBreak == 0);
         theTrials2 = find(task{1}.randVars.presence == 2);
         tmp = ismember(theTrials2,theTrials1);
         theTrials = theTrials2(tmp); 
-    else
-        theTrials = find(task{1}.randVars.fixBreak == 0);
     end
 end
 
-if expN == 2 && trialType == 4
+if expN == 2 && present == 4
     % find correct rejections
     respondAbsentTrials = find(exp.response == 3); 
     tmp = ismember(respondAbsentTrials,theTrials);
@@ -209,20 +201,19 @@ po = NaN(13,200);
 pn = NaN(13,200);
 
 %%% look at n-1 trials
-if trialType == 5 || trialType == 6 || trialType == 7
-    theTrials = [];
-    if trialType == 5
-        trials = pboth;
-    elseif trialType == 6
-        trials = pone;
-    elseif trialType == 7
-        trials = pnone;
-    end
-    
-    for i = 2:size(trials,2)
-        if trials(1,i-1) == 1
-            theTrials = horzcat(theTrials,i);
-        end
+theTrials = [];
+if present == 5
+    trials = pboth;
+elseif present == 6
+    trials = pone;
+elseif present == 7
+    trials = pnone;
+end
+
+if present == 5 || present == 6
+for i = 2:size(trials,2)
+    if trials(1,i-1) == 1
+        theTrials = horzcat(theTrials,i);
     end
 end
 %%%

@@ -87,15 +87,23 @@ end
 
 if mean(hit_4 == 0)
     hit_4 = horzcat(hit_4,1);
+elseif mean(hit_4 == 1)
+    hit_4 = horzcat(hit_4,0);
 end
 if mean(hit_8 == 0)
     hit_8 = horzcat(hit_8,1);
+elseif mean(hit_8 == 1)
+    hit_8 = horzcat(hit_8,0);
 end
 if mean(false_alarm_4 == 0)
     false_alarm_4 = horzcat(false_alarm_4,1);
+elseif mean(false_alarm_4 == 1)
+    false_alarm_4 = horzcat(false_alarm_8,0);
 end
 if mean(false_alarm_8 == 0)
     false_alarm_8 = horzcat(false_alarm_8,1);
+elseif mean(false_alarm_8 == 1)
+    false_alarm_8 = horzcat(false_alarm_8,0);
 end
 
 hit = vertcat(hit_4,hit_8);

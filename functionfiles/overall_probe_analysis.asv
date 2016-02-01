@@ -6,21 +6,19 @@ function [all_p1,all_p2,pairs_p1,pairs_p2] = overall_probe_analysis(task,expN,pr
 %% Parameters
 % task = 'difficult'; ('easy' or 'difficult')
 % expN = 1; (1 or 2) 
-% present = 1; (only valid for expN == 2; 1:target-present trials, 2:target-absent trials, 3:all trials)
+% present = 1; (only valid for expN == 2; 1:target-present trials, 2:target-absent trials, 3:all trials, 4:correct rejection trials)
 % difference = false; (if true, plots difference of p1 and p2)
-% correct = false; (if true, p1 and p2 are corrected for each individual and also by
-% the global average)
+% correct = false; (if true, p1 and p2 are corrected for each individual and also by the global average)
 % printFg = false; (if true, prints and saves the figures)
-% printStats = false; (if true, conducts ANOVA on overall p1 p2 data
-% grouping = 1; (if 1, probes must be exactly correct; if 2, probes must
+% printStats = false; (if true, conducts ANOVA on overall p1 p2 data and prints output in cmd window)
+% grouping = 1; (if 1, probes must be exactly correct; if 2, probes must 
 % match by shape; if 3, probes must match by aperture)
-% absDiff = true; (if true, takes absolute value of difference)
-% observers is a cell of the observers' initials. if empty, then all
-% observers' data are plotted
+% absDiff = true; (if true, takes absolute value of difference - for the colormaps)
+% observers is a cell of the observers' initials. if empty, then all observers' data are plotted
 
 %% Outputs
 % all_p1 and all_p2 are matrices for the p1 and p2 values for all observers
-% (i.e. for 3 observers, a 13x3 matrix for p1 and p2)
+% (e.g. for 3 observers, a 13x3 matrix for p1 and p2)
 
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
@@ -46,6 +44,9 @@ elseif expN == 2
     elseif present == 3
         titleName = '';
         saveFileName = '_2';
+    elseif present == 4
+        titleName = 'CR';
+        saveFileName = '_2CR';
     end
 end
 
@@ -162,6 +163,9 @@ s_pair_p2=nanstd(pair_p2,[],2)/sqrt(numObs);
 
 m_pair_p1=nanmean(pair_p1,2);
 m_pair_p2=nanmean(pair_p2,2);
+
+for i = 2:size(pboth,2)
+    if 
 
 if printFg && ~difference
     % make a data directory if necessary

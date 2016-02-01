@@ -1,4 +1,4 @@
-function [P1,P2,Mpb,Mpo,Mpn,Mpb_pair,Mpn_pair,SH,DH,di,si1,si2,dDi,P1C2,P2C2,pb_pairs,pn_pairs] = p_probe_analysis(obs,task,expN,present,difference,correct,printFg,grouping)
+function [P1,P2,Mpb,Mpo,Mpn,Mpb_pair,Mpn_pair,SH,DH,di,si1,si2,dDi,P1C2,P2C2,pb_pairs,pn_pairs] = p_probe_analysis(obs,task,expN,trialType,difference,correct,printFg,grouping)
 %% Example
 %%% p_probe_analysis('ax','difficult',2,2,false,false,false,1);
 
@@ -6,7 +6,14 @@ function [P1,P2,Mpb,Mpo,Mpn,Mpb_pair,Mpn_pair,SH,DH,di,si1,si2,dDi,P1C2,P2C2,pb_
 % obs = 'ax'; (observer's initials)
 % task = 'difficult'; ('easy' or difficult')
 % expN = 1; (1 or 2)
-% present = 1; (1:target-present trials, 2:target-absent trials, 3:all trials)
+% trialType = 1; (only valid for expN == 2; all possible options below)
+% 1:target-present trials
+% 2:target-absent trials 
+% 3:all trials
+% 4:correct rejection trials
+% 5:BOTH probes answered correctly in previous trial
+% 6:ONE probe answered correctly in previous trial
+% 7:NONE of the probes answered correctly in previous trial
 % difference = false; (if true, plots difference of p1 and p2)
 % correct = false; (if true, p1 and p2 are corrected for each individual and also by
 % the global average)
@@ -31,11 +38,11 @@ if expN == 1
 elseif expN == 2
     saveFileLoc = ['\target present or absent\main_' task '\figures\' obs '_' condition];
     saveFilePairsLoc = ['\target present or absent\main_' task '\figures\pairs\' obs '_' condition];
-    if present == 1
+    if trialType == 1
         saveFileName = '_2TP';
-    elseif present == 2
+    elseif trialType == 2
         saveFileName = '_2TA';
-    elseif present == 3
+    elseif trialType == 3
         saveFileName = '_2';
     end
 end
@@ -100,7 +107,7 @@ for i = 1:size(files,1)
     filename = files(i).name;
     fileL = size(filename,2);
     if fileL == 17 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')
-        [b,o,n,bp,op,np] = probe_analysis(obs,task,filename,expN,present,grouping); 
+        [b,o,n,bp,op,np] = probe_analysis(obs,task,filename,expN,trialType,grouping); 
         pb = horzcat(pb,b);
         po = horzcat(po,o);
         pn = horzcat(pn,n); 
@@ -388,7 +395,7 @@ if printFg && ~correct && ~isempty(Mpb) && ~difference
         plot(100:30:460,t2,'go-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.13 .7 .15])
 
         legend('p1','p2','Location','SouthEast')
-
+        
         set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
 
@@ -536,11 +543,8 @@ if correct
         print ('-djpeg', '-r500',namefig);        
     end
 end
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%% PLOT DIFFERENCE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%% PLOT DIFFERENCE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if printFg && difference
     %% Plot p1 and p2 for each probe delay
 

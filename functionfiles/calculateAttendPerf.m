@@ -1,9 +1,7 @@
 function calculateAttendPerf(p1,p2) 
-
 %% This function calculates the performance at the attended and unattended locations depending on the number of stimuli in the attentional focus
 %% Parameters
-% p1 is a 13x1 matrix of values
-% p2 is a 13x1 matrix of values
+% p1 and p2 are integers
 % delayNum must be an integer between 1 and 13 (should refer to the delay at which the difference between p1 and p2 is the largest, i.e. there is an attentional peak)
 
 % performance at the attended location is abbreviated as ap and performance at the unattended location is abbreviated as up

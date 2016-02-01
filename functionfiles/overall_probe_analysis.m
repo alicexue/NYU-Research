@@ -1,4 +1,4 @@
-function [all_p1,all_p2,pairs_p1,pairs_p2] = overall_probe_analysis(task,expN,present,difference,correct,printFg,printColormap,printFFT,printStats,grouping,absDiff,cMin,cMax,observers)
+function [all_p1,all_p2,pairs_p1,pairs_p2] = overall_probe_analysis(task,expN,trialType,difference,correct,printFg,printColormap,printFFT,printStats,grouping,absDiff,cMin,cMax,observers)
 %% This function graphs raw probabilities and p1 & p2 for overall, pairs, and hemifields across all observers
 %% Example
 %%% [all_p1,all_p2] = overall_probe_analysis('difficult',2,2,false,false,true,true,true,false,1,true,0.1,0.3,{'ax','ld'});
@@ -6,21 +6,26 @@ function [all_p1,all_p2,pairs_p1,pairs_p2] = overall_probe_analysis(task,expN,pr
 %% Parameters
 % task = 'difficult'; ('easy' or 'difficult')
 % expN = 1; (1 or 2) 
-% present = 1; (only valid for expN == 2; 1:target-present trials, 2:target-absent trials, 3:all trials)
+% trialType = 1; (only valid for expN == 2; all possible options below)
+% 1:target-present trials
+% 2:target-absent trials 
+% 3:all trials
+% 4:correct rejection trials
+% 5:BOTH probes answered correctly in previous trial
+% 6:ONE probe answered correctly in previous trial
+% 7:NONE of the probes answered correctly in previous trial
 % difference = false; (if true, plots difference of p1 and p2)
-% correct = false; (if true, p1 and p2 are corrected for each individual and also by
-% the global average)
+% correct = false; (if true, p1 and p2 are corrected for each individual and also by the global average)
 % printFg = false; (if true, prints and saves the figures)
-% printStats = false; (if true, conducts ANOVA on overall p1 p2 data
-% grouping = 1; (if 1, probes must be exactly correct; if 2, probes must
+% printStats = false; (if true, conducts ANOVA on overall p1 p2 data and prints output in cmd window)
+% grouping = 1; (if 1, probes must be exactly correct; if 2, probes must 
 % match by shape; if 3, probes must match by aperture)
-% absDiff = true; (if true, takes absolute value of difference)
-% observers is a cell of the observers' initials. if empty, then all
-% observers' data are plotted
+% absDiff = true; (if true, takes absolute value of difference - for the colormaps)
+% observers is a cell of the observers' initials. if empty, then all observers' data are plotted
 
 %% Outputs
 % all_p1 and all_p2 are matrices for the p1 and p2 values for all observers
-% (i.e. for 3 observers, a 13x3 matrix for p1 and p2)
+% (e.g. for 3 observers, a 13x3 matrix for p1 and p2)
 
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
@@ -37,15 +42,27 @@ if expN == 1
 elseif expN == 2
     saveFileLoc = ['\target present or absent\main_' task '\' condition];
     saveFilePairsLoc = ['\target present or absent\main_' task '\pairs\' condition];
-    if present == 1
+    if trialType == 1
         titleName = 'TP';
         saveFileName = '_2TP';
-    elseif present == 2
+    elseif trialType == 2
         titleName = 'TA';
         saveFileName = '_2TA';
-    elseif present == 3
+    elseif trialType == 3
         titleName = '';
         saveFileName = '_2';
+    elseif trialType == 4
+        titleName = 'CR';
+        saveFileName = '_2CR';
+    elseif trialType == 5
+        titleName = 'prevPB';
+        saveFileName = '_2PB';
+    elseif trialType == 6
+        titleName = 'prevPO';
+        saveFileName = '_2PO';
+    elseif trialType == 7
+        titleName = 'prevPN';
+        saveFileName = '_2PN';
     end
 end
 
@@ -88,7 +105,7 @@ for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
     if (fileL == 2 || fileL == 3) && ~strcmp(obs(1,1),'.') && (ismember(obs,observers) || isempty(observers))
-        [P1,P2,pb,po,pn,pbp,pnp,SH,DH,di,si1,si2,diD,P1C2,P2C2,pb_pairs,pn_pairs] = p_probe_analysis(obs,task,expN,present,false,correct,false,grouping); 
+        [P1,P2,pb,po,pn,pbp,pnp,SH,DH,di,si1,si2,diD,P1C2,P2C2,pb_pairs,pn_pairs] = p_probe_analysis(obs,task,expN,trialType,false,correct,false,grouping); 
         if ~isempty(P1)            
             all_p1 = horzcat(all_p1,P1);
             all_p2 = horzcat(all_p2,P2);
@@ -162,6 +179,9 @@ s_pair_p2=nanstd(pair_p2,[],2)/sqrt(numObs);
 
 m_pair_p1=nanmean(pair_p1,2);
 m_pair_p2=nanmean(pair_p2,2);
+
+%for i = 2:size(pboth,2)
+%    if pboth
 
 if printFg && ~difference
     % make a data directory if necessary
@@ -982,15 +1002,15 @@ if printFFT
 
     % diffSquare = mean(cat(3,obsDiff(:,:,1),obsDiff(:,:,2),obsDiff(:,:,3),obsDiff(:,:,4),obsDiff(:,:,5),obsDiff(:,:,6)),3);
 
-    fft_p1_p2([],[],diff1and6,expN,present,task,'1and6');
-    fft_p1_p2([],[],diff2and5,expN,present,task,'2and5');
-    fft_p1_p2([],[],diff3and4,expN,present,task,'3and4');
-    fft_p1_p2([],[],diff7,expN,present,task,'7');
-    fft_p1_p2([],[],diff12,expN,present,task,'12');
+    fft_p1_p2([],[],diff1and6,expN,trialType,task,'1and6');
+    fft_p1_p2([],[],diff2and5,expN,trialType,task,'2and5');
+    fft_p1_p2([],[],diff3and4,expN,trialType,task,'3and4');
+    fft_p1_p2([],[],diff7,expN,trialType,task,'7');
+    fft_p1_p2([],[],diff12,expN,trialType,task,'12');
 
     % fft_p1_p2([],[],diffSquare,expN,present,task,'Square');
 
-    fft_p1_p2(all_p1,all_p2,[],expN,present,task,'');
+    fft_p1_p2(all_p1,all_p2,[],expN,trialType,task,'');
 end
 end
 

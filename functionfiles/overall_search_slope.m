@@ -1,10 +1,10 @@
-function overall_search_slope(expN,present,displayFg,displayStats)
+function overall_search_slope(expN,trialType,displayFg,displayStats)
 %% Example
 %%% overall_search_slope(2,1,true,true);
 
 %% Parameters
 % expN = 1; (1 or 2)
-% present = 1; (only relevant for expN == 2; 1:target-present trials (discrimination),
+% trialType = 1; (only relevant for expN == 2; 1:target-present trials (discrimination),
 % 2:target-absent trials, 3:all trials (detection))
 % displayFg = true; (if true, prints and saves figures)
 % displayStats = true; (if true, calls search_slope_stats(expN,present) and
@@ -31,13 +31,13 @@ if displayFg
         saveFileName = '';
     elseif expN == 2
         saveFileLoc = '\target present or absent';
-        if present == 1
+        if trialType == 1
             titleName = 'TP';
             saveFileName = '_2TP';
-        elseif present == 2
+        elseif trialType == 2
             titleName = 'TA';
             saveFileName = '_2TA';
-        elseif present == 3
+        elseif trialType == 3
             titleName = '';
             saveFileName = '_2';
         end
@@ -54,7 +54,7 @@ if displayFg
                 else 
                     task = 'difficult';
                 end
-                [rt4,rt8,perf4,perf8] = p_search_slope(obs,task,expN,present,false,false);
+                [rt4,rt8,perf4,perf8] = p_search_slope(obs,task,expN,trialType,false,false);
                     if ~isempty(rt4)
                         if strcmp(task,'easy')
                             easy_rt=horzcat(easy_rt,vertcat(median(rt4),median(rt8)));
@@ -86,7 +86,7 @@ if displayFg
     %% Plot reaction time
     figure;hold on;
     for i=1:numObs
-        errorbar(4:4:8,easy_rt(:,i)*1000,s_easy_rt(:,i),'-o','LineWidth',1.6,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
+        errorbar(4:4:8,easy_rt(:,i)*1000,s_easy_rt(:,i),'-o','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
     end
 
     errorbar(4:4:8,m_easy_rt*1000,ms_easy_rt*1000,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',9,'Color',[0 0 0])
@@ -118,7 +118,7 @@ if displayFg
     figure;hold on;
 
     for i=1:numObs
-        errorbar(4:4:8,easy_perf(:,i)*100,s_easy_perf(:,i),'-o','LineWidth',1.6,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
+        errorbar(4:4:8,easy_perf(:,i)*100,s_easy_perf(:,i),'-o','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
     end
 
     errorbar(4:4:8,m_easy_perf*100,ms_easy_perf*100,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
@@ -151,7 +151,7 @@ if displayFg
     figure;hold on;
 
     for i=1:numObs
-        errorbar(4:4:8,difficult_rt(:,i)*1000,s_difficult_rt(:,i),'-o','LineWidth',1.6,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
+        errorbar(4:4:8,difficult_rt(:,i)*1000,s_difficult_rt(:,i),'-o','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
     end
 
     errorbar(4:4:8,m_difficult_rt*1000,ms_difficult_rt*1000,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
@@ -183,7 +183,7 @@ if displayFg
     figure;hold on;
 
     for i=1:numObs
-        errorbar(4:4:8,difficult_perf(:,i)*100,s_difficult_perf(:,i),'-o','LineWidth',1.6,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
+        errorbar(4:4:8,difficult_perf(:,i)*100,s_difficult_perf(:,i),'-o','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
     end
 
     errorbar(4:4:8,m_difficult_perf*100,ms_difficult_perf*100,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
@@ -213,7 +213,7 @@ if displayFg
     print ('-djpeg', '-r500',namefig);
 end
 if displayStats
-    search_slope_stats(expN,present);
+    search_slope_stats(expN,trialType);
 end
 end
 

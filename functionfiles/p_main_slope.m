@@ -86,8 +86,8 @@ if printFg
 
     errorbar(100:30:460,p*100,p_sem*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 
-    ylim([50 100])
-    set(gca,'YTick', 50:10:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    ylim([30 100])
+    set(gca,'YTick', 30:10:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
 
     title([condition ' Performance (' obs ')' saveFileName],'FontSize',20)
     xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')

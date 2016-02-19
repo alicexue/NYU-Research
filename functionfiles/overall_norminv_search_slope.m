@@ -3,11 +3,14 @@ function [easy_dprime,difficult_dprime] = overall_norminv_search_slope(type,divi
 %%% overall_norminv_search_slope(1,false);
 % type = 1 for detection
 % type = 2 for discrimination
+% type = 3 for target absent trials - report absence correctly
 
 if type == 1
     typeName = 'Detection';
 elseif type == 2
     typeName = 'Discrimination';
+elseif type == 3
+    typeName = 'Detect Absence';
 end
 
 saveFileLoc = '\target present or absent';
@@ -24,10 +27,7 @@ difficult_hit = [];
 difficult_false_alarm = [];
 
 easy_RT = [];
-easy_false_alarmRT = [];
-
 difficult_RT = [];
-difficult_false_alarmRT = [];
 
 %% Load data
 files = dir('C:\Users\alice_000\Documents\MATLAB\data');  
@@ -74,9 +74,6 @@ difficult_z_fa = norminv(difficult_fa,0,1);
 easy_dprime = easy_z_hit - easy_z_fa;
 difficult_dprime = difficult_z_hit - difficult_z_fa;
 
-s_easy_dprime = std(easy_dprime,[],2)/sqrt(numObs);
-s_difficult_dprime = std(difficult_dprime,[],2)/sqrt(numObs);
-
 if divideRT
     for x = 1:size(easy_hit,1)
         for y = 1:size(easy_hit,2)
@@ -86,20 +83,23 @@ if divideRT
     end
 end
 
+s_easy_dprime = std(easy_dprime,[],2)/sqrt(numObs);
+s_difficult_dprime = std(difficult_dprime,[],2)/sqrt(numObs);
+
 %% Plot dprime
 figure;hold on;
 
 for i=1:numObs
-    plot(4:4:8,easy_dprime(:,i),'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
+    plot(4:4:8,easy_dprime(:,i),'-o','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
 end
 
-% errorbar(4:4:8,mean(easy_dprime,2)(:,i),mean(s_easy_dprime,2)(:,i),'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
+errorbar(4:4:8,mean(easy_dprime,2),s_easy_dprime,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
 
 legend_obs = cell(numObs,1);
 for i=1:numObs
     legend_obs{i} = ['obs ' num2str(i)];
 end
-% legend_obs{numObs+1} = 'average';    
+legend_obs{numObs+1} = 'average';    
 l = legend(legend_obs);    
 set(l,'FontSize',12);      
 
@@ -107,19 +107,32 @@ xlim([3 9])
 set(gca,'XTick', 4:4:8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
 
 if divideRT
-    set(gca,'YTick', 1:4:25,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
-    ylim([0 25])
+    if type == 3
+        inc = 11;
+        ymax = 45;
+    else
+        inc = 4;
+        ymax = 25;
+    end    
+    set(gca,'YTick', 1:inc:ymax,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
+    ylim([0 ymax]) 
 else
-    set(gca,'YTick', 1:1:3,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
-    ylim([0 3])
+    if type == 3
+        ymax = 5;
+    else
+        ymax = 3;
+    end
+    set(gca,'YTick', 0:1:ymax,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
+    ylim([0 ymax])
 end
 
-title(['Feature d prime - ' typeName ' (n = ' num2str(numObs) ')'],'FontSize',18)
 xlabel('Set Size','FontSize',18,'Fontname','Ariel')
 if divideRT
     ylabel('efficiency','FontSize',18,'Fontname','Ariel')
+    title(['Feature Efficiency - ' typeName ' (n = ' num2str(numObs) ')'],'FontSize',18)
 else
     ylabel('d prime','FontSize',18,'Fontname','Ariel')
+    title(['Feature d prime - ' typeName ' (n = ' num2str(numObs) ')'],'FontSize',18)
 end
 
 namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\easy\Feature_dprime_slope' num2str(type) saveFileName]);
@@ -129,16 +142,16 @@ print ('-djpeg', '-r500',namefig);
 figure;hold on;
 
 for i=1:numObs
-    plot(4:4:8,difficult_dprime(:,i),'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
+    plot(4:4:8,difficult_dprime(:,i),'-o','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
 end
 
-% errorbar(4:4:8,mean(difficult_dprime,2)(:,i),mean(s_difficult_dprime,2)(:,i),'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
+errorbar(4:4:8,mean(difficult_dprime,2),s_difficult_dprime,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
 
 legend_obs = cell(numObs,1);
 for i=1:numObs
     legend_obs{i} = ['obs ' num2str(i)];
 end
-% legend_obs{numObs+1} = 'average';    
+legend_obs{numObs+1} = 'average';    
 l = legend(legend_obs);    
 set(l,'FontSize',12);      
 
@@ -146,19 +159,32 @@ xlim([3 9])
 set(gca,'XTick', 4:4:8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
 
 if divideRT
-    set(gca,'YTick', 1:4:25,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
-    ylim([0 25])    
+    if type == 3
+        inc = 11;
+        ymax = 45;
+    else
+        inc = 4;
+        ymax = 25;
+    end    
+    set(gca,'YTick', 1:inc:ymax,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
+    ylim([0 ymax]) 
 else
-    set(gca,'YTick', 1:1:3,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
-    ylim([0 3])
+    if type == 3
+        ymax = 5;
+    else
+        ymax = 3;
+    end
+    set(gca,'YTick', 0:1:ymax,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
+    ylim([0 ymax])
 end
 
-title(['Conjunction d prime - ' typeName ' (n = ' num2str(numObs) ')'],'FontSize',18)
 xlabel('Set Size','FontSize',18,'Fontname','Ariel')
 if divideRT
     ylabel('efficiency','FontSize',18,'Fontname','Ariel')
+    title(['Conjunction Efficiency - ' typeName ' (n = ' num2str(numObs) ')'],'FontSize',18)
 else
     ylabel('d prime','FontSize',18,'Fontname','Ariel')
+    title(['Conjunction d prime - ' typeName ' (n = ' num2str(numObs) ')'],'FontSize',18)
 end
 
 namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\difficult\Conjunction_dprime_slope' num2str(type) saveFileName]);

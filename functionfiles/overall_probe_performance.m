@@ -46,7 +46,7 @@ files = dir('C:\Users\alice_000\Documents\MATLAB\data');
 for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
-    if (fileL == 2 || fileL == 3) && ~strcmp(obs(1,1),'.')
+    if (fileL == 2) && ~strcmp(obs(1,1),'.')
         [perf,pTP,pTA] = p_probe_performance(obs,task,expN,present,false,grouping);
         if ~isnan(perf) 
             perfDelays = horzcat(perfDelays,perf);
@@ -181,9 +181,6 @@ elseif grouping == 2 || grouping == 3
     q = rot90(mPerf)
     imagesc(q)
 end
-    
-    
-    
-    
+
     
 end

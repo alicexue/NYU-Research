@@ -6,7 +6,7 @@ function [hit,false_alarm,RT] = norminv_search_slope(obs,task,file,type)
 % obs = 'ax'; (observer's initials)
 % task = 'difficult'; ('easy' or 'difficult')
 % file = '150701_stim05.mat'; (name of stim file)
-% type = 1; (1: detection,2: discrimination)
+% type = 1; (1: detection,2: discrimination, 3:detect target absent)
 
 %% Load data
 load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\target present or absent\' task '\' file])
@@ -23,9 +23,6 @@ false_alarm = NaN(1,size(noFixBreakIndices,2));
 RT = NaN(1,size(noFixBreakIndices,2));
 fa_RT = NaN(1,size(noFixBreakIndices,2));
 
-ishit = false;
-isfa = false;
-
 for n = 1:size(noFixBreakIndices,2)
     tmp = noFixBreakIndices(n);
     response = exp.response(tmp);
@@ -34,32 +31,35 @@ for n = 1:size(noFixBreakIndices,2)
     if type == 1
         if (presence == 1 && (response == 1 || response == 2))
             hit(n) = 1;
-            ishit = true;
         else
-            ishit = false;
             hit(n) = 0;
         end
         if (presence == 2 && (response == 1 || response == 2))
-            isfa = true;
             false_alarm(n) = 1;
         else
-            ishit = false;
             false_alarm(n) = 0;
         end
     elseif type == 2
         if (presence == 1 && orientation == 2 && response == 2)
             hit(n) = 1;
-            ishit = true;
         else
             hit(n) = 0;
-            ishit = false;
         end
         if (presence == 1 && orientation == 1 && response == 2)
             false_alarm(n) = 1;
-            isfa = true;
         else
             false_alarm(n) = 0;
-            isfa = false;
+        end
+    elseif type == 3
+        if (presence == 1)
+            hit(n) = NaN;
+            false_alarm(n) = NaN;
+        elseif (presence == 2 && response == 3)
+            hit(n) = 1;
+            false_alarm(n) = 0;
+        else
+            hit(n) = 0;
+            false_alarm(n) = 1;
         end
     end
     RT(n) = exp.reactionTime(n);

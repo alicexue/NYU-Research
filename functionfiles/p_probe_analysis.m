@@ -252,7 +252,7 @@ if printFg && ~correct && ~isempty(Mpb) && ~difference
     set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
 
     ylabel('Probe report probabilities','FontSize',20,'Fontname','Ariel')
-    xlabel('Time from discrimination task onset [ms]','FontSize',20,'Fontname','Ariel')
+    xlabel('Time from search task onset [ms]','FontSize',20,'Fontname','Ariel')
     ylim([0 1.2])
     xlim([0 500])
 

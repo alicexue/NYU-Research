@@ -1,6 +1,6 @@
 function [perf,pTP,pTA] = p_probe_performance(obs,task,expN,present,printFg,grouping)
 %% Example
-%%% p_probe_performance('ax','difficult',2,2,true);
+%%% p_probe_performance('ax','difficult',2,2,true,1);
 
 %% Parameters
 % obs = 'ax'; (observer's initials)

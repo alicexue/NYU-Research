@@ -1,7 +1,7 @@
-function [all_p1,all_p2,pairs_p1,pairs_p2] = overall_probe_analysis(task,expN,trialType,difference,correct,printFg,printColormap,printFFT,printStats,grouping,absDiff,cMin,cMax,observers)
+function [all_p1,all_p2,pairs_p1,pairs_p2,pair_p1,pair_p2] = overall_probe_analysis(task,expN,trialType,difference,correct,printFg,printColormap,printFFT,printStats,grouping,absDiff,cMin,cMax,observers)
 %% This function graphs raw probabilities and p1 & p2 for overall, pairs, and hemifields across all observers
 %% Example
-%%% [all_p1,all_p2] = overall_probe_analysis('difficult',2,2,false,false,true,true,true,false,1,true,0.1,0.3,{'ax','ld'});
+%%% [all_p1,all_p2,pairs_p1,pairs_p2,pair_p1,pair_p2] = overall_probe_analysis('difficult',2,2,false,false,true,true,true,false,1,true,0.1,0.3,{'ax','ld'});
 
 %% Parameters
 % task = 'difficult'; ('easy' or 'difficult')
@@ -171,17 +171,14 @@ m_p2=nanmean(all_p2,2);
 s_pairs_p1 = nanstd(pairs_p1,[],2)/sqrt(numObs);
 s_pairs_p2 = nanstd(pairs_p2,[],2)/sqrt(numObs);
 
-pairs_p1 = nanmean(pairs_p1,2);
-pairs_p2 = nanmean(pairs_p2,2);
+m_pairs_p1 = nanmean(pairs_p1,2);
+m_pairs_p2 = nanmean(pairs_p2,2);
 
 s_pair_p1=nanstd(pair_p1,[],2)/sqrt(numObs);
 s_pair_p2=nanstd(pair_p2,[],2)/sqrt(numObs);
 
 m_pair_p1=nanmean(pair_p1,2);
 m_pair_p2=nanmean(pair_p2,2);
-
-%for i = 2:size(pboth,2)
-%    if pboth
 
 if printFg && ~difference
     % make a data directory if necessary
@@ -488,14 +485,14 @@ if printFg && ~difference
 %         print ('-djpeg', '-r500',namefig);
         
         %%%%%%%%%%%%%%%%%%%% OTHER PAIR GROUPINGS %%%%%%%%%%%%%%%%%%%%%%%% 
-        for i = 1:size(pairs_p1,3)
-            t1 = pairs_p1(:,:,i);
-            t2 = pairs_p2(:,:,i);
+        for i = 1:size(m_pairs_p1,3)
+            t1 = m_pairs_p1(:,:,i);
+            t2 = m_pairs_p2(:,:,i);
             s1 = s_pairs_p1(:,:,i);
             s2 = s_pairs_p2(:,:,i);
             figure;hold on;
-            errorbar(100:30:460,t1,s1,'ro-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.96 .37 .15])
-            errorbar(100:30:460,t2,s2,'go-','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12,'Color',[.13 .7 .15])
+            errorbar(100:30:460,t1,s1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
+            errorbar(100:30:460,t2,s2,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
 
             legend('p1','p2','Location','SouthEast')
 
@@ -531,6 +528,9 @@ if printFg && ~difference
         
     end
 end
+
+diff_p1p2 = m_p1-m_p2;
+diff_pair_p1p2 = m_pair_p1-m_pair_p2;
 
 if printFg && difference
     %% Plot p1 and p2 for each probe delay    
@@ -714,12 +714,12 @@ if printStats
     index = 0;
     for i = 1:numObs
         p1p2(index+1:index+13,1) = all_p1(:,i);
-        p1p2(index+1:index+13,2) = rot90([13,12,11,10,9,8,7,6,5,4,3,2,1]);
+        p1p2(index+1:index+13,2) = rot90(1:13,-1);
         p1p2(index+1:index+13,3) = rot90([1,1,1,1,1,1,1,1,1,1,1,1,1]);
         p1p2(index+1:index+13,4) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
         index = index + 13;
         p1p2(index+1:index+13,1) = all_p2(:,i);
-        p1p2(index+1:index+13,2) = rot90([13,12,11,10,9,8,7,6,5,4,3,2,1]);
+        p1p2(index+1:index+13,2) = rot90(1:13,-1);
         p1p2(index+1:index+13,3) = rot90([2,2,2,2,2,2,2,2,2,2,2,2,2]);
         p1p2(index+1:index+13,4) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
         index = index + 13;

@@ -218,7 +218,7 @@ if trialType == 5 || trialType == 6 || trialType == 7
     elseif trialType == 7
         trials = pnone;
     end
-    
+ 
     for i = 2:size(trials,2)
         if trials(1,i-1) == 1
             theTrials = horzcat(theTrials,i);

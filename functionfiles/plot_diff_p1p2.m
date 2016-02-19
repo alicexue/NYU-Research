@@ -72,6 +72,7 @@ figure;
 for numPair = 1:size(easy_pair_p1,3)/2
     subplot(2,3,numPair)
     hold on;
+    
     easy_d = mean(easy_pair_p1(:,:,numPair)-easy_pair_p2(:,:,numPair),2);
     easy_s_diff = std(easy_pair_p1(:,:,numPair)-easy_pair_p2(:,:,numPair),[],2)/sqrt(numObs);
     difficult_d = mean(difficult_pair_p1(:,:,numPair)-difficult_pair_p2(:,:,numPair),2);

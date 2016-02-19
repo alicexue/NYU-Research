@@ -104,7 +104,7 @@ files = dir(thisdir);
 for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
-    if (fileL == 2 || fileL == 3) && ~strcmp(obs(1,1),'.') && (ismember(obs,observers) || isempty(observers))
+    if (fileL == 2) && ~strcmp(obs(1,1),'.') && (ismember(obs,observers) || isempty(observers))
         [P1,P2,pb,po,pn,pbp,pnp,SH,DH,di,si1,si2,diD,P1C2,P2C2,pb_pairs,pn_pairs] = p_probe_analysis(obs,task,expN,trialType,false,correct,false,grouping); 
         if ~isempty(P1)            
             all_p1 = horzcat(all_p1,P1);

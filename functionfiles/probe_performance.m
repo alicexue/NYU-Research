@@ -104,13 +104,7 @@ for n = theTrials
                 end
                 match11 = false;
                 match12 = false;
-                if reported1(1) == presented1(1) 
-                    cor1 = 4;
-                    match11 = true;
-                elseif reported1(1) == presented2(1)
-                    cor1 = 4;
-                    match12 = true;
-                elseif (reported1(1)>=min && reported1(1)<=max)
+                if (reported1(1)>=min && reported1(1)<=max)
                     if (presented1(1)>=min && presented1(1)<=max)
                         cor1 = 1;
                         match11 = true;
@@ -119,11 +113,7 @@ for n = theTrials
                         cor1 = 1;
                     end                                            
                 end
-                if reported2(1) == presented1(1) 
-                    cor1 = 4;
-                elseif reported2(1) == presented2(1)
-                    cor1 = 4;
-                elseif (reported2(1)>=min && reported2(1)<=max)
+                if (reported2(1)>=min && reported2(1)<=max)
                     if match12 || (~match11&&~match12)
                         if (presented1(1)>=min && presented1(1)<=max)
                             cor2 = 1;
@@ -156,14 +146,8 @@ for n = theTrials
                     x3 = 12;
                 end
                 match11 = false;
-                match12 = false;
-                if reported1(1) == presented1(1) 
-                    cor1 = 4;
-                    match11 = true;
-                elseif reported1(1) == presented2(1)
-                    cor1 = 4;
-                    match12 = true;                
-                elseif (reported1(1)==x1 || reported1(1)==x2 || reported1(1)==x3)
+                match12 = false;               
+                if (reported1(1)==x1 || reported1(1)==x2 || reported1(1)==x3)
                     if (presented1(1)==x1 || presented1(1)==x2 || presented1(1)==x3)
                         cor1 = 1;
                         match11 = true;
@@ -172,11 +156,7 @@ for n = theTrials
                         cor1 = 1;
                     end                                            
                 end
-                if reported2(1) == presented1(1) 
-                    cor1 = 4;
-                elseif reported2(1) == presented2(1)
-                    cor1 = 4;               
-                elseif (reported2(1)==x1 || reported2(1)==x2 || reported2(1)==x3)
+                if (reported2(1)==x1 || reported2(1)==x2 || reported2(1)==x3)
                     if match12 || (~match11&&~match12)
                         if (presented1(1)==x1 || presented1(1)==x2 || presented1(1)==x3)
                             cor2 = 1;
@@ -225,5 +205,6 @@ end
 p = nanmean(perfDelays,2);
 pTargetP = rot90(perfTargetP,-1);
 pTargetA = rot90(perfTargetA,-1);
+
 end
 

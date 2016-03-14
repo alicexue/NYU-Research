@@ -1,4 +1,4 @@
-function [P1,P2,Mpb,Mpo,Mpn,Mpb_pair,Mpn_pair,SH,DH,di,si1,si2,dDi,P1C2,P2C2,pb_pairs,pn_pairs] = p_probe_analysis(obs,task,expN,trialType,difference,correct,printFg,grouping)
+function [P1,P2,Mpb,Mpo,Mpn,Mpb_pair,Mpo_pair,Mpn_pair,SH,DH,di,si1,si2,dDi,P1C2,P2C2] = p_probe_analysis(obs,task,expN,trialType,difference,correct,printFg,grouping)
 %% Example
 %%% p_probe_analysis('ax','difficult',2,2,false,false,false,1);
 
@@ -91,9 +91,6 @@ pn_pair_7 = [];
 pb_pair_12 = [];
 pn_pair_12 = [];
 
-pb_pairs = [];
-pn_pairs = [];
-
 %% Load data
 if expN == 1
     thisdir = ['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\main_', task];
@@ -168,31 +165,6 @@ pnMdSide2 = nanmean(nanmean(pnDSi2,2),3);
 pbMdDiag3 = nanmean(nanmean(pbDDg3,2),3);
 pnMdDiag3 = nanmean(nanmean(pnDDg3,2),3);  
 
-pb_pair_2_5 = nanmean(nanmean(pb_pair_2_5,2),3);
-pn_pair_2_5 = nanmean(nanmean(pn_pair_2_5,2),3);
-
-pb_pair_1_6 = nanmean(nanmean(pb_pair_1_6,2),3);
-pn_pair_1_6 = nanmean(nanmean(pn_pair_1_6,2),3);
-
-pb_pair_9_11 = nanmean(nanmean(pb_pair_9_11,2),3);
-pn_pair_9_11 = nanmean(nanmean(pn_pair_9_11,2),3);
-
-pb_pair_8_10 = nanmean(nanmean(pb_pair_8_10,2),3);
-pn_pair_8_10 = nanmean(nanmean(pn_pair_8_10,2),3);    
-
-pb_pair_3_4 = nanmean(nanmean(pb_pair_3_4,2),3);
-pn_pair_3_4 = nanmean(nanmean(pn_pair_3_4,2),3);       
-
-pb_pair_7 = nanmean(pb_pair_7,2);
-pn_pair_7 = nanmean(pn_pair_7,2);
-
-pb_pair_12 = nanmean(pb_pair_12,2);
-pn_pair_12 = nanmean(pn_pair_12,2);            
-
-    
-pb_pairs = cat(3,pb_pair_7,pb_pair_12,pb_pair_1_6,pb_pair_2_5,pb_pair_3_4,pb_pair_8_10,pb_pair_9_11);
-pn_pairs = cat(3,pn_pair_7,pn_pair_12,pn_pair_1_6,pn_pair_2_5,pn_pair_3_4,pn_pair_8_10,pn_pair_9_11);
-
 Mpb = nanmean(pb,2);
 Mpo = nanmean(po,2);
 Mpn = nanmean(pn,2);
@@ -205,6 +177,7 @@ Spn = nanstd(pn,[],2)./sqrt(size(pn,2));
 
 %% Averaging across runs pair by pair
 Mpb_pair = nanmean(pbp,2);
+Mpo_pair = nanmean(pop,2);
 Mpn_pair = nanmean(pnp,2);
 
 %% Transform pboth and pnone into p1 and p2

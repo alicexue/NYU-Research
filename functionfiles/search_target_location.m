@@ -1,5 +1,5 @@
-function [search_perf_loc_detect,search_perf_loc_discri,m_probe_locations_perf] = search_target_location(obs,task,file,expN)
-%% This program analyzes performance in the search task for performance when the target is at each location
+function [search_perf_loc_detect,search_perf_loc_discri,m_probe_locations_perf,pairs_perf_loc,pairs_indices] = search_target_location(obs,task,file,expN)
+%% This program analyzes performance in the search and probe tasks for performance when the target is at each location
 %% Example
 %%% search_target_location('ax','easy','151104_stim03.mat',2);
 
@@ -202,6 +202,55 @@ m_probe_locations_perf = nanmean(probe_loc_perf,1);
 m_perf_locations_discri = nanmean(search_perf_loc_discri,1);
 m_perf_locations_detect = nanmean(search_perf_loc_detect,1);
 
+% probe_perf_trials = NaN(size(probe_perf,1)/2,2);
+% for i = 1:size(probe_perf,1)/2 
+%     trial_idx = i * 2 - 1;
+%     probe_perf_trials(i,1) = probe_perf(trial_idx,2);
+%     probe_perf_trials(i,2) = probe_perf(trial_idx+1,2);
+% 
+% end
+% 
 
+% the third dimension of pairs_perf_loc is for each pair
+% for each pair, the first column refers to the location that is
+% numerically lower that the second (refer to the diagram of each pair and
+% the numerical location for each probe location)
+pairs_perf_loc = [];
+pairs_indices = [];
+
+for pair = unique(exp.randVars.probePairsLoc)
+    pairTrials = exp.randVars.probePairsLoc(theTrials)==pair;
+    perf_tmp = NaN(80,2);
+    idx_tmp = NaN(80,1);
+    tmpidx = 1;
+    for i = 1:size(pairTrials,2);
+        if pairTrials(1,i) == true
+            trialidx = i * 2 - 1;
+            tmp1 = probe_perf(trialidx,2);  
+            tmp2 = probe_perf(trialidx+1,2);
+            if probe_perf(trialidx,1) > probe_perf(trialidx+1,1)
+                tmp1 = tmp2;
+                tmp2 = probe_perf(trialidx,2);
+            end
+            perf_tmp(tmpidx,1) = tmp1;    
+            perf_tmp(tmpidx,2) = tmp2;
+            idx_tmp(tmpidx) = i;
+            tmpidx = tmpidx + 1;
+        end
+    end
+%     keyboard
+%     perf_tmp = perf_tmp(1:tmpidx-1,:);
+%     idx_tmp = idx_tmp(1:tmpidx-1,:);
+    pairs_perf_loc(:,:,pair) = perf_tmp;
+    pairs_indices(:,1,pair) = idx_tmp;
+end
+
+% all_chi2 = [];
+% all_p = [];
+% for i=1:size(pairs_perf_loc,3) 
+%     [tbl,chi2,p] = crosstab(pairs_perf_loc(:,1,i),pairs_perf_loc(:,2,i));
+%     all_chi2(i) = chi2;
+%     all_p(i) = p;
+% end
 end
 

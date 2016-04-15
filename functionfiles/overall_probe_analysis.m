@@ -1,8 +1,8 @@
-function [all_p1,all_p2,pairs_p1,pairs_p2,pair_p1,pair_p2,sameHemiP1,sameHemiP2,diffHemiP1,diffHemiP2,d1P1,d1P2,d2P1,d2P2,d3P1,d3P2] = overall_probe_analysis(task,expN,trialType,difference,correct,printFg,printColormap,printFFT,printStats,grouping,absDiff,cMin,cMax,observers)
+function [all_p1,all_p2,pairs_p1,pairs_p2,pair_p1,pair_p2,sameHemiP1,sameHemiP2,diffHemiP1,diffHemiP2,d1P1,d1P2,d2P1,d2P2,d3P1,d3P2,configP1P2] = overall_probe_analysis(task,expN,trialType,difference,correct,printFg,printColormap,printFFT,printStats,grouping,absDiff,cMin,cMax,observers)
 %% This function graphs raw probabilities and p1 & p2 for overall, pairs, and hemifields across all observers
 %% Example
 %%% [all_p1,all_p2,pairs_p1,pairs_p2,pair_p1,pair_p2] = overall_probe_analysis('difficult',2,2,false,false,true,true,true,false,1,true,0.1,0.3,{'ax','ld'});
-
+% overall_probe_analysis('difficult',2,2,false,false,true,true,true,false,1,true,0.1,0.3,{});
 %% Parameters
 % task = 'difficult'; ('easy' or 'difficult')
 % expN = 1; (1 or 2) 
@@ -42,6 +42,7 @@ if expN == 1
 elseif expN == 2
     saveFileLoc = ['\target present or absent\main_' task '\' condition];
     saveFilePairsLoc = ['\target present or absent\main_' task '\pairs\' condition];
+    saveFileConfigLoc = ['\target present or absent\main_' task '\configuration\' condition];
     if trialType == 1
         titleName = 'TP';
         saveFileName = '_2TP';
@@ -97,9 +98,6 @@ all_p2=[];
 P1_C2=[];
 P2_C2=[];
 
-pairs_p1=[];
-pairs_p2=[];
-
 numObs = 0;
 
 dir_name = setup_dir();
@@ -108,7 +106,7 @@ for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
     if (fileL == 2) && ~strcmp(obs(1,1),'.') && (ismember(obs,observers) || isempty(observers))
-        [P1,P2,pb,po,pn,pbp,pop,pnp,SH,DH,di,si1,si2,diD,P1C2,P2C2] = p_probe_analysis(obs,task,expN,trialType,false,correct,false,grouping); 
+        [P1,P2,pb,po,pn,pbp,~,pnp,SH,DH,di,si1,si2,diD,P1C2,P2C2] = p_probe_analysis(obs,task,expN,trialType,false,correct,false,grouping); 
         if ~isempty(P1)            
             all_p1 = horzcat(all_p1,P1);
             all_p2 = horzcat(all_p2,P2);
@@ -228,6 +226,20 @@ d3PN = mean(cat(3,pnonep(:,:,2),pnonep(:,:,5),pnonep(:,:,7),pnonep(:,:,12)),3);
 [d3P1,d3P2] = quadratic_analysis(d3PB,d3PN);
 sem_d3P1 = std(d3P1,[],2)./sqrt(numObs);  
 sem_d3P2 = std(d3P2,[],2)./sqrt(numObs);  
+
+squarePB = mean(cat(3,pbothp(:,:,1),pbothp(:,:,2),pbothp(:,:,3),pbothp(:,:,4),pbothp(:,:,5),pbothp(:,:,6)),3);
+squarePN = mean(cat(3,pnonep(:,:,1),pnonep(:,:,2),pnonep(:,:,3),pnonep(:,:,4),pnonep(:,:,5),pnonep(:,:,6)),3);
+[squareP1,squareP2] = quadratic_analysis(squarePB,squarePN);
+sem_squareP1 = std(squareP1,[],2)./sqrt(numObs);  
+sem_squareP2 = std(squareP2,[],2)./sqrt(numObs); 
+
+diamondPB = mean(cat(3,pbothp(:,:,7),pbothp(:,:,8),pbothp(:,:,9),pbothp(:,:,10),pbothp(:,:,11),pbothp(:,:,12)),3);
+diamondPN = mean(cat(3,pnonep(:,:,7),pnonep(:,:,8),pnonep(:,:,9),pnonep(:,:,10),pnonep(:,:,11),pnonep(:,:,12)),3);
+[diamondP1,diamondP2] = quadratic_analysis(diamondPB,diamondPN);
+sem_diamondP1 = std(diamondP1,[],2)./sqrt(numObs);  
+sem_diamondP2 = std(diamondP2,[],2)./sqrt(numObs); 
+
+configP1P2 = cat(1,mean(squareP1,2),mean(squareP2,2),mean(diamondP1,2),mean(diamondP2,2));
 
 if printFg && ~difference
     % make a data directory if necessary
@@ -435,6 +447,52 @@ if printFg && ~difference
         namefig=sprintf('%s', [dir_name '\figures\' saveFileLoc '_p1p2PAIR2' saveFileName]);
         print ('-djpeg', '-r500',namefig);  
  
+        %% Plot p1 and p2 for square configuration
+        figure;
+        hold on;        
+        errorbar(100:30:460,mean(squareP1,2),sem_squareP1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
+        errorbar(100:30:460,mean(squareP2,2),sem_squareP2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+
+        legend('p1','p2','Location','SouthEast')
+
+        set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
+        set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
+
+        ylabel('Probe report probabilities','FontSize',18,'Fontname','Ariel')
+        xlabel('Time from search array onset [ms]','FontSize',18,'Fontname','Ariel')
+        ylim([0 1])
+
+        xlim([0 500])
+
+        title([condition ' Search - Square Configuration - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
+
+        namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileConfigLoc '_p1p2SQ' saveFileName]);
+
+        print ('-djpeg', '-r500',namefig);        
+        
+        %% Plot p1 and p2 for diamond configuration
+        figure;
+        hold on;        
+        errorbar(100:30:460,mean(diamondP1,2),sem_diamondP1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
+        errorbar(100:30:460,mean(diamondP2,2),sem_diamondP2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+
+        legend('p1','p2','Location','SouthEast')
+
+        set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
+        set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
+
+        ylabel('Probe report probabilities','FontSize',18,'Fontname','Ariel')
+        xlabel('Time from search array onset [ms]','FontSize',18,'Fontname','Ariel')
+        ylim([0 1])
+
+        xlim([0 500])
+
+        title([condition ' Search - Diamond Configuration - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
+
+        namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileConfigLoc '_p1p2DMD' saveFileName]);
+
+        print ('-djpeg', '-r500',namefig);         
+        
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PLOT HEMIFIELDS %%%%%%%%%%%%%%%%%%%%%%%
         %% Plot p1 and p2 for same hemifield
         figure;
@@ -457,7 +515,7 @@ if printFg && ~difference
 
         namefig=sprintf('%s', [dir_name '\figures\' saveFileLoc '_p1p2SH' saveFileName]);
 
-        print ('-djpeg', '-r500',namefig);
+        print ('-djpeg', '-r500',namefig);        
         
         %% Plot p1 and p2 for different hemifield
         figure;
@@ -770,7 +828,7 @@ if printFg && difference
     end
     namefig=sprintf('%s', [dir_name '\figures\' saveFileLoc '_p1p2HemiDiagDdiff' saveFileName]);
     print ('-djpeg', '-r500',namefig);
-    
+end
    
 %% Conducts ANOVA on P1 and P2
 if printStats
@@ -788,7 +846,7 @@ if printStats
         p1p2(index+1:index+13,4) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
         index = index + 13;
     end
-    RMAOV2(p1p2);    
+    RMAOV2(p1p2);     
 end
 
 %% Bar graphs for PBOTH, PNONE, and PONE. Note that the graph is not saved.

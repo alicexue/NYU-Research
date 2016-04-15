@@ -601,26 +601,26 @@ print ('-djpeg', '-r500',namefig);
 % % namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_ConfigAvg' dpg saveFileName]);
 % % print ('-djpeg', '-r500',namefig);
 
-% %% Plot colormap for square configuration for each delay
-% figure; hold on;
-% group1 = mean(vertcat(d(1,:),d(6,:)),1);
-% group2 = mean(vertcat(d(3,:),d(4,:)),1);
-% group3 = mean(vertcat(d(2,:),d(5,:)),1);
-% groups = vertcat(group1,group2,group3);
-% if absDiff
-%     groups = abs(groups);
-% end
-% imagesc(flipud(groups),[cMin cMax]);
-% colorbar
-% xlim([0.5 nGroups+0.5])
-% ylim([0.5 3.5])
-% set(gca,'YTick',1:1:3,'YTickLabel',{'2 and 5','3 and 4','1 and 6'})
-% set(gca,'XTick',1:1:13,'XTickLabel',x_axis_labels)
-% ylabel('Pairs','FontSize',12,'Fontname','Ariel')
-% xlabel('Time from Search Array Onset [ms]','FontSize',12,'Fontname','Ariel')
-% title([condition ' P1 - P2 (Square) ' titleName],'FontSize',15,'Fontname','Ariel')
-% namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_Square' dpg saveFileName]);
-% print ('-djpeg', '-r500',namefig);
+%% Plot colormap for square configuration for each delay
+figure; hold on;
+group1 = mean(vertcat(d(1,:),d(6,:)),1);
+group2 = mean(vertcat(d(3,:),d(4,:)),1);
+group3 = mean(vertcat(d(2,:),d(5,:)),1);
+groups = vertcat(group1,group2,group3);
+if absDiff
+    groups = abs(groups);
+end
+imagesc(flipud(groups),[cMin cMax]);
+colorbar
+xlim([0.5 nGroups+0.5])
+ylim([0.5 3.5])
+set(gca,'YTick',1:1:3,'YTickLabel',{'2 and 5','3 and 4','1 and 6'})
+set(gca,'XTick',1:1:13,'XTickLabel',x_axis_labels)
+ylabel('Pairs','FontSize',12,'Fontname','Ariel')
+xlabel('Time from Search Array Onset [ms]','FontSize',12,'Fontname','Ariel')
+title([condition ' P1 - P2 (Square) ' titleName],'FontSize',15,'Fontname','Ariel')
+namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_Square' dpg saveFileName]);
+print ('-djpeg', '-r500',namefig);
 
 %% Plot colormap for square configuration averaged across delays
 % figure; hold on;

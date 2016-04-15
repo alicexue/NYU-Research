@@ -91,13 +91,13 @@ if displayFg
 
     errorbar(4:4:8,m_easy_rt*1000,ms_easy_rt*1000,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',9,'Color',[0 0 0])
 
-    legend_obs = cell(numObs,1);
-    for i=1:numObs
-        legend_obs{i} = ['obs ' num2str(i)];
-    end
-    legend_obs{numObs+1} = 'average';
-    l = legend(legend_obs,'Location','SouthWest');    
-    set(l,'FontSize',12);    
+%     legend_obs = cell(numObs,1);
+%     for i=1:numObs
+%         legend_obs{i} = ['obs ' num2str(i)];
+%     end
+%     legend_obs{numObs+1} = 'average';
+%     l = legend(legend_obs,'Location','SouthWest');    
+%     set(l,'FontSize',12);    
 
     xlim([3 9])
     set(gca,'XTick',4:4:8,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
@@ -123,14 +123,14 @@ if displayFg
 
     errorbar(4:4:8,m_easy_perf*100,ms_easy_perf*100,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
 
-    legend_obs = cell(numObs,1);
-    for i=1:numObs
-        legend_obs{i} = ['obs ' num2str(i)];
-    end
-    legend_obs{numObs+1} = 'average';    
-    l = legend(legend_obs,'Location','SouthWest');    
-    set(l,'FontSize',12);      
-
+%     legend_obs = cell(numObs,1);
+%     for i=1:numObs
+%         legend_obs{i} = ['obs ' num2str(i)];
+%     end
+%     legend_obs{numObs+1} = 'average';    
+%     l = legend(legend_obs,'Location','SouthWest');    
+%     set(l,'FontSize',12);      
+ 
     xlim([3 9])
     set(gca,'XTick', 4:4:8,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
     if expN == 1
@@ -156,13 +156,13 @@ if displayFg
 
     errorbar(4:4:8,m_difficult_rt*1000,ms_difficult_rt*1000,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
 
-    legend_obs = cell(numObs,1);
-    for i=1:numObs
-        legend_obs{i} = ['obs ' num2str(i)];
-    end
-    legend_obs{numObs+1} = 'average';      
-    l = legend(legend_obs,'Location','SouthWest');    
-    set(l,'FontSize',12);    
+%     legend_obs = cell(numObs,1);
+%     for i=1:numObs
+%         legend_obs{i} = ['obs ' num2str(i)];
+%     end
+%     legend_obs{numObs+1} = 'average';      
+%     l = legend(legend_obs,'Location','SouthWest');    
+%     set(l,'FontSize',12);    
 
     xlim([3 9])
     set(gca,'XTick',4:4:8,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
@@ -188,13 +188,13 @@ if displayFg
 
     errorbar(4:4:8,m_difficult_perf*100,ms_difficult_perf*100,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
 
-    legend_obs = cell(numObs,1);
-    for i=1:numObs
-        legend_obs{i} = ['obs ' num2str(i)];
-    end
-    legend_obs{numObs+1} = 'average';
-    l = legend(legend_obs,'Location','SouthWest');    
-    set(l,'FontSize',12); 
+%     legend_obs = cell(numObs,1);
+%     for i=1:numObs
+%         legend_obs{i} = ['obs ' num2str(i)];
+%     end
+%     legend_obs{numObs+1} = 'average';
+%     l = legend(legend_obs,'Location','SouthWest');    
+%     set(l,'FontSize',12); 
 
     xlim([3 9])
     set(gca,'XTick', 4:4:8,'FontSize',20,'LineWidth',2,'Fontname','Ariel')

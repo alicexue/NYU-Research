@@ -288,7 +288,7 @@ hold on;
 easy_d = mean(easy_D3P1-easy_D3P2,2);
 easy_s_diff = std(easy_D3P1-easy_D3P2,[],2)/sqrt(numObs);
 difficult_d = mean(difficult_D3P1-difficult_D3P2,2);
-difficult_s_diff = std(difficult_D3P1-difficult_D3P1,[],2)/sqrt(numObs);
+difficult_s_diff = std(difficult_D3P1-difficult_D3P2,[],2)/sqrt(numObs);
 
 errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[1 0 0])

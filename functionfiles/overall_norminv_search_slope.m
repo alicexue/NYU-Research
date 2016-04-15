@@ -95,13 +95,13 @@ end
 
 errorbar(4:4:8,mean(easy_dprime,2),s_easy_dprime,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
 
-legend_obs = cell(numObs,1);
-for i=1:numObs
-    legend_obs{i} = ['obs ' num2str(i)];
-end
-legend_obs{numObs+1} = 'average';    
-l = legend(legend_obs);    
-set(l,'FontSize',12);      
+% legend_obs = cell(numObs,1);
+% for i=1:numObs
+%     legend_obs{i} = ['obs ' num2str(i)];
+% end
+% legend_obs{numObs+1} = 'average';    
+% l = legend(legend_obs);    
+% set(l,'FontSize',12);      
 
 xlim([3 9])
 set(gca,'XTick', 4:4:8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
@@ -109,12 +109,12 @@ set(gca,'XTick', 4:4:8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
 if divideRT
     if type == 3
         inc = 11;
-        ymax = 45;
+        ymax = 44;
     else
         inc = 4;
-        ymax = 25;
+        ymax = 24;
     end    
-    set(gca,'YTick', 1:inc:ymax,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
+    set(gca,'YTick', 0:inc:ymax,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
     ylim([0 ymax]) 
 else
     if type == 3
@@ -147,13 +147,13 @@ end
 
 errorbar(4:4:8,mean(difficult_dprime,2),s_difficult_dprime,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
 
-legend_obs = cell(numObs,1);
-for i=1:numObs
-    legend_obs{i} = ['obs ' num2str(i)];
-end
-legend_obs{numObs+1} = 'average';    
-l = legend(legend_obs);    
-set(l,'FontSize',12);      
+% legend_obs = cell(numObs,1);
+% for i=1:numObs
+%     legend_obs{i} = ['obs ' num2str(i)];
+% end
+% legend_obs{numObs+1} = 'average';    
+% l = legend(legend_obs);    
+% set(l,'FontSize',12);      
 
 xlim([3 9])
 set(gca,'XTick', 4:4:8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
@@ -161,12 +161,12 @@ set(gca,'XTick', 4:4:8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
 if divideRT
     if type == 3
         inc = 11;
-        ymax = 45;
+        ymax = 44;
     else
         inc = 4;
-        ymax = 25;
+        ymax = 24;
     end    
-    set(gca,'YTick', 1:inc:ymax,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
+    set(gca,'YTick', 0:inc:ymax,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
     ylim([0 ymax]) 
 else
     if type == 3

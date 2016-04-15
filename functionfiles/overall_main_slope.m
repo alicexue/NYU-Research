@@ -63,17 +63,17 @@ if printFg
     %% Plot rt
     figure; hold on;
     for i=1:numObs
-        plot(100:30:460,all_rt(:,i)*1000,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8)
+        plot(100:30:460,all_rt(:,i)*1000,'-o','LineWidth',0.8,'MarkerFaceColor',[1 1 1],'MarkerSize',6)
     end
 
-    errorbar(100:30:460,rt_m*1000,rt_sem*1000,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+    errorbar(100:30:460,rt_m*1000,rt_sem*1000,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 
-    legend_obs = cell(numObs,1);
-    for i=1:numObs
-        legend_obs{i} = ['obs ' num2str(i)];
-    end
-    legend_obs{numObs+1} = 'average';
-    legend(legend_obs,'Location','NorthEast')
+%     legend_obs = cell(numObs,1);
+%     for i=1:numObs
+%         legend_obs{i} = ['obs ' num2str(i)];
+%     end
+%     legend_obs{numObs+1} = 'average';
+%     legend(legend_obs,'Location','NorthEast')
 
     if expN == 1
         ylim([0 1200])
@@ -92,24 +92,24 @@ if printFg
     %% Plot performance
     figure; hold on;
     for i=1:numObs
-        plot(100:30:460,all_p(:,i)*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8)
+        plot(100:30:460,all_p(:,i)*100,'-o','LineWidth',0.8,'MarkerFaceColor',[1 1 1],'MarkerSize',6)
     end
 
-    errorbar(100:30:460,p_m*100,p_sem*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+    errorbar(100:30:460,p_m*100,p_sem*100,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 
-    legend_obs = cell(numObs,1);
-    for i=1:numObs
-        legend_obs{i} = ['obs ' num2str(i)];
-    end
-    legend_obs{numObs+1} = 'average';
-    legend(legend_obs,'Location','SouthWest')
+%     legend_obs = cell(numObs,1);
+%     for i=1:numObs
+%         legend_obs{i} = ['obs ' num2str(i)];
+%     end
+%     legend_obs{numObs+1} = 'average';
+%     legend(legend_obs,'Location','SouthWest')
 
     if expN == 1
         ylim([50 100])
         set(gca,'YTick', 50:10:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
     elseif expN == 2
-        ylim([50 100])
-        set(gca,'YTick', 50:10:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+        ylim([30 100])
+        set(gca,'YTick', 30:10:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
     end
     title([condition ' Performance (n = ' num2str(numObs) ') ' titleName],'FontSize',20)
     xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')

@@ -5,7 +5,7 @@ function [dirloc] = setup_dir()
 
 % always write dirloc with '\' 
 % the backslash will be changed to the forward slash in the functions using
-% strrep('dirloc','\',filesep)
+% strrep(dirloc,'\',filesep)
 
 % uncomment the correct path
 
@@ -13,5 +13,5 @@ function [dirloc] = setup_dir()
 % dirloc = 'C:\Users\alice_000\Documents\MATLAB\data'
  
 % hypatia
-dirloc = '\Users\purpadmin\Laura\psychophysics\data'
+dirloc = '\Users\purpadmin\Laura\psychophysics\data';
 

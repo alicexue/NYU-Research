@@ -2,6 +2,7 @@ function [pb,po,pn,pbp,pop,pnp,pboth,pone,pnone] = probe_analysis(obs,task,file,
 %% This program analyzes the probe task for individual stim files
 %% Example
 %%% probe_analysis('ax','difficult','150820_stim01.mat',1,1,1);
+%%% probe_analysis('ax','difficult','151102_stim04.mat',2,1,1);
 
 %% Parameters
 % obs = 'ax'; (observer's initials)
@@ -20,11 +21,14 @@ function [pb,po,pn,pbp,pop,pnp,pboth,pone,pnone] = probe_analysis(obs,task,file,
 % match by shape; if 3, probes must match by aperture)
 
 %% Load the data
+dir_name = setup_dir();
 if expN == 1
-    load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\main_' task '\' file])
+    dir_loc = [dir_name '\' obs '\main_' task '\' file];
 elseif expN == 2
-    load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\target present or absent\main_' task '\' file])
+    dir_loc = [dir_name '\' obs '\target present or absent\main_' task '\' file];
 end
+
+load(strrep(dir_loc,'\',filesep))
 
 %% Get Probe data
 %%% Probe identity
@@ -32,7 +36,7 @@ identity = [1 0;2 0;3 0;4 0;5 0;6 0;7 0;8 0;9 0;10 0;11 0;12 0];
 
 %%% Probe positions
 positions = [-16 -13.25 -10.5 -7.75 -5 -2.25 0.5 3.25 6 8.75 11.5 14.25];
-
+%keyboard
 exp = getTaskParameters(myscreen,task);
 
 expProbe = task{1}.probeTask;
@@ -237,9 +241,9 @@ for delays = unique(exp.randVars.delays)
     pn(delays,1:size(tmp,2)) = tmp;
 end
 
-pbp = NaN(13,100,12);
-pop = NaN(13,100,12);
-pnp = NaN(13,100,12);
+% pbp = NaN(13,100,12);
+% pop = NaN(13,100,12);
+% pnp = NaN(13,100,12);
 
 for delays = unique(exp.randVars.delays)
     for pair = unique(exp.randVars.probePairsLoc)
@@ -253,6 +257,5 @@ for delays = unique(exp.randVars.delays)
         pnp(delays,1:size(tmp,2),pair) = tmp;
     end
 end
-
 end
 

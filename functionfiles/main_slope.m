@@ -17,11 +17,14 @@ function [perfDelays,rtDelays] = main_slope(obs,task,file,expN,present)
 % main experiment
 
 %% Load data
+dir_name = setup_dir();
 if expN == 1
-    load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\main_' task '\' file])
+    dir_loc = [dir_name '\' obs '\main_' task '\' file];
 elseif expN == 2
-    load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\target present or absent\main_' task '\' file])
+    dir_loc = [dir_name '\' obs '\target present or absent\main_' task '\' file];
 end
+
+load(strrep(dir_loc,'\',filesep))
 
 %% Transform data
 exp = getTaskParameters(myscreen,task);

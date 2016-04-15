@@ -6,6 +6,7 @@ function get_stats()
 [~,~,~,~,~,~,~,~,~,~,~,~,~,~,~,~,easy_config] = overall_probe_analysis('easy',2,2,false,false,false,false,false,false,1,true,0.1,0.3,{});
 [~,~,~,~,~,~,~,~,~,~,~,~,~,~,~,~,difficult_config] = overall_probe_analysis('difficult',2,2,false,false,false,false,false,false,1,true,0.1,0.3,{});
 
+% order for task_config: squareP1, squareP2, diamondP1, diamondP2 
 
 y = vertcat(easy_config,difficult_config);
 n = size(y,1);
@@ -45,10 +46,9 @@ g2 = [p1; p2; p1; p2; p1; p2; p1; p2];
     
 g3 = rot90([1:13, 1:13, 1:13, 1:13, 1:13, 1:13, 1:13, 1:13],-1);
 
-[p,t,stats,terms] = anovan(y,{g1 g2 g3 g4},'model','interaction','varnames',{'g1','g2','g3','g4'});
+[p,t,stats,terms] = anovan(y,{g1 g2 g3 g4},'model','interaction','varnames',{'condition','p1 & p2','delay','configuration'});
 p
 t
 stats
 terms
 
-keyboard

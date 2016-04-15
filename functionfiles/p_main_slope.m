@@ -35,11 +35,15 @@ perf_avg = zeros(13,10000);
 rt_median = [];
 c = 1;
 
+dir_name = setup_dir();
 if expN == 1
-    files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\main_', task]);    
+    dir_loc = [dir_name '\' obs '\main_' task];
 elseif expN == 2
-    files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\target present or absent\main_', task]);    
+    dir_loc = [dir_name '\' obs '\target present or absent\main_' task];
 end
+
+files = dir(strrep(dir_loc,'\',filesep));  
+
 for n = 1:size(files,1)
     filename = files(n).name;
     fileL = size(filename,2);
@@ -78,7 +82,7 @@ if printFg
     xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
     ylabel('RT [ms] ','FontSize',15,'Fontname','Ariel')  
 
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_rtDelays' saveFileName]);
+    namefig=sprintf('%s', [dir_loc '\' obs '\' saveFileLoc '_rtDelays' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 
     %% Plot performance
@@ -93,7 +97,7 @@ if printFg
     xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
     ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
 
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' saveFileLoc '_PerfDelays' saveFileName]);
+    namefig=sprintf('%s', [dir_loc '\' obs '\' saveFileLoc '_PerfDelays' saveFileName]);
     print ('-djpeg', '-r500',namefig);
 end
 end

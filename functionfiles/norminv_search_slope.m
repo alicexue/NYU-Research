@@ -9,6 +9,7 @@ function [hit,false_alarm,RT] = norminv_search_slope(obs,task,file,type)
 % type = 1; (1: detection,2: discrimination, 3:detect target absent)
 
 %% Load data
+dir_name = setup_dir();
 load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\target present or absent\' task '\' file])
 
 %% Transform data

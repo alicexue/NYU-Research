@@ -30,8 +30,12 @@ function [all_p1,all_p2,pairs_p1,pairs_p2,pair_p1,pair_p2,sameHemiP1,sameHemiP2,
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
     condition = 'Conjunction';
+    p1clr = [0 0 0.8];
+    p2clr = [0.537 0.671 0.937];
 else 
     condition = 'Feature';
+    p1clr = [1 0.502 0];
+    p2clr = [1 0.8 0.6];
 end
 
 if expN == 1
@@ -290,7 +294,8 @@ if printFg && ~difference
         ylim([0 1])
     end
     
-    title([condition ' Search (n = ' num2str(numObs) ') ' titleName],'FontSize',24,'Fontname','Ariel')
+    title(condition,'FontSize',24,'Fontname','Ariel')
+    % title([condition ' Search (n = ' num2str(numObs) ') ' titleName],'FontSize',24,'Fontname','Ariel')
 
     if correct
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_rawProbsC1' saveFileName],'\',filesep));
@@ -301,8 +306,8 @@ if printFg && ~difference
     %% Plot p1 and p2 for each probe delay    
     figure;hold on;
 
-    errorbar(100:30:460,m_p1,Sp1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-    errorbar(100:30:460,m_p2,Sp2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+    errorbar(100:30:460,m_p1,Sp1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
+    errorbar(100:30:460,m_p2,Sp2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
     legend('p1','p2','Location','SouthEast')
 
@@ -314,8 +319,9 @@ if printFg && ~difference
     ylim([0 1])
 
     xlim([0 500])
-
-    title([condition ' Search (n = ' num2str(numObs) ') ' titleName],'FontSize',24,'Fontname','Ariel')
+    
+    title(condition,'FontSize',24,'Fontname','Ariel')
+    % title([condition ' Search (n = ' num2str(numObs) ') ' titleName],'FontSize',24,'Fontname','Ariel')
 
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2' saveFileName],'\',filesep));
 
@@ -330,8 +336,8 @@ if printFg && ~difference
         P2C1 = nanmean(P2C1,2);
         
         figure;hold on;
-        errorbar(100:30:460,P1C1,Sp1C1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-        errorbar(100:30:460,P2C1,Sp2C1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+        errorbar(100:30:460,P1C1,Sp1C1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
+        errorbar(100:30:460,P2C1,Sp2C1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
         legend('p1','p2','Location','SouthEast')
 
@@ -342,7 +348,8 @@ if printFg && ~difference
         xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
         ylim([-0.2 1.2])
 
-        title([condition ' Search (n = ' num2str(numObs) ')'],'FontSize',24,'Fontname','Ariel')
+        title(condition,'FontSize',24,'Fontname','Ariel')
+        % title([condition ' Search (n = ' num2str(numObs) ')'],'FontSize',24,'Fontname','Ariel')
 
         namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\main_' task '\' condition '_p1p2C1']);
         print ('-djpeg', '-r500',namefig);
@@ -354,8 +361,8 @@ if printFg && ~difference
         P2_C2 = nanmean(P2_C2,2);
         figure;hold on;
 
-        errorbar(100:30:460,P1_C2,Sp1C2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-        errorbar(100:30:460,P2_C2,Sp2C2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+        errorbar(100:30:460,P1_C2,Sp1C2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
+        errorbar(100:30:460,P2_C2,Sp2C2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
         legend('p1','p2','Location','SouthEast')
 
@@ -368,7 +375,8 @@ if printFg && ~difference
 
         xlim([0 500])
 
-        title([condition ' Search (n = ' num2str(numObs) ')' titleName],'FontSize',24,'Fontname','Ariel')
+        title(condition,'FontSize',24,'Fontname','Ariel')
+        % title([condition ' Search (n = ' num2str(numObs) ')' titleName],'FontSize',24,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2C2' saveFileName],'\',filesep));
         print ('-djpeg', '-r500',namefig);
@@ -385,8 +393,8 @@ if printFg && ~difference
         P2C3 = nanmean(P2C3,2);
         
         figure;hold on;
-        errorbar(100:30:460,P1C3,Sp1C3,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-        errorbar(100:30:460,P2C3,Sp2C3,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+        errorbar(100:30:460,P1C3,Sp1C3,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
+        errorbar(100:30:460,P2C3,Sp2C3,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
         legend('p1','p2','Location','SouthEast')
 
@@ -397,7 +405,8 @@ if printFg && ~difference
         xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
         ylim([-0.4 0.4])
 
-        title([condition ' Search (n = ' num2str(numObs) ')' titleName],'FontSize',24,'Fontname','Ariel')
+        title(condition,'FontSize',24,'Fontname','Ariel')
+        % title([condition ' Search (n = ' num2str(numObs) ')' titleName],'FontSize',24,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2C3' saveFileName],'\',filesep));
         print ('-djpeg', '-r500',namefig);
@@ -409,8 +418,8 @@ if printFg && ~difference
             subplot(2,3,numPair)
             hold on;
 
-            errorbar(100:30:460,m_pair_p1(:,:,numPair),s_pair_p1(:,:,numPair),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-            errorbar(100:30:460,m_pair_p2(:,:,numPair),s_pair_p2(:,:,numPair),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+            errorbar(100:30:460,m_pair_p1(:,:,numPair),s_pair_p1(:,:,numPair),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
+            errorbar(100:30:460,m_pair_p2(:,:,numPair),s_pair_p2(:,:,numPair),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
             legend('p1','p2','Location','SouthEast')
             set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
@@ -437,8 +446,8 @@ if printFg && ~difference
             subplot(2,3,numPair)
             hold on;
 
-            errorbar(100:30:460,m_pair_p1(:,:,numPair+6),s_pair_p1(:,:,numPair+6),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-            errorbar(100:30:460,m_pair_p2(:,:,numPair+6),s_pair_p2(:,:,numPair+6),'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+            errorbar(100:30:460,m_pair_p1(:,:,numPair+6),s_pair_p1(:,:,numPair+6),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
+            errorbar(100:30:460,m_pair_p2(:,:,numPair+6),s_pair_p2(:,:,numPair+6),'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
             legend('p1','p2','Location','SouthEast')
             set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
@@ -462,8 +471,8 @@ if printFg && ~difference
         %% Plot p1 and p2 for square configuration
         figure;
         hold on;        
-        errorbar(100:30:460,mean(squareP1,2),sem_squareP1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-        errorbar(100:30:460,mean(squareP2,2),sem_squareP2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+        errorbar(100:30:460,mean(squareP1,2),sem_squareP1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
+        errorbar(100:30:460,mean(squareP2,2),sem_squareP2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
         legend('p1','p2','Location','SouthEast')
 
@@ -476,7 +485,8 @@ if printFg && ~difference
 
         xlim([0 500])
 
-        title([condition ' Search - Square Configuration - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
+        title(condition,'FontSize',24,'Fontname','Ariel')
+        % title([condition ' Search - Square Configuration - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileConfigLoc '_p1p2SQ' saveFileName],'\',filesep));
 
@@ -485,8 +495,8 @@ if printFg && ~difference
         %% Plot p1 and p2 for diamond configuration
         figure;
         hold on;        
-        errorbar(100:30:460,mean(diamondP1,2),sem_diamondP1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-        errorbar(100:30:460,mean(diamondP2,2),sem_diamondP2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+        errorbar(100:30:460,mean(diamondP1,2),sem_diamondP1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
+        errorbar(100:30:460,mean(diamondP2,2),sem_diamondP2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
         legend('p1','p2','Location','SouthEast')
 
@@ -499,7 +509,8 @@ if printFg && ~difference
 
         xlim([0 500])
 
-        title([condition ' Search - Diamond Configuration - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
+        title(condition,'FontSize',24,'Fontname','Ariel')
+        % title([condition ' Search - Diamond Configuration - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileConfigLoc '_p1p2DMD' saveFileName],'\',filesep));
 
@@ -509,8 +520,8 @@ if printFg && ~difference
         %% Plot p1 and p2 for same hemifield
         figure;
         hold on;       
-        errorbar(100:30:460,mean(sameHemiP1,2),sem_sameHemiP1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-        errorbar(100:30:460,mean(sameHemiP2,2),sem_sameHemiP2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+        errorbar(100:30:460,mean(sameHemiP1,2),sem_sameHemiP1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
+        errorbar(100:30:460,mean(sameHemiP2,2),sem_sameHemiP2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
         legend('p1','p2','Location','SouthEast')
 
@@ -523,7 +534,8 @@ if printFg && ~difference
 
         xlim([0 500])
 
-        title([condition ' Search - Same Hemi - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
+        title(condition,'FontSize',24,'Fontname','Ariel')
+        % title([condition ' Search - Same Hemi - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2SH' saveFileName],'\',filesep));
 
@@ -532,8 +544,8 @@ if printFg && ~difference
         %% Plot p1 and p2 for different hemifield
         figure;
         hold on;        
-        errorbar(100:30:460,mean(diffHemiP1,2),sem_diffHemiP1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-        errorbar(100:30:460,mean(diffHemiP2,2),sem_diffHemiP2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+        errorbar(100:30:460,mean(diffHemiP1,2),sem_diffHemiP1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
+        errorbar(100:30:460,mean(diffHemiP2,2),sem_diffHemiP2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
         legend('p1','p2','Location','SouthEast')
 
@@ -546,7 +558,8 @@ if printFg && ~difference
 
         xlim([0 500])
 
-        title([condition ' Search - Diff Hemi - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
+        title(condition,'FontSize',24,'Fontname','Ariel')
+        % title([condition ' Search - Diff Hemi - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2DH' saveFileName],'\',filesep));
 
@@ -556,8 +569,8 @@ if printFg && ~difference
         %% Plot p1 and p2 for d1 (shortest distance)
         figure;
         hold on;              
-        errorbar(100:30:460,mean(d1P1,2),sem_d1P1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-        errorbar(100:30:460,mean(d1P2,2),sem_d1P2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+        errorbar(100:30:460,mean(d1P1,2),sem_d1P1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
+        errorbar(100:30:460,mean(d1P2,2),sem_d1P2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
         legend('p1','p2','Location','SouthEast')
 
@@ -570,7 +583,8 @@ if printFg && ~difference
 
         xlim([0 500])
 
-        title([condition ' Search - Shortest Dist - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
+        title(condition,'FontSize',24,'Fontname','Ariel')
+        % title([condition ' Search - Shortest Dist - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2D1' saveFileName],'\',filesep));
 
@@ -579,8 +593,8 @@ if printFg && ~difference
         %% Plot p1 and p2 for d2 (medium distance)
         figure;
         hold on;
-        errorbar(100:30:460,mean(d2P1,2),sem_d2P1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-        errorbar(100:30:460,mean(d2P2,2),sem_d2P2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+        errorbar(100:30:460,mean(d2P1,2),sem_d2P1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
+        errorbar(100:30:460,mean(d2P2,2),sem_d2P2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
         legend('p1','p2','Location','SouthEast')
 
@@ -593,7 +607,8 @@ if printFg && ~difference
 
         xlim([0 500])
 
-        title([condition ' Search - Medium Dist - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
+        title(condition,'FontSize',24,'Fontname','Ariel')
+        % title([condition ' Search - Medium Dist - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2D2' saveFileName],'\',filesep));
 
@@ -602,8 +617,8 @@ if printFg && ~difference
         %% Plot p1 and p2 for d3 (farthest distance)
         figure;
         hold on;        
-        errorbar(100:30:460,mean(d3P1,2),sem_d3P1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-        errorbar(100:30:460,mean(d3P2,2),sem_d3P2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+        errorbar(100:30:460,mean(d3P1,2),sem_d3P1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
+        errorbar(100:30:460,mean(d3P2,2),sem_d3P2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
         legend('p1','p2','Location','SouthEast')
 
@@ -616,7 +631,8 @@ if printFg && ~difference
 
         xlim([0 500])
 
-        title([condition ' Search - Farthest Dist - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
+        title(condition,'FontSize',24,'Fontname','Ariel')
+        % title([condition ' Search - Farthest Dist - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2D3' saveFileName],'\',filesep));
 
@@ -630,8 +646,8 @@ if printFg && ~difference
         s2 = s_pairs_p2(:,:,i);
 
         figure;hold on;
-        errorbar(100:30:460,t1,s1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.96 .37 .15])
-        errorbar(100:30:460,t2,s2,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[.13 .7 .15])
+        errorbar(100:30:460,t1,s1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
+        errorbar(100:30:460,t2,s2,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
         legend('p1','p2','Location','SouthEast')
 
@@ -746,100 +762,6 @@ if printFg && difference
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2PAIR2diff' saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);  
 
-    %% Graph same/different hemifields and diagonals for square configuration
-    figure; hold on;
-    for i = 1:3
-        if i == 1
-            t1 = SH_p1;
-            t2 = SH_p2;
-        elseif i == 2
-            t1 = DH_p1;
-            t2 = DH_p2;
-        elseif i == 3
-            t1 = di_p1;
-            t2 = di_p2;
-        end    
-
-        s_diff = std(t1-t2,[],2)/sqrt(numObs);
-        
-        t1 = nanmean(t1,2);
-        t2 = nanmean(t2,2);
-
-        d = t1 - t2;
-        
-        subplot(1,3,i)
-        hold on;
-        errorbar(100:30:460,d,s_diff,'ro-','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',6,'Color',[0 0 0])
-
-        set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
-        set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
-
-        ylim([-0.8 0.8])
-        xlim([0 500])
-
-        if i == 1           
-            title('Same Hemifield','FontSize',14,'Fontname','Ariel')  
-            ylabel('P1 - P2','FontSize',16,'Fontname','Ariel') 
-        elseif i == 2
-            title('Different Hemifield','FontSize',14,'Fontname','Ariel')  
-            xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
-        elseif i == 3
-            title('Square Diagonals','FontSize',14,'Fontname','Ariel')
-        end    
-        
-        plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
-    end
-    namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2HemiDiagSdiff' saveFileName],'\',filesep));
-    print ('-djpeg', '-r500',namefig);
-
-    %% Graph same/different hemifields and diagonals for diamond configuration
-    figure; hold on;
-    for i = 1:3
-        if i == 1
-            t1 = si1_p1;
-            t2 = si1_p2;
-        elseif i == 2
-            t1 = si2_p1;
-            t2 = si2_p2;
-        elseif i == 3
-            t1 = diD_p1;
-            t2 = diD_p2;
-        end    
-
-        s_diff = std(t1-t2,[],2)/sqrt(numObs);
-        
-        t1 = nanmean(t1,2);
-        t2 = nanmean(t2,2);
-
-        d = t1 - t2;
-        
-        subplot(1,3,i)
-        hold on;
-
-        errorbar(100:30:460,d,s_diff,'ro-','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',6,'Color',[0 0 0])
-
-        set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
-        set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
-
-        ylim([-0.8 0.8])
-        xlim([0 500])
-
-        if i == 1 || i == 2
-            title(['Diamond Sides n' num2str(i)],'FontSize',14,'Fontname','Ariel')
-        elseif i == 3
-            title(['Diamond Diagonals n' num2str(i)],'FontSize',14,'Fontname','Ariel')
-        end
-
-        if i == 1
-            ylabel('P1 - P2','FontSize',16,'Fontname','Ariel') 
-        elseif i == 2
-            xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
-        end
-        
-        plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
-    end
-    namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2HemiDiagDdiff' saveFileName],'\',filesep));
-    print ('-djpeg', '-r500',namefig);
 end
    
 %% Conducts ANOVA on P1 and P2

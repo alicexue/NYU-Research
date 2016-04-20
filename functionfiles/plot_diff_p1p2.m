@@ -8,6 +8,7 @@ function plot_diff_p1p2(expN,trialType)
 
 numObs = size(easy_p1,2);
 
+dir_name = setup_dir();
 if expN == 1
     saveFileName = '';
     titleName = '';
@@ -38,6 +39,11 @@ elseif expN == 2
     end
 end
 
+% make difference folder
+
+easyclr = [1 0.698 0.4];
+difficultclr = [0 0.502 1];
+
 %% Plot overall p1 - p2 
 m_easy = mean(easy_p1 - easy_p2,2);
 sem_easy = std(easy_p1 - easy_p2,[],2)./sqrt(numObs);
@@ -46,8 +52,8 @@ m_difficult = mean(difficult_p1 - difficult_p2,2);
 sem_difficult = std(difficult_p1 - difficult_p2,[],2)./sqrt(numObs);
 
 figure;hold on;
-errorbar(100:30:460,m_easy,sem_easy,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
-errorbar(100:30:460,m_difficult,sem_difficult,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[1 0 0])
+errorbar(100:30:460,m_easy,sem_easy,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
+errorbar(100:30:460,m_difficult,sem_difficult,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
 
 legend('Feature','Conjunction','Location','SouthWest')
            
@@ -59,11 +65,11 @@ xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 ylim([-0.6 0.6])
 xlim([0 500])
 
-plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
+plot([0 500],[0 0],'Color',easyclr,'LineStyle','--')
 
 title(['P1 - P2 (n = ' num2str(numObs) ') ' titleName],'FontSize',24,'Fontname','Ariel')
 
-namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\p1p2diff' saveFileName]);
+namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diff' saveFileName],'\',filesep));
 
 print ('-djpeg', '-r500',namefig);  
 
@@ -78,8 +84,8 @@ for numPair = 1:size(easy_pair_p1,3)/2
     difficult_d = mean(difficult_pair_p1(:,:,numPair)-difficult_pair_p2(:,:,numPair),2);
     difficult_s_diff = std(difficult_pair_p1(:,:,numPair)-difficult_pair_p2(:,:,numPair),[],2)/sqrt(numObs);
     
-    errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
-    errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[1 0 0])
+    errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
+    errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
     
     set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
     set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
@@ -93,12 +99,12 @@ for numPair = 1:size(easy_pair_p1,3)/2
         xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
     end
 
-    plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
+    plot([0 500],[0 0],'Color',easyclr,'LineStyle','--')
 
     title(['PAIR n' num2str(numPair)],'FontSize',14,'Fontname','Ariel')  
 end
 
-namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\p1p2diffPAIR1' saveFileName]);
+namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diffPAIR1' saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig);
 
 %% Plot p1 and p2 for each pair - diamond configuration
@@ -111,8 +117,8 @@ for numPair = 1:size(easy_pair_p1,3)/2
     difficult_d = mean(difficult_pair_p1(:,:,numPair+6)-difficult_pair_p2(:,:,numPair+6),2);
     difficult_s_diff = std(difficult_pair_p1(:,:,numPair+6)-difficult_pair_p2(:,:,numPair+6),[],2)/sqrt(numObs);
     
-    errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
-    errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[1 0 0])
+    errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
+    errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
     set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
     set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
     ylim([-0.8 0.8])
@@ -125,12 +131,12 @@ for numPair = 1:size(easy_pair_p1,3)/2
         xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
     end
 
-    plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
+    plot([0 500],[0 0],'Color',easyclr,'LineStyle','--')
 
     title(['PAIR n' num2str(numPair+6)],'FontSize',14,'Fontname','Ariel')  
 end
 
-namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\p1p2diffPAIR2' saveFileName]);
+namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diffPAIR2' saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig); 
 
 %% Plot for each grouped pair
@@ -141,10 +147,10 @@ for i = 1:size(easy_pairs_p1,3)
     sem_difficult_diff = std(difficult_pairs_p1(:,:,i) - difficult_pairs_p2(:,:,i),[],2)./sqrt(numObs);
     
     figure;hold on;
-    errorbar(100:30:460,easy_diff,sem_easy_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
-    errorbar(100:30:460,difficult_diff,sem_difficult_diff,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[1 0 0])
+    errorbar(100:30:460,easy_diff,sem_easy_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
+    errorbar(100:30:460,difficult_diff,sem_difficult_diff,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
 
-    plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
+    plot([0 500],[0 0],'Color',easyclr,'LineStyle','--')
     
     legend('Feature','Conjunction','Location','SouthEast')
 
@@ -174,7 +180,7 @@ for i = 1:size(easy_pairs_p1,3)
 
     title(['P1 - P2: Pair ' name ' ' titleName],'FontSize',20,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFilePairsLoc '\p1p2diff_' name saveFileName]);
+    namefig=sprintf('%s', strrep([dir_name '\figures' saveFilePairsLoc '\p1p2diff_' name saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);   
 end
 
@@ -186,8 +192,8 @@ easy_s_diff = std(easy_SHP1-easy_SHP2,[],2)/sqrt(numObs);
 difficult_d = mean(difficult_SHP1-difficult_SHP2,2);
 difficult_s_diff = std(difficult_SHP1-difficult_SHP2,[],2)/sqrt(numObs);
 
-errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
-errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[1 0 0])
+errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
+errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
 set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
 set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
 ylim([-0.8 0.8])
@@ -197,11 +203,11 @@ ylabel('P1 - P2','FontSize',16,'Fontname','Ariel')
 xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
 
 legend('Feature','Conjunction','Location','SouthWest')
-plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
+plot([0 500],[0 0],'Color',easyclr,'LineStyle','--')
 
 title('P1 - P2: Same Hemifield','FontSize',14,'Fontname','Ariel')  
 
-namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\p1p2diffSH' saveFileName]);
+namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diffSH' saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig); 
 
 %% Plot p1 and p2 for different hemifield
@@ -212,8 +218,8 @@ easy_s_diff = std(easy_DHP1-easy_DHP2,[],2)/sqrt(numObs);
 difficult_d = mean(difficult_DHP1-difficult_DHP2,2);
 difficult_s_diff = std(difficult_DHP1-difficult_DHP2,[],2)/sqrt(numObs);
 
-errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
-errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[1 0 0])
+errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
+errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
 set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
 set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
 ylim([-0.8 0.8])
@@ -223,11 +229,11 @@ legend('Feature','Conjunction','Location','SouthWest')
 ylabel('P1 - P2','FontSize',16,'Fontname','Ariel')
 xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
 
-plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
+plot([0 500],[0 0],'Color',easyclr,'LineStyle','--')
 
 title('P1 - P2: Different Hemifield','FontSize',14,'Fontname','Ariel')  
 
-namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\p1p2diffDH' saveFileName]);
+namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diffDH' saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig); 
 
 %% Plot p1 and p2 for shortest distance
@@ -238,8 +244,8 @@ easy_s_diff = std(easy_D1P1-easy_D1P2,[],2)/sqrt(numObs);
 difficult_d = mean(difficult_D1P1-difficult_D1P2,2);
 difficult_s_diff = std(difficult_D1P1-difficult_D1P2,[],2)/sqrt(numObs);
 
-errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
-errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[1 0 0])
+errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
+errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
 set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
 set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
 ylim([-0.8 0.8])
@@ -249,11 +255,11 @@ legend('Feature','Conjunction','Location','SouthWest')
 ylabel('P1 - P2','FontSize',16,'Fontname','Ariel')
 xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
 
-plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
+plot([0 500],[0 0],'Color',easyclr,'LineStyle','--')
 
 title('P1 - P2: Shortest Distance','FontSize',14,'Fontname','Ariel')  
 
-namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\p1p2diffD1' saveFileName]);
+namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diffD1' saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig); 
 
 %% Plot p1 and p2 for medium distance
@@ -264,8 +270,8 @@ easy_s_diff = std(easy_D2P1-easy_D2P2,[],2)/sqrt(numObs);
 difficult_d = mean(difficult_D2P1-difficult_D2P2,2);
 difficult_s_diff = std(difficult_D2P1-difficult_D2P2,[],2)/sqrt(numObs);
 
-errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
-errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[1 0 0])
+errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
+errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
 set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
 set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
 ylim([-0.8 0.8])
@@ -275,11 +281,11 @@ legend('Feature','Conjunction','Location','SouthWest')
 ylabel('P1 - P2','FontSize',16,'Fontname','Ariel')
 xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
 
-plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
+plot([0 500],[0 0],'Color',easyclr,'LineStyle','--')
 
 title('P1 - P2: Medium Distance','FontSize',14,'Fontname','Ariel')  
 
-namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\p1p2diffD2' saveFileName]);
+namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diffD2' saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig); 
 
 %% Plot p1 and p2 for farthest distance
@@ -290,8 +296,8 @@ easy_s_diff = std(easy_D3P1-easy_D3P2,[],2)/sqrt(numObs);
 difficult_d = mean(difficult_D3P1-difficult_D3P2,2);
 difficult_s_diff = std(difficult_D3P1-difficult_D3P2,[],2)/sqrt(numObs);
 
-errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
-errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[1 0 0])
+errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
+errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
 set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
 set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
 ylim([-0.8 0.8])
@@ -301,11 +307,11 @@ legend('Feature','Conjunction','Location','SouthWest')
 ylabel('P1 - P2','FontSize',16,'Fontname','Ariel')
 xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
 
-plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
+plot([0 500],[0 0],'Color',easyclr,'LineStyle','--')
 
 title('P1 - P2: Farthest Distance','FontSize',14,'Fontname','Ariel')  
 
-namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\p1p2diffD3' saveFileName]);
+namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diffD3' saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig); 
 
 end

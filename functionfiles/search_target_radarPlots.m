@@ -5,9 +5,12 @@ function search_target_radarPlots()
 
 numObs = size(easy_p_discri,2);
 
+dir_name = setup_dir();
+
 figure; hold on;
 radarPlot(easy_p_discri,'-o','LineWidth',1.6,'MarkerFaceColor',[1 1 1],'MarkerSize',9);
 title('Feature Discrimination','FontSize',15)
+% namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diff' saveFileName],'\',filesep));
 namefig=sprintf('%s', 'C:\Users\alice_000\Documents\MATLAB\data\figures\target present or absent\performance fields\Feature_Discrimination');
 print ('-djpeg', '-r500',namefig);
 

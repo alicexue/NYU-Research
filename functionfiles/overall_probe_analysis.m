@@ -675,7 +675,8 @@ if printFg && ~difference
             name = '9 and 11';   
         end
 
-        title([condition ' Search - Pair ' name ' ' titleName],'FontSize',20,'Fontname','Ariel')
+        title(condition,'FontSize',20,'Fontname','Ariel')
+        % title([condition ' Search - Pair ' name ' ' titleName],'FontSize',20,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures\' saveFilePairsLoc '_p1p2_' name saveFileName],'\',filesep));
         print ('-djpeg', '-r500',namefig);   

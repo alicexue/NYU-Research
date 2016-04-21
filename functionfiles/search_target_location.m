@@ -12,10 +12,11 @@ function [search_perf_loc_detect,search_perf_loc_discri,m_probe_locations_perf,p
 %% Outputs
 
 %% Load the data
+dir_name = setup_dir();
 if expN == 1
-    load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\main_' task '\' file])
+    load(strrep([dir_name '\' obs '\main_' task '\' file],'\',filesep)) 
 elseif expN == 2
-    load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\target present or absent\main_' task '\' file])
+    load(strrep([dir_name '\' obs '\target present or absent\main_' task '\' file],'\',filesep)) 
 end
 
 %% Get Search Display Data

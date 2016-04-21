@@ -35,15 +35,18 @@ if toggle
     hold on
 end
 
+%%% Alice's edit: To set number of axis lines
+nLines = 4;
+
 %%% Plot axes isocurves
 % Radial offset per axis
-th = (2*pi/M)*(ones(9,1)*(M:-1:1));
+th = (2*pi/M)*(ones(nLines,1)*(M:-1:1));
 % Axis start and end
-r = (linspace(0.1, 0.9, 9)')*ones(1,M);
+r = (linspace(0.1, 0.9, nLines)')*ones(1,M);
 % Conversion to cartesian coordinates to plot using regular plot.
 [x,y] = pol2cart(th, r);
 hLine = line([x, x(:,1)]', [y, y(:,1)]',...
-    'LineWidth', 1,...
+    'LineWidth', 1,... 
     'Color', [1, 1, 1]*0.5  );
 for i = 1:numel(hLine)
     set(get(get(hLine(i),'Annotation'),'LegendInformation'),...
@@ -71,14 +74,21 @@ axis([-1,1,-1,1]*1.5)
 hold on
 
 % Radius
-minV = rot90([0,0,0,0,0,0,0,0]);
-maxV = rot90([1,1,1,1,1,1,1,1]);
+% Alice's edits
+s = size(P,1);
+minV = zeros(s,1);
+maxV = ones(s,1);
 R = 0.8*((P - (minV*ones(1,N)))./((maxV-minV)*ones(1,N))) + 0.1;
 R = [R; R(1,:)];
 Th = (2*pi/M) * ((M:-1:0)'*ones(1,N));
 
 % polar(Th, R)
 [X, Y] = pol2cart(Th, R);
+
+% Alice's edit for colors
+if size(R,2) == 2
+    set(gca, 'ColorOrder', [1 0.502 0; 0 0 0.8]);
+end
 
 h = plot(X, Y, varargin{:});
 axis([-1,1,-1,1])

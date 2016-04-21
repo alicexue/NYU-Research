@@ -65,9 +65,10 @@ xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 ylim([-0.6 0.6])
 xlim([0 500])
 
-plot([0 500],[0 0],'Color',easyclr,'LineStyle','--')
+plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
-title(['P1 - P2 (n = ' num2str(numObs) ') ' titleName],'FontSize',24,'Fontname','Ariel')
+title([P1 - P2','FontSize',24,'Fontname','Ariel')
+% title(['P1 - P2 (n = ' num2str(numObs) ') ' titleName],'FontSize',24,'Fontname','Ariel')
 
 namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diff' saveFileName],'\',filesep));
 
@@ -99,7 +100,7 @@ for numPair = 1:size(easy_pair_p1,3)/2
         xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
     end
 
-    plot([0 500],[0 0],'Color',easyclr,'LineStyle','--')
+    plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
     title(['PAIR n' num2str(numPair)],'FontSize',14,'Fontname','Ariel')  
 end
@@ -131,7 +132,7 @@ for numPair = 1:size(easy_pair_p1,3)/2
         xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
     end
 
-    plot([0 500],[0 0],'Color',easyclr,'LineStyle','--')
+    plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
     title(['PAIR n' num2str(numPair+6)],'FontSize',14,'Fontname','Ariel')  
 end
@@ -150,7 +151,7 @@ for i = 1:size(easy_pairs_p1,3)
     errorbar(100:30:460,easy_diff,sem_easy_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
     errorbar(100:30:460,difficult_diff,sem_difficult_diff,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
 
-    plot([0 500],[0 0],'Color',easyclr,'LineStyle','--')
+    plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
     
     legend('Feature','Conjunction','Location','SouthEast')
 
@@ -178,7 +179,8 @@ for i = 1:size(easy_pairs_p1,3)
         name = '9 and 11';   
     end
 
-    title(['P1 - P2: Pair ' name ' ' titleName],'FontSize',20,'Fontname','Ariel')
+    title('P1 - P2','FontSize',20,'Fontname','Ariel')
+    % title(['P1 - P2: Pair ' name ' ' titleName],'FontSize',20,'Fontname','Ariel')
 
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFilePairsLoc '\p1p2diff_' name saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);   
@@ -203,9 +205,10 @@ ylabel('P1 - P2','FontSize',16,'Fontname','Ariel')
 xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
 
 legend('Feature','Conjunction','Location','SouthWest')
-plot([0 500],[0 0],'Color',easyclr,'LineStyle','--')
+plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
-title('P1 - P2: Same Hemifield','FontSize',14,'Fontname','Ariel')  
+title('P1 - P2','FontSize',14,'Fontname','Ariel')
+% title('P1 - P2: Same Hemifield','FontSize',14,'Fontname','Ariel')  
 
 namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diffSH' saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig); 
@@ -229,9 +232,10 @@ legend('Feature','Conjunction','Location','SouthWest')
 ylabel('P1 - P2','FontSize',16,'Fontname','Ariel')
 xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
 
-plot([0 500],[0 0],'Color',easyclr,'LineStyle','--')
+plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
-title('P1 - P2: Different Hemifield','FontSize',14,'Fontname','Ariel')  
+title('P1 - P2','FontSize',14,'Fontname','Ariel')
+% title('P1 - P2: Different Hemifield','FontSize',14,'Fontname','Ariel')  
 
 namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diffDH' saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig); 
@@ -255,9 +259,10 @@ legend('Feature','Conjunction','Location','SouthWest')
 ylabel('P1 - P2','FontSize',16,'Fontname','Ariel')
 xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
 
-plot([0 500],[0 0],'Color',easyclr,'LineStyle','--')
+plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
-title('P1 - P2: Shortest Distance','FontSize',14,'Fontname','Ariel')  
+title('P1 - P2','FontSize',14,'Fontname','Ariel')
+% title('P1 - P2: Shortest Distance','FontSize',14,'Fontname','Ariel')  
 
 namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diffD1' saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig); 
@@ -281,9 +286,10 @@ legend('Feature','Conjunction','Location','SouthWest')
 ylabel('P1 - P2','FontSize',16,'Fontname','Ariel')
 xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
 
-plot([0 500],[0 0],'Color',easyclr,'LineStyle','--')
+plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
-title('P1 - P2: Medium Distance','FontSize',14,'Fontname','Ariel')  
+title('P1 - P2','FontSize',14,'Fontname','Ariel')
+% title('P1 - P2: Medium Distance','FontSize',14,'Fontname','Ariel')  
 
 namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diffD2' saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig); 
@@ -307,9 +313,10 @@ legend('Feature','Conjunction','Location','SouthWest')
 ylabel('P1 - P2','FontSize',16,'Fontname','Ariel')
 xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
 
-plot([0 500],[0 0],'Color',easyclr,'LineStyle','--')
+plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
-title('P1 - P2: Farthest Distance','FontSize',14,'Fontname','Ariel')  
+title('P1 - P2','FontSize',14,'Fontname','Ariel')
+% title('P1 - P2: Farthest Distance','FontSize',14,'Fontname','Ariel')  
 
 namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diffD3' saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig); 

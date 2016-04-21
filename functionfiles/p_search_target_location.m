@@ -29,10 +29,11 @@ probe_perf_loc = [];
 pairs_perf_loc = [];
 pairs_indices = [];
 
+dir_name = setup_dir();
 if expN == 1
-    files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\main_', task]);  
+    files = dir(strrep([dir_name '\' obs '\main_' task],'\',filesep)); 
 elseif expN == 2
-    files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\target present or absent\main_', task]);  
+    files = dir(strrep([dir_name '\' obs '\target present or absent\main_' task],'\',filesep));
 end
 
 for n = 1:size(files,1)

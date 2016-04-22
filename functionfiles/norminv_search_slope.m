@@ -10,7 +10,7 @@ function [hit,false_alarm,RT] = norminv_search_slope(obs,task,file,type)
 
 %% Load data
 dir_name = setup_dir();
-load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\target present or absent\' task '\' file])
+load([dir_name '\' obs '\target present or absent\' task '\' file])
 
 %% Transform data
 exp = getTaskParameters(myscreen,task);

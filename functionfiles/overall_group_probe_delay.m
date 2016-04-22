@@ -66,12 +66,10 @@ diD_p2=[];
 all_p1=[];
 all_p2=[];
 
-P1_C2=[];
-P2_C2=[];
-
 numObs = 0;
 
-files = dir('C:\Users\alice_000\Documents\MATLAB\data');  
+dir_name = setup_dir();
+files = dir(strrep(dir_name,'\',filesep));  
 for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
@@ -168,7 +166,7 @@ if printFg
     xlim([0 350])
     
     title([condition ' Search (n = ' num2str(numObs) ') ' titleName],'FontSize',24,'Fontname','Ariel')
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_rawProbsG' saveFileName]);
+    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_rawProbsG' saveFileName],'\',filesep));
     
     print ('-djpeg', '-r500',namefig);
     %% Plot p1 and p2 for each probe delay    
@@ -189,7 +187,7 @@ if printFg
 
     title([condition ' Search (n = ' num2str(numObs) ') ' titleName],'FontSize',24,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2G' saveFileName]);
+    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_p1p2G' saveFileName],'\',filesep));
 
     print ('-djpeg', '-r500',namefig);
     %% Establish x-axis labels 
@@ -225,7 +223,7 @@ if printFg
         title(['PAIR n' num2str(numPair)],'FontSize',14,'Fontname','Ariel')  
     end
 
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2PAIR1G' saveFileName]);
+    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_p1p2PAIR1G' saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);
 
     %% Plot p1 and p2 for each pair - diamond configuration
@@ -253,7 +251,7 @@ if printFg
         title(['PAIR n' num2str(numPair+6)],'FontSize',14,'Fontname','Ariel')  
     end
 
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2PAIR2G' saveFileName]);
+    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_p1p2PAIR2G' saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);  
 
     %% Graph same/different hemifields and diagonals for square configuration
@@ -299,7 +297,8 @@ if printFg
             title('Square Diagonals','FontSize',14,'Fontname','Ariel')
         end    
     end
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2HemiDiagSG' saveFileName]);
+    
+    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_p1p2HemiDiagSG' saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);
 
     %% Graph same/different hemifields and diagonals for diamond configuration
@@ -348,7 +347,8 @@ if printFg
         end
 
     end
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2HemiDiagDG' saveFileName]);
+
+    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_p1p2HemiDiagDG' saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);
 end
 
@@ -407,7 +407,7 @@ set(gca,'XTick',1:1:13,'XTickLabel',x_axis_labels)
 ylabel('Pair Number','FontSize',10,'Fontname','Ariel')
 xlabel('Time from Search Array Onset [ms]','FontSize',10,'Fontname','Ariel')
 title([condition ' P1 - P2 ' titleName],'FontSize',15,'Fontname','Ariel')
-namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_Overall' dpg saveFileName]);
+namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_Overall' dpg saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig);
 
 % %% Plot colormap of all pairs averaged across all delays
@@ -420,7 +420,7 @@ print ('-djpeg', '-r500',namefig);
 % % ylabel('Pair Number','FontSize',10,'Fontname','Ariel')
 % % xlabel('Averaged Across Delays','FontSize',10,'Fontname','Ariel')
 % % title([condition ' P1 - P2 ' titleName],'FontSize',15,'Fontname','Ariel')
-% % namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_OverallAvg' dpg saveFileName]);
+% % namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_OverallAvg' dpg saveFileName],'\',filesep));
 % % print ('-djpeg', '-r500',namefig);
 % 
 % %% Plot Performance Field groupings for all delays
@@ -441,7 +441,7 @@ print ('-djpeg', '-r500',namefig);
 % ylabel('Grouping','FontSize',12,'Fontname','Ariel')
 % xlabel('Time from Search Array Onset [ms]','FontSize',12,'Fontname','Ariel')
 % title([condition ' P1 - P2 (Performance Field) ' titleName],'FontSize',15,'Fontname','Ariel')
-% namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_PerfField' dpg saveFileName]);
+% namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_PerfField' dpg saveFileName],'\',filesep));
 % print ('-djpeg', '-r500',namefig);
 % 
 % %% Plot Performance Field groupings averaged across delays
@@ -455,7 +455,7 @@ print ('-djpeg', '-r500',namefig);
 % % ylabel('Grouping','FontSize',12,'Fontname','Ariel')
 % % xlabel('Averaged Across Delays','FontSize',12,'Fontname','Ariel')
 % % title([condition ' P1 - P2 (Performance Field) ' titleName],'FontSize',15,'Fontname','Ariel')
-% % namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_PerfFieldAvg' dpg saveFileName]);
+% % namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_PerfFieldAvg' dpg saveFileName],'\',filesep));
 % % print ('-djpeg', '-r500',namefig);
 % 
 % %% Plot Hemifield groupings across all delays
@@ -476,7 +476,7 @@ print ('-djpeg', '-r500',namefig);
 % ylabel('Grouping','FontSize',12,'Fontname','Ariel')
 % xlabel('Time from Search Array Onset [ms]','FontSize',12,'Fontname','Ariel')
 % title([condition ' P1 - P2 (Hemifield) ' titleName],'FontSize',15,'Fontname','Ariel')
-% namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_Hemifield' dpg saveFileName]);
+% namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_Hemifield' dpg saveFileName],'\',filesep));
 % print ('-djpeg', '-r500',namefig);
 % 
 % %% Plot Hemifield groupings averaged across delays
@@ -490,7 +490,7 @@ print ('-djpeg', '-r500',namefig);
 % % ylabel('Grouping','FontSize',12,'Fontname','Ariel')
 % % xlabel('Averaged Across Delays','FontSize',12,'Fontname','Ariel')
 % % title([condition ' P1 - P2 (Hemifield) ' titleName],'FontSize',15,'Fontname','Ariel')
-% % namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_HemifieldAvg' dpg saveFileName]);
+% % namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_HemifieldAvg' dpg saveFileName],'\',filesep);
 % % print ('-djpeg', '-r500',namefig);
 % % 
 % % 
@@ -512,7 +512,7 @@ print ('-djpeg', '-r500',namefig);
 % % ylabel('Grouping','FontSize',12,'Fontname','Ariel')
 % % xlabel('Time from Search Array Onset [ms]','FontSize',12,'Fontname','Ariel')
 % % title([condition ' P1 - P2 (Distance) ' titleName],'FontSize',15,'Fontname','Ariel')
-% % namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_Distance' dpg saveFileName]);
+% % namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_Distance' dpg saveFileName],'\',filesep));
 % % print ('-djpeg', '-r500',namefig);
 % % 
 % % %% Plot colormap for Distance groupings averaged across all delays
@@ -526,7 +526,7 @@ print ('-djpeg', '-r500',namefig);
 % % % ylabel('Grouping','FontSize',12,'Fontname','Ariel')
 % % % xlabel('Time from Search Array Onset [ms]','FontSize',12,'Fontname','Ariel')
 % % % title([condition ' P1 - P2 (Distance) ' titleName],'FontSize',15,'Fontname','Ariel')
-% % % namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_DistanceAvg' dpg saveFileName]);
+% % % namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_DistanceAvg' dpg saveFileName],'\',filesep));
 % % % print ('-djpeg', '-r500',namefig);
 % 
 % %% Plot colormap for Configuration groupings for each delay
@@ -546,7 +546,7 @@ print ('-djpeg', '-r500',namefig);
 % ylabel('Grouping','FontSize',12,'Fontname','Ariel')
 % xlabel('Time from Search Array Onset [ms]','FontSize',12,'Fontname','Ariel')
 % title([condition ' P1 - P2 (Configuration) ' titleName],'FontSize',15,'Fontname','Ariel')
-% namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_Config' dpg saveFileName]);
+% namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_Config' dpg saveFileName],'\',filesep));
 % print ('-djpeg', '-r500',namefig);
 % 
 % %% Plot colormap for Configuration groups averaged across delays
@@ -560,7 +560,7 @@ print ('-djpeg', '-r500',namefig);
 % % ylabel('Grouping','FontSize',12,'Fontname','Ariel')
 % % xlabel('Averaged Across Delays','FontSize',12,'Fontname','Ariel')
 % % title([condition ' P1 - P2 (Configuration) ' titleName],'FontSize',15,'Fontname','Ariel')
-% % namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_ConfigAvg' dpg saveFileName]);
+% % namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_ConfigAvg' dpg saveFileName],'\',filesep));
 % % print ('-djpeg', '-r500',namefig);
 % 
 % %% Plot colormap for Configuration groupings for each delay
@@ -584,7 +584,7 @@ print ('-djpeg', '-r500',namefig);
 % ylabel('Grouping','FontSize',12,'Fontname','Ariel')
 % xlabel('Time from Search Array Onset [ms]','FontSize',12,'Fontname','Ariel')
 % title([condition ' P1 - P2 (Configuration) ' titleName],'FontSize',15,'Fontname','Ariel')
-% namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_Config' dpg saveFileName]);
+% namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_Config' dpg saveFileName],'\',filesep));
 % print ('-djpeg', '-r500',namefig);
 % 
 % %% Plot colormap for Configuration groups averaged across delays
@@ -598,7 +598,7 @@ print ('-djpeg', '-r500',namefig);
 % % ylabel('Grouping','FontSize',12,'Fontname','Ariel')
 % % xlabel('Averaged Across Delays','FontSize',12,'Fontname','Ariel')
 % % title([condition ' P1 - P2 (Configuration) ' titleName],'FontSize',15,'Fontname','Ariel')
-% % namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_ConfigAvg' dpg saveFileName]);
+% % namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_ConfigAvg' dpg saveFileName],'\',filesep));
 % % print ('-djpeg', '-r500',namefig);
 
 %% Plot colormap for square configuration for each delay
@@ -619,7 +619,7 @@ set(gca,'XTick',1:1:13,'XTickLabel',x_axis_labels)
 ylabel('Pairs','FontSize',12,'Fontname','Ariel')
 xlabel('Time from Search Array Onset [ms]','FontSize',12,'Fontname','Ariel')
 title([condition ' P1 - P2 (Square) ' titleName],'FontSize',15,'Fontname','Ariel')
-namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_Square' dpg saveFileName]);
+namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_Square' dpg saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig);
 
 %% Plot colormap for square configuration averaged across delays
@@ -633,7 +633,7 @@ print ('-djpeg', '-r500',namefig);
 % ylabel('Grouping','FontSize',12,'Fontname','Ariel')
 % xlabel('Averaged Across Delays','FontSize',12,'Fontname','Ariel')
 % title([condition ' P1 - P2 (Square) ' titleName],'FontSize',15,'Fontname','Ariel')
-% namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_SquareAvg' dpg saveFileName]);
+% namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_SquareAvg' dpg saveFileName],'\',filesep));
 % print ('-djpeg', '-r500',namefig);
 
 %% Plot colormap for diamond configuration for each delay
@@ -653,7 +653,7 @@ set(gca,'XTick',1:1:13,'XTickLabel',x_axis_labels)
 ylabel('Pairs','FontSize',12,'Fontname','Ariel')
 xlabel('Time from Search Array Onset [ms]','FontSize',12,'Fontname','Ariel')
 title([condition ' P1 - P2 (Diamond) ' titleName],'FontSize',15,'Fontname','Ariel')
-namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_Diamond' dpg saveFileName]);
+namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_Diamond' dpg saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig);
 
 %% Plot colormap for diamond configuration averaged across delays
@@ -667,7 +667,7 @@ print ('-djpeg', '-r500',namefig);
 % ylabel('Pairs','FontSize',12,'Fontname','Ariel')
 % xlabel('Averaged Across Delays','FontSize',12,'Fontname','Ariel')
 % title([condition ' P1 - P2 (Diamond) ' titleName],'FontSize',15,'Fontname','Ariel')
-% namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_DiamondAvg' dpg saveFileName]);
+% namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_DiamondAvg' dpg saveFileName],'\',filesep);
 % print ('-djpeg', '-r500',namefig);
 
 end

@@ -30,12 +30,12 @@ function [all_p1,all_p2,pairs_p1,pairs_p2,pair_p1,pair_p2,sameHemiP1,sameHemiP2,
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
     condition = 'Conjunction';
-    p1clr = [0 0 0.8];
-    p2clr = [0.537 0.671 0.937];
+    p1clr = [0 64 255]/255;
+    p2clr = [102 140 255]/255;
 else 
     condition = 'Feature';
-    p1clr = [1 0.502 0];
-    p2clr = [1 0.8 0.6];
+    p1clr = [255 102 0]/255;
+    p2clr = [255 163 102]/255;
 end
 
 if expN == 1
@@ -294,8 +294,8 @@ if printFg && ~difference
         ylim([0 1])
     end
     
-    title(condition,'FontSize',24,'Fontname','Ariel')
-    % title([condition ' Search (n = ' num2str(numObs) ') ' titleName],'FontSize',24,'Fontname','Ariel')
+%     title(condition,'FontSize',24,'Fontname','Ariel')
+    title([condition ' Search (n = ' num2str(numObs) ') ' titleName],'FontSize',24,'Fontname','Ariel')
 
     if correct
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_rawProbsC1' saveFileName],'\',filesep));
@@ -309,7 +309,7 @@ if printFg && ~difference
     errorbar(100:30:460,m_p1,Sp1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
     errorbar(100:30:460,m_p2,Sp2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-    legend('p1','p2','Location','SouthEast')
+    legend('p1','p2','Location','NorthWest')
 
     set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
     set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -320,8 +320,8 @@ if printFg && ~difference
 
     xlim([0 500])
     
-    title(condition,'FontSize',24,'Fontname','Ariel')
-    % title([condition ' Search (n = ' num2str(numObs) ') ' titleName],'FontSize',24,'Fontname','Ariel')
+%     title(condition,'FontSize',24,'Fontname','Ariel')
+    title([condition ' Search (n = ' num2str(numObs) ') ' titleName],'FontSize',24,'Fontname','Ariel')
 
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2' saveFileName],'\',filesep));
 
@@ -339,7 +339,7 @@ if printFg && ~difference
         errorbar(100:30:460,P1C1,Sp1C1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,P2C1,Sp2C1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthEast')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',-0.2:.2:1.2,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -348,8 +348,8 @@ if printFg && ~difference
         xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
         ylim([-0.2 1.2])
 
-        title(condition,'FontSize',24,'Fontname','Ariel')
-        % title([condition ' Search (n = ' num2str(numObs) ')'],'FontSize',24,'Fontname','Ariel')
+%         title(condition,'FontSize',24,'Fontname','Ariel')
+        title([condition ' Search (n = ' num2str(numObs) ')'],'FontSize',24,'Fontname','Ariel')
 
         namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\main_' task '\' condition '_p1p2C1']);
         print ('-djpeg', '-r500',namefig);
@@ -364,7 +364,7 @@ if printFg && ~difference
         errorbar(100:30:460,P1_C2,Sp1C2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,P2_C2,Sp2C2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthEast')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',-0.35:.35:0.35,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -375,8 +375,8 @@ if printFg && ~difference
 
         xlim([0 500])
 
-        title(condition,'FontSize',24,'Fontname','Ariel')
-        % title([condition ' Search (n = ' num2str(numObs) ')' titleName],'FontSize',24,'Fontname','Ariel')
+%         title(condition,'FontSize',24,'Fontname','Ariel')
+        title([condition ' Search (n = ' num2str(numObs) ')' titleName],'FontSize',24,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2C2' saveFileName],'\',filesep));
         print ('-djpeg', '-r500',namefig);
@@ -396,7 +396,7 @@ if printFg && ~difference
         errorbar(100:30:460,P1C3,Sp1C3,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,P2C3,Sp2C3,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthEast')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',-0.4:.1:0.4,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -405,8 +405,8 @@ if printFg && ~difference
         xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
         ylim([-0.4 0.4])
 
-        title(condition,'FontSize',24,'Fontname','Ariel')
-        % title([condition ' Search (n = ' num2str(numObs) ')' titleName],'FontSize',24,'Fontname','Ariel')
+%         title(condition,'FontSize',24,'Fontname','Ariel')
+        title([condition ' Search (n = ' num2str(numObs) ')' titleName],'FontSize',24,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2C3' saveFileName],'\',filesep));
         print ('-djpeg', '-r500',namefig);
@@ -421,7 +421,7 @@ if printFg && ~difference
             errorbar(100:30:460,m_pair_p1(:,:,numPair),s_pair_p1(:,:,numPair),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
             errorbar(100:30:460,m_pair_p2(:,:,numPair),s_pair_p2(:,:,numPair),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-            legend('p1','p2','Location','SouthEast')
+            legend('p1','p2','Location','NorthWest')
             set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
             set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
             ylim([0 1])
@@ -449,7 +449,7 @@ if printFg && ~difference
             errorbar(100:30:460,m_pair_p1(:,:,numPair+6),s_pair_p1(:,:,numPair+6),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
             errorbar(100:30:460,m_pair_p2(:,:,numPair+6),s_pair_p2(:,:,numPair+6),'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-            legend('p1','p2','Location','SouthEast')
+            legend('p1','p2','Location','NorthWest')
             set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
             set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
             ylim([0 1])
@@ -474,7 +474,7 @@ if printFg && ~difference
         errorbar(100:30:460,mean(squareP1,2),sem_squareP1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,mean(squareP2,2),sem_squareP2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthEast')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -485,8 +485,8 @@ if printFg && ~difference
 
         xlim([0 500])
 
-        title(condition,'FontSize',24,'Fontname','Ariel')
-        % title([condition ' Search - Square Configuration - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
+%         title(condition,'FontSize',24,'Fontname','Ariel')
+        title([condition ' Search - Square Configuration - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileConfigLoc '_p1p2SQ' saveFileName],'\',filesep));
 
@@ -498,7 +498,7 @@ if printFg && ~difference
         errorbar(100:30:460,mean(diamondP1,2),sem_diamondP1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,mean(diamondP2,2),sem_diamondP2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthEast')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -509,8 +509,8 @@ if printFg && ~difference
 
         xlim([0 500])
 
-        title(condition,'FontSize',24,'Fontname','Ariel')
-        % title([condition ' Search - Diamond Configuration - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
+%         title(condition,'FontSize',24,'Fontname','Ariel')
+        title([condition ' Search - Diamond Configuration - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileConfigLoc '_p1p2DMD' saveFileName],'\',filesep));
 
@@ -523,7 +523,7 @@ if printFg && ~difference
         errorbar(100:30:460,mean(sameHemiP1,2),sem_sameHemiP1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,mean(sameHemiP2,2),sem_sameHemiP2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthEast')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -534,8 +534,8 @@ if printFg && ~difference
 
         xlim([0 500])
 
-        title(condition,'FontSize',24,'Fontname','Ariel')
-        % title([condition ' Search - Same Hemi - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
+%         title(condition,'FontSize',24,'Fontname','Ariel')
+        title([condition ' Search - Same Hemi - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2SH' saveFileName],'\',filesep));
 
@@ -547,7 +547,7 @@ if printFg && ~difference
         errorbar(100:30:460,mean(diffHemiP1,2),sem_diffHemiP1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,mean(diffHemiP2,2),sem_diffHemiP2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthEast')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -558,8 +558,8 @@ if printFg && ~difference
 
         xlim([0 500])
 
-        title(condition,'FontSize',24,'Fontname','Ariel')
-        % title([condition ' Search - Diff Hemi - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
+%         title(condition,'FontSize',24,'Fontname','Ariel')
+        title([condition ' Search - Diff Hemi - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2DH' saveFileName],'\',filesep));
 
@@ -572,7 +572,7 @@ if printFg && ~difference
         errorbar(100:30:460,mean(d1P1,2),sem_d1P1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,mean(d1P2,2),sem_d1P2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthEast')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -583,8 +583,8 @@ if printFg && ~difference
 
         xlim([0 500])
 
-        title(condition,'FontSize',24,'Fontname','Ariel')
-        % title([condition ' Search - Shortest Dist - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
+%         title(condition,'FontSize',24,'Fontname','Ariel')
+        title([condition ' Search - Shortest Dist - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2D1' saveFileName],'\',filesep));
 
@@ -596,7 +596,7 @@ if printFg && ~difference
         errorbar(100:30:460,mean(d2P1,2),sem_d2P1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,mean(d2P2,2),sem_d2P2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthEast')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -607,8 +607,8 @@ if printFg && ~difference
 
         xlim([0 500])
 
-        title(condition,'FontSize',24,'Fontname','Ariel')
-        % title([condition ' Search - Medium Dist - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
+%         title(condition,'FontSize',24,'Fontname','Ariel')
+        title([condition ' Search - Medium Dist - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2D2' saveFileName],'\',filesep));
 
@@ -620,7 +620,7 @@ if printFg && ~difference
         errorbar(100:30:460,mean(d3P1,2),sem_d3P1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,mean(d3P2,2),sem_d3P2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthEast')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -631,8 +631,8 @@ if printFg && ~difference
 
         xlim([0 500])
 
-        title(condition,'FontSize',24,'Fontname','Ariel')
-        % title([condition ' Search - Farthest Dist - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
+%         title(condition,'FontSize',24,'Fontname','Ariel')
+        title([condition ' Search - Farthest Dist - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2D3' saveFileName],'\',filesep));
 
@@ -649,7 +649,7 @@ if printFg && ~difference
         errorbar(100:30:460,t1,s1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,t2,s2,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthEast')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -675,8 +675,8 @@ if printFg && ~difference
             name = '9 and 11';   
         end
 
-        title(condition,'FontSize',20,'Fontname','Ariel')
-        % title([condition ' Search - Pair ' name ' ' titleName],'FontSize',20,'Fontname','Ariel')
+%         title(condition,'FontSize',20,'Fontname','Ariel')
+        title([condition ' Search - Pair ' name ' ' titleName],'FontSize',20,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures\' saveFilePairsLoc '_p1p2_' name saveFileName],'\',filesep));
         print ('-djpeg', '-r500',namefig);   

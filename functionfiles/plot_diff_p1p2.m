@@ -41,8 +41,8 @@ end
 
 % make difference folder
 
-easyclr = [1 0.698 0.4];
-difficultclr = [0 0.502 1];
+easyclr = [255 133 51]/255;
+difficultclr = [51 102 255]/255;
 
 %% Plot overall p1 - p2 
 m_easy = mean(easy_p1 - easy_p2,2);
@@ -67,8 +67,8 @@ xlim([0 500])
 
 plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
-title([P1 - P2','FontSize',24,'Fontname','Ariel')
-% title(['P1 - P2 (n = ' num2str(numObs) ') ' titleName],'FontSize',24,'Fontname','Ariel')
+% title('P1 - P2','FontSize',20,'Fontname','Ariel')
+title(['P1 - P2 (n = ' num2str(numObs) ') ' titleName],'FontSize',20,'Fontname','Ariel')
 
 namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diff' saveFileName],'\',filesep));
 
@@ -155,8 +155,8 @@ for i = 1:size(easy_pairs_p1,3)
     
     legend('Feature','Conjunction','Location','SouthEast')
 
-    set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
-    set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
+    set(gca,'YTick',-0.8:.4:0.8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
+    set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
     ylim([-0.8 0.8])
     xlim([0 500])
 
@@ -179,8 +179,8 @@ for i = 1:size(easy_pairs_p1,3)
         name = '9 and 11';   
     end
 
-    title('P1 - P2','FontSize',20,'Fontname','Ariel')
-    % title(['P1 - P2: Pair ' name ' ' titleName],'FontSize',20,'Fontname','Ariel')
+%     title('P1 - P2','FontSize',20,'Fontname','Ariel')
+    title(['P1 - P2: Pair ' name ' ' titleName],'FontSize',20,'Fontname','Ariel')
 
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFilePairsLoc '\p1p2diff_' name saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);   
@@ -196,19 +196,19 @@ difficult_s_diff = std(difficult_SHP1-difficult_SHP2,[],2)/sqrt(numObs);
 
 errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
 errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
-set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
-set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
+set(gca,'YTick',-0.8:.4:0.8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
+set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
 ylim([-0.8 0.8])
 xlim([0 500])
 
-ylabel('P1 - P2','FontSize',16,'Fontname','Ariel')
-xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
+ylabel('P1 - P2','FontSize',20,'Fontname','Ariel')
+xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 
 legend('Feature','Conjunction','Location','SouthWest')
 plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
-title('P1 - P2','FontSize',14,'Fontname','Ariel')
-% title('P1 - P2: Same Hemifield','FontSize',14,'Fontname','Ariel')  
+% title('P1 - P2','FontSize',20,'Fontname','Ariel')
+title('P1 - P2: Same Hemifield','FontSize',20,'Fontname','Ariel')  
 
 namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diffSH' saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig); 
@@ -223,19 +223,19 @@ difficult_s_diff = std(difficult_DHP1-difficult_DHP2,[],2)/sqrt(numObs);
 
 errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
 errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
-set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
-set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
+set(gca,'YTick',-0.8:.4:0.8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
+set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
 ylim([-0.8 0.8])
 xlim([0 500])
 
 legend('Feature','Conjunction','Location','SouthWest')
-ylabel('P1 - P2','FontSize',16,'Fontname','Ariel')
-xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
+ylabel('P1 - P2','FontSize',20,'Fontname','Ariel')
+xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 
 plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
-title('P1 - P2','FontSize',14,'Fontname','Ariel')
-% title('P1 - P2: Different Hemifield','FontSize',14,'Fontname','Ariel')  
+% title('P1 - P2','FontSize',20,'Fontname','Ariel')
+title('P1 - P2: Different Hemifield','FontSize',20,'Fontname','Ariel')  
 
 namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diffDH' saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig); 
@@ -250,19 +250,19 @@ difficult_s_diff = std(difficult_D1P1-difficult_D1P2,[],2)/sqrt(numObs);
 
 errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
 errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
-set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
-set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
+set(gca,'YTick',-0.8:.4:0.8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
+set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
 ylim([-0.8 0.8])
 xlim([0 500])
 
 legend('Feature','Conjunction','Location','SouthWest')
-ylabel('P1 - P2','FontSize',16,'Fontname','Ariel')
-xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
+ylabel('P1 - P2','FontSize',20,'Fontname','Ariel')
+xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 
 plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
-title('P1 - P2','FontSize',14,'Fontname','Ariel')
-% title('P1 - P2: Shortest Distance','FontSize',14,'Fontname','Ariel')  
+% title('P1 - P2','FontSize',20,'Fontname','Ariel')
+title('P1 - P2: Shortest Distance','FontSize',20,'Fontname','Ariel')  
 
 namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diffD1' saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig); 
@@ -277,19 +277,19 @@ difficult_s_diff = std(difficult_D2P1-difficult_D2P2,[],2)/sqrt(numObs);
 
 errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
 errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
-set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
-set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
+set(gca,'YTick',-0.8:.4:0.8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
+set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
 ylim([-0.8 0.8])
 xlim([0 500])
 
 legend('Feature','Conjunction','Location','SouthWest')
-ylabel('P1 - P2','FontSize',16,'Fontname','Ariel')
-xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
+ylabel('P1 - P2','FontSize',20,'Fontname','Ariel')
+xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 
 plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
-title('P1 - P2','FontSize',14,'Fontname','Ariel')
-% title('P1 - P2: Medium Distance','FontSize',14,'Fontname','Ariel')  
+% title('P1 - P2','FontSize',20,'Fontname','Ariel')
+title('P1 - P2: Medium Distance','FontSize',20,'Fontname','Ariel')  
 
 namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diffD2' saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig); 
@@ -304,19 +304,19 @@ difficult_s_diff = std(difficult_D3P1-difficult_D3P2,[],2)/sqrt(numObs);
 
 errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
 errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
-set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
-set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
+set(gca,'YTick',-0.8:.4:0.8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
+set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
 ylim([-0.8 0.8])
 xlim([0 500])
 
 legend('Feature','Conjunction','Location','SouthWest')
-ylabel('P1 - P2','FontSize',16,'Fontname','Ariel')
-xlabel('Time from search array onset [ms]','FontSize',16,'Fontname','Ariel')
+ylabel('P1 - P2','FontSize',20,'Fontname','Ariel')
+xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 
 plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
-title('P1 - P2','FontSize',14,'Fontname','Ariel')
-% title('P1 - P2: Farthest Distance','FontSize',14,'Fontname','Ariel')  
+% title('P1 - P2','FontSize',20,'Fontname','Ariel')
+title('P1 - P2: Farthest Distance','FontSize',20,'Fontname','Ariel')  
 
 namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diffD3' saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig); 

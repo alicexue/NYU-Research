@@ -10,7 +10,7 @@ function [dirloc] = setup_dir()
 % uncomment the correct path
 
 % alice
-% dirloc = 'C:\Users\alice_000\Documents\MATLAB\data'
+% dirloc = 'C:\Users\alice_000\Documents\MATLAB\data';
  
 % hypatia
 dirloc = '\Users\purpadmin\Laura\psychophysics\data';

@@ -44,8 +44,8 @@ all_pn = [];
 
 numObs = 0;
 
-thisdir = 'C:\Users\alice_000\Documents\MATLAB\data';
-files = dir(thisdir);  
+dir_name = setup_dir();
+files = dir(strrep(dir_name,'\',filesep));  
 for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
@@ -110,7 +110,7 @@ if printFg
 
     title([condition ' Search (n = ' num2str(numObs) ') ' titleName],'FontSize',24,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_rawProbsObs' saveFileName]);
+    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_rawProbsObs' saveFileName],'\',filesep));
 
     print ('-djpeg', '-r500',namefig);
 
@@ -133,7 +133,7 @@ if printFg
 
     title([condition ' Search (n = ' num2str(numObs) ') ' titleName],'FontSize',24,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2Obs' saveFileName]);
+    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_p1p2Obs' saveFileName],'\',filesep));
 
     print ('-djpeg', '-r500',namefig);
 end

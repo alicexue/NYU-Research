@@ -87,5 +87,14 @@ legend('Feature','Conjunction','Location','SouthEast')
 namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\DiamondDetectionAvg'],'\',filesep));
 print ('-djpeg', '-r500',namefig);
 
-keyboard
+% Probe Perf
+easy_dmd_probe = cat(1,easy_m_p_probe(1,:),easy_m_p_probe(3,:),easy_m_p_probe(5,:),easy_m_p_probe(7,:));
+difficult_dmd_probe = cat(1,difficult_m_p_probe(1,:),difficult_m_p_probe(3,:),difficult_m_p_probe(5,:),difficult_m_p_probe(7,:));
+figure; hold on;
+radarPlot(horzcat(easy_dmd_probe,difficult_dmd_probe),'-o','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12);
+title(['Average Probe Performance on Diamond (n = ' num2str(numObs) ')'],'FontSize',15)
+legend('Feature','Conjunction','Location','SouthEast')
+namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\DiamondProbeAvg'],'\',filesep));
+print ('-djpeg', '-r500',namefig);
+
 end

@@ -35,7 +35,7 @@ if toggle
     hold on
 end
 
-%%% Alice's edit: To set number of axes isocurves
+%%% Alice's edit: To set number of axis lines
 nLines = 4;
 
 %%% Plot axes isocurves
@@ -67,7 +67,7 @@ for j = 1:M
 %     text(mx, my, msg);
 end
 text(0,0,'0')
-text(-1,0,'1')
+text(-mx-0.3,0,'1')
 axis([-1,1,-1,1]*1.5)
 
 % Hold on to plot data points
@@ -78,7 +78,6 @@ hold on
 s = size(P,1);
 minV = zeros(s,1);
 maxV = ones(s,1);
-
 R = 0.8*((P - (minV*ones(1,N)))./((maxV-minV)*ones(1,N))) + 0.1;
 R = [R; R(1,:)];
 Th = (2*pi/M) * ((M:-1:0)'*ones(1,N));

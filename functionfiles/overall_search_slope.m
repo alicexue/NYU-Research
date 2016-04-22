@@ -96,7 +96,7 @@ if displayFg
 %         legend_obs{i} = ['obs ' num2str(i)];
 %     end
 %     legend_obs{numObs+1} = 'average';
-%     l = legend(legend_obs,'Location','SouthWest');    
+%     l = legend(legend_obs,'Location','NorthWest');    
 %     set(l,'FontSize',12);    
 
     xlim([3 9])
@@ -128,7 +128,7 @@ if displayFg
 %         legend_obs{i} = ['obs ' num2str(i)];
 %     end
 %     legend_obs{numObs+1} = 'average';    
-%     l = legend(legend_obs,'Location','SouthWest');    
+%     l = legend(legend_obs,'Location','NorthWest');    
 %     set(l,'FontSize',12);      
  
     xlim([3 9])
@@ -161,7 +161,7 @@ if displayFg
 %         legend_obs{i} = ['obs ' num2str(i)];
 %     end
 %     legend_obs{numObs+1} = 'average';      
-%     l = legend(legend_obs,'Location','SouthWest');    
+%     l = legend(legend_obs,'Location','NorthWest');    
 %     set(l,'FontSize',12);    
 
     xlim([3 9])
@@ -193,7 +193,7 @@ if displayFg
 %         legend_obs{i} = ['obs ' num2str(i)];
 %     end
 %     legend_obs{numObs+1} = 'average';
-%     l = legend(legend_obs,'Location','SouthWest');    
+%     l = legend(legend_obs,'Location','NorthWest');    
 %     set(l,'FontSize',12); 
 
     xlim([3 9])

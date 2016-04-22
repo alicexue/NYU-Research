@@ -1,6 +1,6 @@
-function plot_diff_p1p2(expN,trialType)
+function plot_diff_p1p2(expN,trialType,printStats)
 %% Example
-%%% plot_diff_p1p2(2,2);
+%%% plot_diff_p1p2(2,2,false);
 
 [easy_p1,easy_p2,easy_pairs_p1,easy_pairs_p2,easy_pair_p1,easy_pair_p2,easy_SHP1,easy_SHP2,easy_DHP1,easy_DHP2,easy_D1P1,easy_D1P2,easy_D2P1,easy_D2P2,easy_D3P1,easy_D3P2] = overall_probe_analysis('easy',expN,trialType,true,false,false,false,false,false,1,true,0.1,0.3,{});
 
@@ -41,8 +41,8 @@ end
 
 % make difference folder
 
-easyclr = [255 133 51]/255;
-difficultclr = [51 102 255]/255;
+easyclr = [255 148 77]/255;
+difficultclr = [77 166 255]/255;
 
 %% Plot overall p1 - p2 
 m_easy = mean(easy_p1 - easy_p2,2);
@@ -55,7 +55,7 @@ figure;hold on;
 errorbar(100:30:460,m_easy,sem_easy,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
 errorbar(100:30:460,m_difficult,sem_difficult,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
 
-legend('Feature','Conjunction','Location','SouthWest')
+legend('Feature','Conjunction','Location','NorthWest')
            
 set(gca,'YTick',-0.6:.2:0.6,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
 set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
@@ -88,9 +88,9 @@ for numPair = 1:size(easy_pair_p1,3)/2
     errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
     errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
     
-    set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
+    set(gca,'YTick',-0.4:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
     set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
-    ylim([-0.8 0.8])
+    ylim([-0.4 0.8])
     xlim([0 500])
 
     if numPair == 1 || numPair == 4
@@ -120,9 +120,9 @@ for numPair = 1:size(easy_pair_p1,3)/2
     
     errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
     errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
-    set(gca,'YTick',-0.8:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
+    set(gca,'YTick',-0.4:.4:0.8,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
     set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2,'Fontname','Ariel')
-    ylim([-0.8 0.8])
+    ylim([-0.4 0.8])
     xlim([0 500])
 
     if numPair == 1 || numPair == 4
@@ -142,27 +142,35 @@ print ('-djpeg', '-r500',namefig);
 
 %% Plot for each grouped pair
 for i = 1:size(easy_pairs_p1,3)
-    easy_diff = mean(easy_pairs_p1(:,:,i) - easy_pairs_p2(:,:,i),2);
+    easy_diff = easy_pairs_p1(:,:,i) - easy_pairs_p2(:,:,i);
     sem_easy_diff = std(easy_pairs_p1(:,:,i) - easy_pairs_p2(:,:,i),[],2)./sqrt(numObs);
-    difficult_diff = mean(difficult_pairs_p1(:,:,i) - difficult_pairs_p2(:,:,i),2);
+    difficult_diff = difficult_pairs_p1(:,:,i) - difficult_pairs_p2(:,:,i);
     sem_difficult_diff = std(difficult_pairs_p1(:,:,i) - difficult_pairs_p2(:,:,i),[],2)./sqrt(numObs);
     
     figure;hold on;
-    errorbar(100:30:460,easy_diff,sem_easy_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
-    errorbar(100:30:460,difficult_diff,sem_difficult_diff,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
+    errorbar(100:30:460,mean(easy_diff,2),sem_easy_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
+    errorbar(100:30:460,mean(difficult_diff,2),sem_difficult_diff,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
 
     plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
     
-    legend('Feature','Conjunction','Location','SouthWest')
-
-    set(gca,'YTick',-0.8:.4:0.8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
+    if i == 3
+        legend('Feature','Conjunction','Location','NorthWest')
+    end
+    set(gca,'YTick',-0.3:.1:0.7,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
     set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
-    ylim([-0.8 0.8])
+    ylim([-0.3 0.7])
     xlim([0 500])
 
     ylabel('P1 - P2','FontSize',20,'Fontname','Ariel')
     xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 
+    [sig] = diff_ttest(easy_diff,difficult_diff)
+    for j=1:size(sig,2)
+        if sig(j,1) <= 0.05
+            %%% plot + underneath delay (for sig<0.05/13, plot * underneath
+            %%% delay
+        end
+    end
     if i == 1
         name = '7';
     elseif i == 2
@@ -196,15 +204,15 @@ difficult_s_diff = std(difficult_SHP1-difficult_SHP2,[],2)/sqrt(numObs);
 
 errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
 errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
-set(gca,'YTick',-0.8:.4:0.8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
+set(gca,'YTick',-0.4:.4:0.8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
 set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
-ylim([-0.8 0.8])
+ylim([-0.4 0.8])
 xlim([0 500])
 
 ylabel('P1 - P2','FontSize',20,'Fontname','Ariel')
 xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 
-legend('Feature','Conjunction','Location','SouthWest')
+legend('Feature','Conjunction','Location','NorthWest')
 plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
 % title('P1 - P2','FontSize',20,'Fontname','Ariel')
@@ -223,12 +231,12 @@ difficult_s_diff = std(difficult_DHP1-difficult_DHP2,[],2)/sqrt(numObs);
 
 errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
 errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
-set(gca,'YTick',-0.8:.4:0.8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
+set(gca,'YTick',-0.4:.4:0.8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
 set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
-ylim([-0.8 0.8])
+ylim([-0.4 0.8])
 xlim([0 500])
 
-legend('Feature','Conjunction','Location','SouthWest')
+legend('Feature','Conjunction','Location','NorthWest')
 ylabel('P1 - P2','FontSize',20,'Fontname','Ariel')
 xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 
@@ -250,12 +258,12 @@ difficult_s_diff = std(difficult_D1P1-difficult_D1P2,[],2)/sqrt(numObs);
 
 errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
 errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
-set(gca,'YTick',-0.8:.4:0.8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
+set(gca,'YTick',-0.4:.4:0.8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
 set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
-ylim([-0.8 0.8])
+ylim([-0.4 0.8])
 xlim([0 500])
 
-legend('Feature','Conjunction','Location','SouthWest')
+legend('Feature','Conjunction','Location','NorthWest')
 ylabel('P1 - P2','FontSize',20,'Fontname','Ariel')
 xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 
@@ -277,12 +285,12 @@ difficult_s_diff = std(difficult_D2P1-difficult_D2P2,[],2)/sqrt(numObs);
 
 errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
 errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
-set(gca,'YTick',-0.8:.4:0.8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
+set(gca,'YTick',-0.4:.4:0.8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
 set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
-ylim([-0.8 0.8])
+ylim([-0.4 0.8])
 xlim([0 500])
 
-legend('Feature','Conjunction','Location','SouthWest')
+legend('Feature','Conjunction','Location','NorthWest')
 ylabel('P1 - P2','FontSize',20,'Fontname','Ariel')
 xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 
@@ -304,12 +312,12 @@ difficult_s_diff = std(difficult_D3P1-difficult_D3P2,[],2)/sqrt(numObs);
 
 errorbar(100:30:460,easy_d,easy_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',easyclr)
 errorbar(100:30:460,difficult_d,difficult_s_diff,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',difficultclr)
-set(gca,'YTick',-0.8:.4:0.8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
+set(gca,'YTick',-0.4:.4:0.8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
 set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
-ylim([-0.8 0.8])
+ylim([-0.4 0.8])
 xlim([0 500])
 
-legend('Feature','Conjunction','Location','SouthWest')
+legend('Feature','Conjunction','Location','NorthWest')
 ylabel('P1 - P2','FontSize',20,'Fontname','Ariel')
 xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 
@@ -321,4 +329,54 @@ title('P1 - P2: Farthest Distance','FontSize',20,'Fontname','Ariel')
 namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diffD3' saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig); 
 
+%% Conducts ANOVA on P1 - P2 for Grouped Pairs
+if printStats
+    easy_diff = easy_pairs_p1 - easy_pairs_p2;
+    difficult_diff = difficult_pairs_p1 - difficult_pairs_p2;
+    for pair=1:size(easy_diff,3)
+        data = zeros(numObs*13*2,4);
+        index = 0;
+        for i = 1:numObs
+            data(index+1:index+13,1) = easy_diff(:,i,pair);
+            data(index+1:index+13,2) = rot90(1:13,-1);
+            data(index+1:index+13,3) = rot90([1,1,1,1,1,1,1,1,1,1,1,1,1]);
+            data(index+1:index+13,4) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
+            index = index + 13;
+            data(index+1:index+13,1) = difficult_diff(:,i,pair);
+            data(index+1:index+13,2) = rot90(1:13,-1);
+            data(index+1:index+13,3) = rot90([2,2,2,2,2,2,2,2,2,2,2,2,2]);
+            data(index+1:index+13,4) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
+            index = index + 13;
+        end
+        fprintf('------------------------------------------------------\n')
+        if pair == 1
+            name = '7';
+        elseif pair == 2
+            name = '12';
+        elseif pair == 3
+            name = '1 and 6';
+        elseif pair == 4
+            name = '2 and 5';            
+        elseif pair == 5
+            name = '3 and 4';
+        elseif pair == 6
+            name = '8 and 10';                 
+        elseif pair == 7
+            name = '9 and 11';   
+        end
+        fprintf(['PAIR ' name '\n'])
+
+        RMAOV2(data);     
+    end
 end
+end
+
+function [sig] = diff_ttest(easy,difficult)
+    for i=1:size(easy,1)
+        [h,p,ci,stats] = ttest(easy(i,:));
+        sig(1,i) = p;
+        [h,p,ci,stats] = ttest(difficult(i,:));
+        sig(2,i) = p;
+    end  
+end
+

@@ -30,12 +30,12 @@ function [all_p1,all_p2,pairs_p1,pairs_p2,pair_p1,pair_p2,sameHemiP1,sameHemiP2,
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
     condition = 'Conjunction';
-    p1clr = [0 64 255]/255;
-    p2clr = [102 140 255]/255;
+    p1clr = [0 128 255]/255;
+    p2clr = [153 204 255]/255;
 else 
     condition = 'Feature';
     p1clr = [255 102 0]/255;
-    p2clr = [255 163 102]/255;
+    p2clr = [255 194 153]/255;
 end
 
 if expN == 1
@@ -309,7 +309,7 @@ if printFg && ~difference
     errorbar(100:30:460,m_p1,Sp1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
     errorbar(100:30:460,m_p2,Sp2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-    legend('p1','p2','Location','SouthWest')
+    legend('p1','p2','Location','NorthWest')
 
     set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
     set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -339,7 +339,7 @@ if printFg && ~difference
         errorbar(100:30:460,P1C1,Sp1C1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,P2C1,Sp2C1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthWest')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',-0.2:.2:1.2,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -364,7 +364,7 @@ if printFg && ~difference
         errorbar(100:30:460,P1_C2,Sp1C2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,P2_C2,Sp2C2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthWest')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',-0.35:.35:0.35,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -396,7 +396,7 @@ if printFg && ~difference
         errorbar(100:30:460,P1C3,Sp1C3,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,P2C3,Sp2C3,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthWest')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',-0.4:.1:0.4,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -421,7 +421,7 @@ if printFg && ~difference
             errorbar(100:30:460,m_pair_p1(:,:,numPair),s_pair_p1(:,:,numPair),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
             errorbar(100:30:460,m_pair_p2(:,:,numPair),s_pair_p2(:,:,numPair),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-            legend('p1','p2','Location','SouthWest')
+            legend('p1','p2','Location','NorthWest')
             set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
             set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
             ylim([0 1])
@@ -449,7 +449,7 @@ if printFg && ~difference
             errorbar(100:30:460,m_pair_p1(:,:,numPair+6),s_pair_p1(:,:,numPair+6),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
             errorbar(100:30:460,m_pair_p2(:,:,numPair+6),s_pair_p2(:,:,numPair+6),'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-            legend('p1','p2','Location','SouthWest')
+            legend('p1','p2','Location','NorthWest')
             set(gca,'YTick',0:.2:1,'FontSize',12,'LineWidth',2','Fontname','Ariel')
             set(gca,'XTick',0:200:600,'FontSize',12,'LineWidth',2','Fontname','Ariel')
             ylim([0 1])
@@ -474,7 +474,7 @@ if printFg && ~difference
         errorbar(100:30:460,mean(squareP1,2),sem_squareP1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,mean(squareP2,2),sem_squareP2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthWest')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -498,7 +498,7 @@ if printFg && ~difference
         errorbar(100:30:460,mean(diamondP1,2),sem_diamondP1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,mean(diamondP2,2),sem_diamondP2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthWest')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -523,7 +523,7 @@ if printFg && ~difference
         errorbar(100:30:460,mean(sameHemiP1,2),sem_sameHemiP1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,mean(sameHemiP2,2),sem_sameHemiP2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthWest')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -547,7 +547,7 @@ if printFg && ~difference
         errorbar(100:30:460,mean(diffHemiP1,2),sem_diffHemiP1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,mean(diffHemiP2,2),sem_diffHemiP2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthWest')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -572,7 +572,7 @@ if printFg && ~difference
         errorbar(100:30:460,mean(d1P1,2),sem_d1P1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,mean(d1P2,2),sem_d1P2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthWest')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -596,7 +596,7 @@ if printFg && ~difference
         errorbar(100:30:460,mean(d2P1,2),sem_d2P1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,mean(d2P2,2),sem_d2P2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthWest')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -620,7 +620,7 @@ if printFg && ~difference
         errorbar(100:30:460,mean(d3P1,2),sem_d3P1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,mean(d3P2,2),sem_d3P2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthWest')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -649,7 +649,7 @@ if printFg && ~difference
         errorbar(100:30:460,t1,s1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,t2,s2,'go-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','SouthWest')
+        legend('p1','p2','Location','NorthWest')
 
         set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')

@@ -66,7 +66,38 @@ legend('Feature','Conjunction','Location','SouthEast')
 namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\ProbePerfAvg'],'\',filesep));
 print ('-djpeg', '-r500',namefig);
 
-%%% Diamond
+%% Square - Note: the figure does not a accurately represent locations in the search display; graph must be rotated 45 counterclockwise
+% Discrimination
+easy_sq_discri = cat(1,easy_m_p_discri(8,:),easy_m_p_discri(2,:),easy_m_p_discri(4,:),easy_m_p_discri(6,:));
+difficult_sq_discri = cat(1,difficult_m_p_discri(8,:),difficult_m_p_discri(2,:),difficult_m_p_discri(4,:),difficult_m_p_discri(6,:));
+figure; hold on;
+radarPlot(horzcat(easy_sq_discri,difficult_sq_discri),'-o','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12);
+title(['Average Discrimination Performance on Square (n = ' num2str(numObs) ')'],'FontSize',15)
+legend('Feature','Conjunction','Location','SouthEast')
+namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\SquareDiscriminationAvg'],'\',filesep));
+print ('-djpeg', '-r500',namefig);
+
+% Detection
+easy_sq_detect = cat(1,easy_m_p_detect(8,:),easy_m_p_detect(2,:),easy_m_p_detect(4,:),easy_m_p_detect(6,:));
+difficult_sq_detect = cat(1,difficult_m_p_detect(8,:),difficult_m_p_detect(2,:),difficult_m_p_detect(4,:),difficult_m_p_detect(6,:));
+figure; hold on;
+radarPlot(horzcat(easy_sq_detect,difficult_sq_detect),'-o','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12);
+title(['Average Detection Performance on Square (n = ' num2str(numObs) ')'],'FontSize',15)
+legend('Feature','Conjunction','Location','SouthEast')
+namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\SquareDetectionAvg'],'\',filesep));
+print ('-djpeg', '-r500',namefig);
+
+% Probe Perf
+easy_sq_probe = cat(1,easy_m_p_probe(8,:),easy_m_p_probe(2,:),easy_m_p_probe(4,:),easy_m_p_probe(6,:));
+difficult_sq_probe = cat(1,difficult_m_p_probe(8,:),difficult_m_p_probe(2,:),difficult_m_p_probe(4,:),difficult_m_p_probe(6,:));
+figure; hold on;
+radarPlot(horzcat(easy_sq_probe,difficult_sq_probe),'-o','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12);
+title(['Average Probe Performance on Square (n = ' num2str(numObs) ')'],'FontSize',15)
+legend('Feature','Conjunction','Location','SouthEast')
+namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\SquareProbeAvg'],'\',filesep));
+print ('-djpeg', '-r500',namefig);
+
+%% Diamond
 % Discrimination
 easy_dmd_discri = cat(1,easy_m_p_discri(1,:),easy_m_p_discri(3,:),easy_m_p_discri(5,:),easy_m_p_discri(7,:));
 difficult_dmd_discri = cat(1,difficult_m_p_discri(1,:),difficult_m_p_discri(3,:),difficult_m_p_discri(5,:),difficult_m_p_discri(7,:));

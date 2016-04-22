@@ -153,7 +153,7 @@ for i = 1:size(easy_pairs_p1,3)
 
     plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
     
-    legend('Feature','Conjunction','Location','SouthEast')
+    legend('Feature','Conjunction','Location','SouthWest')
 
     set(gca,'YTick',-0.8:.4:0.8,'FontSize',18,'LineWidth',2,'Fontname','Ariel')
     set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2,'Fontname','Ariel')

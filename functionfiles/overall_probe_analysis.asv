@@ -516,9 +516,7 @@ if printFg && ~difference
         ylim([0 1])
         xlim([0 500])
 
-        diamondP1
-        diamondP2
-        [sig] = diff_ttest(diamondP1,diamondP2,true);
+        [sig] = diff_ttest(diamond1,squareP2,true);
         for j=1:size(sig,2)
             if sig(1,j) <= 0.05/13
                 plot((j-1)*30+100,0.05,'*','Color',[0 0 0])

@@ -66,8 +66,8 @@ for j = 1:M
     [mx, my] = pol2cart( th(1, j), 1.1);
 %     text(mx, my, msg);
 end
-text(0,0,'0')
-text(-1,0,'1')
+% text(0,0,'0')
+% text(-1,0,'1')
 axis([-1,1,-1,1]*1.5)
 
 % Hold on to plot data points
@@ -88,7 +88,7 @@ Th = (2*pi/M) * ((M:-1:0)'*ones(1,N));
 
 % Alice's edit for colors
 if size(R,2) == 2
-    set(gca, 'ColorOrder', [255 102 0;0 64 255]/255);
+    set(gca, 'ColorOrder', [255 148 77;77 166 255]/255);
 end
 
 h = plot(X, Y, varargin{:});

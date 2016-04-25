@@ -67,7 +67,7 @@ xlim([0 500])
 
 plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
-[sig] = diff_ttest(easy_p1 - easy_p2,difficult_p1 - difficult_p2,false);
+[sig] = diff_ttest(easy_p1 - easy_p2,difficult_p1 - difficult_p2,true);
 for j=1:size(sig,2)
     if sig(1,j) <= 0.05/13
         plot((j-1)*30+100,-0.10,'*','Color',easyclr)
@@ -178,7 +178,7 @@ for i = 1:size(easy_pairs_p1,3)
     ylabel('P1 - P2','FontSize',20,'Fontname','Ariel')
     xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 
-    [sig] = diff_ttest(easy_diff,difficult_diff,false);
+    [sig] = diff_ttest(easy_diff,difficult_diff,true);
     for j=1:size(sig,2)
         if sig(1,j) <= 0.05/13
             plot((j-1)*30+100,-0.20,'*','Color',easyclr)
@@ -235,7 +235,7 @@ xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 legend('Feature','Conjunction','Location','NorthWest')
 plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
-[sig] = diff_ttest(easy_SHP1-easy_SHP2,difficult_SHP1-difficult_SHP2,false);
+[sig] = diff_ttest(easy_SHP1-easy_SHP2,difficult_SHP1-difficult_SHP2,true);
 for j=1:size(sig,2)
     if sig(1,j) <= 0.05/13
         plot((j-1)*30+100,-0.10,'*','Color',easyclr)
@@ -276,7 +276,7 @@ xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 
 plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
-[sig] = diff_ttest(easy_DHP1-easy_DHP2,difficult_DHP1-difficult_DHP2,false);
+[sig] = diff_ttest(easy_DHP1-easy_DHP2,difficult_DHP1-difficult_DHP2,true);
 for j=1:size(sig,2)
     if sig(1,j) <= 0.05/13
         plot((j-1)*30+100,-0.10,'*','Color',easyclr)
@@ -317,7 +317,7 @@ xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 
 plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
-[sig] = diff_ttest(easy_D1P1-easy_D1P2,difficult_D1P1-difficult_D1P2,false);
+[sig] = diff_ttest(easy_D1P1-easy_D1P2,difficult_D1P1-difficult_D1P2,true);
 for j=1:size(sig,2)
     if sig(1,j) <= 0.05/13
         plot((j-1)*30+100,-0.10,'*','Color',easyclr)
@@ -358,7 +358,7 @@ xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 
 plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
-[sig] = diff_ttest(easy_D2P1-easy_D2P2,difficult_D2P1-difficult_D2P2,false);
+[sig] = diff_ttest(easy_D2P1-easy_D2P2,difficult_D2P1-difficult_D2P2,true);
 for j=1:size(sig,2)
     if sig(1,j) <= 0.05/13
         plot((j-1)*30+100,-0.10,'*','Color',easyclr)
@@ -399,7 +399,7 @@ xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
 
 plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
 
-[sig] = diff_ttest(easy_D3P1-easy_D3P2,difficult_D3P1-difficult_D3P2,false);
+[sig] = diff_ttest(easy_D3P1-easy_D3P2,difficult_D3P1-difficult_D3P2,true);
 for j=1:size(sig,2)
     if sig(1,j) <= 0.05/13
         plot((j-1)*30+100,-0.10,'*','Color',easyclr)

@@ -474,12 +474,12 @@ if printFg && ~difference
         errorbar(100:30:460,mean(squareP1,2),sem_squareP1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,mean(squareP2,2),sem_squareP2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','Best')
+%         legend('p1','p2','Location','Best')
 
         set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
 
-        [sig] = diff_ttest(squareP1,squareP2,true);
+        [sig] = diff_ttest(squareP1,squareP2,false);
         for j=1:size(sig,2)
             if sig(1,j) <= 0.05/13
                 plot((j-1)*30+100,0.05,'*','Color',[0 0 0])
@@ -506,7 +506,7 @@ if printFg && ~difference
         errorbar(100:30:460,mean(diamondP1,2),sem_diamondP1,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p1clr)
         errorbar(100:30:460,mean(diamondP2,2),sem_diamondP2,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',p2clr)
 
-        legend('p1','p2','Location','Best')
+%         legend('p1','p2','Location','Best')
 
         set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
@@ -516,9 +516,7 @@ if printFg && ~difference
         ylim([0 1])
         xlim([0 500])
 
-        diamondP1
-        diamondP2
-        [sig] = diff_ttest(diamondP1,diamondP2,true);
+        [sig] = diff_ttest(diamondP1,diamondP2,false);
         for j=1:size(sig,2)
             if sig(1,j) <= 0.05/13
                 plot((j-1)*30+100,0.05,'*','Color',[0 0 0])
@@ -781,25 +779,6 @@ if printFg && difference
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2PAIR2diff' saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);  
 
-end
-   
-%% Conducts ANOVA on P1 and P2
-if printStats
-    p1p2 = zeros(numObs*13*2,4);
-    index = 0;
-    for i = 1:numObs
-        p1p2(index+1:index+13,1) = all_p1(:,i);
-        p1p2(index+1:index+13,2) = rot90(1:13,-1);
-        p1p2(index+1:index+13,3) = rot90([1,1,1,1,1,1,1,1,1,1,1,1,1]);
-        p1p2(index+1:index+13,4) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
-        index = index + 13;
-        p1p2(index+1:index+13,1) = all_p2(:,i);
-        p1p2(index+1:index+13,2) = rot90(1:13,-1);
-        p1p2(index+1:index+13,3) = rot90([2,2,2,2,2,2,2,2,2,2,2,2,2]);
-        p1p2(index+1:index+13,4) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
-        index = index + 13;
-    end
-    RMAOV2(p1p2);     
 end
 
 %% Bar graphs for PBOTH, PNONE, and PONE. Note that the graph is not saved.
@@ -1087,5 +1066,35 @@ if printFFT
 
     fft_p1_p2(all_p1,all_p2,[],expN,trialType,task,'');
 end
+
+%% Conducts ANOVA on P1 and P2
+if printStats
+   setupRMAOV2(all_p1,all_p2)
+   fprintf('------------------------------------------------------\n')
+   fprintf('SQUARE CONFIGURATION\n')
+   setupRMAOV2(squareP1,squareP2);
+   fprintf('------------------------------------------------------\n')
+   fprintf('DIAMOND CONFIGURATION\n')  
+   setupRMAOV2(diamondP1,diamondP2);   
+end
+end
+
+function setupRMAOV2(p1,p2)
+numObs = size(p1,2);
+p1p2 = zeros(numObs*13*2,4);
+index = 0;
+for i = 1:numObs
+    p1p2(index+1:index+13,1) = p1(:,i);
+    p1p2(index+1:index+13,2) = rot90(1:13,-1);
+    p1p2(index+1:index+13,3) = rot90([1,1,1,1,1,1,1,1,1,1,1,1,1]);
+    p1p2(index+1:index+13,4) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
+    index = index + 13;
+    p1p2(index+1:index+13,1) = p2(:,i);
+    p1p2(index+1:index+13,2) = rot90(1:13,-1);
+    p1p2(index+1:index+13,3) = rot90([2,2,2,2,2,2,2,2,2,2,2,2,2]);
+    p1p2(index+1:index+13,4) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
+    index = index + 13;
+end
+RMAOV2(p1p2);  
 end
 

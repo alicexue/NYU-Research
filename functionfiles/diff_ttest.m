@@ -12,8 +12,9 @@ if difference
     end  
 else
    sig = zeros(1,13); 
+   diff = x1-x2;
    for delay=1:size(x1,1)
-        [~,p,~,~] = ttest(x1-x2(delay,:));
+        [~,p,~,~] = ttest(diff(delay,:));
         sig(1,delay) = p;
     end
 end

@@ -1,7 +1,7 @@
 function search_target_radarPlots()
 
-[easy_m_p_discri,easy_m_p_detect,easy_p_discri,easy_p_detect,easy_p_probe,easy_m_p_probe] = overall_search_target_location('easy',2);
-[difficult_m_p_discri,difficult_m_p_detect,difficult_p_discri,difficult_p_detect,difficult_p_probe,difficult_m_p_probe] = overall_search_target_location('difficult',2);
+[easy_p_discri,easy_p_detect,easy_p_probe] = overall_search_target_location('easy',2);
+[difficult_p_discri,difficult_p_detect,difficult_p_probe] = overall_search_target_location('difficult',2);
 
 numObs = size(easy_p_discri,2);
 
@@ -9,63 +9,70 @@ dir_name = setup_dir();
 
 % make performance field folder
 
+easy_m_p_discri = nanmean(easy_p_discri,2);
+easy_m_p_detect = nanmean(easy_p_detect,2);
+easy_m_p_probe = nanmean(easy_p_probe,2);
+difficult_m_p_discri = nanmean(difficult_p_discri,2);
+difficult_m_p_detect = nanmean(difficult_p_detect,2);
+difficult_m_p_probe = nanmean(difficult_p_probe,2);
+
 %% Individual data
 % figure; hold on;
 % radarPlot(easy_p_discri,'-o','LineWidth',1.6,'MarkerFaceColor',[1 1 1],'MarkerSize',9);
 % title('Feature Discrimination','FontSize',15)
 % namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\Feature_Discrimination'],'\',filesep));
-% print ('-djpeg', '-r500',namefig);
+% print ('-dpdf', '-r500',namefig);
 % 
 % figure; hold on;
 % radarPlot(easy_p_detect,'-o','LineWidth',1.6,'MarkerFaceColor',[1 1 1],'MarkerSize',9);
 % title('Feature Detection','FontSize',15)
 % namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\Feature_Detection'],'\',filesep));
-% print ('-djpeg', '-r500',namefig);
+% print ('-dpdf', '-r500',namefig);
 % 
 % figure; hold on;
 % radarPlot(easy_p_probe,'-o','LineWidth',1.6,'MarkerFaceColor',[1 1 1],'MarkerSize',9);
 % title('Feature Probe Performance','FontSize',15)
 % namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\Feature_ProbePerf'],'\',filesep));
-% print ('-djpeg', '-r500',namefig);
+% print ('-dpdf', '-r500',namefig);
 % 
 % figure; hold on;
 % radarPlot(difficult_p_discri,'-o','LineWidth',1.6,'MarkerFaceColor',[1 1 1],'MarkerSize',9);
 % title('Conjunction Discrimination','FontSize',15)
 % namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\Difficult_Discrimination'],'\',filesep));
-% print ('-djpeg', '-r500',namefig);
+% print ('-dpdf', '-r500',namefig);
 % 
 % figure; hold on;
 % radarPlot(difficult_p_detect,'-o','LineWidth',1.6,'MarkerFaceColor',[1 1 1],'MarkerSize',9);
 % title('Conjunction Detection','FontSize',15)
 % namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\Difficult_Detection'],'\',filesep));
-% print ('-djpeg', '-r500',namefig);
+% print ('-dpdf', '-r500',namefig);
 % 
 % figure; hold on;
 % radarPlot(difficult_p_probe,'-o','LineWidth',1.6,'MarkerFaceColor',[1 1 1],'MarkerSize',9);
 % title('Conjunction Probe Performance','FontSize',15)
 % namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\Difficult_ProbePerf'],'\',filesep));
-% print ('-djpeg', '-r500',namefig);
+% print ('-dpdf', '-r500',namefig);
 
 figure; hold on;
 radarPlot(horzcat(easy_m_p_discri,difficult_m_p_discri),'-o','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12);
 title(['Average Discrimination Performance (n = ' num2str(numObs) ')'],'FontSize',15)
 legend('Feature','Conjunction','Location','SouthEast')
 namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\DiscriminationAvg'],'\',filesep));
-print ('-djpeg', '-r500',namefig);
+print ('-dpdf', '-r500',namefig);
 
 figure; hold on;
 radarPlot(horzcat(easy_m_p_detect,difficult_m_p_detect),'-o','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12);
 title(['Average Detection Performance (n = ' num2str(numObs) ')'],'FontSize',15)
 legend('Feature','Conjunction','Location','SouthEast')
 namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\DetectionAvg'],'\',filesep));
-print ('-djpeg', '-r500',namefig);
+print ('-dpdf', '-r500',namefig);
 
 figure; hold on;
 radarPlot(horzcat(easy_m_p_probe,difficult_m_p_probe),'-o','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12);
 title(['Average Probe Performance (n = ' num2str(numObs) ')'],'FontSize',15)
 legend('Feature','Conjunction','Location','SouthEast')
 namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\ProbePerfAvg'],'\',filesep));
-print ('-djpeg', '-r500',namefig);
+print ('-dpdf', '-r500',namefig);
 
 %% Square - Note: the figure does not a accurately represent locations in the search display; graph must be rotated 45 counterclockwise
 % Discrimination
@@ -76,7 +83,7 @@ radarPlot(horzcat(easy_sq_discri,difficult_sq_discri),'-o','LineWidth',3,'Marker
 title(['Average Discrimination Performance on Square (n = ' num2str(numObs) ')'],'FontSize',15)
 legend('Feature','Conjunction','Location','SouthEast')
 namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\SquareDiscriminationAvg'],'\',filesep));
-print ('-djpeg', '-r500',namefig);
+print ('-dpdf', '-r500',namefig);
 
 % Detection
 easy_sq_detect = cat(1,easy_m_p_detect(8,:),easy_m_p_detect(2,:),easy_m_p_detect(4,:),easy_m_p_detect(6,:));
@@ -86,7 +93,7 @@ radarPlot(horzcat(easy_sq_detect,difficult_sq_detect),'-o','LineWidth',3,'Marker
 title(['Average Detection Performance on Square (n = ' num2str(numObs) ')'],'FontSize',15)
 legend('Feature','Conjunction','Location','SouthEast')
 namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\SquareDetectionAvg'],'\',filesep));
-print ('-djpeg', '-r500',namefig);
+print ('-dpdf', '-r500',namefig);
 
 % Probe Perf
 easy_sq_probe = cat(1,easy_m_p_probe(8,:),easy_m_p_probe(2,:),easy_m_p_probe(4,:),easy_m_p_probe(6,:));
@@ -96,37 +103,38 @@ radarPlot(horzcat(easy_sq_probe,difficult_sq_probe),'-o','LineWidth',3,'MarkerFa
 title(['Average Probe Performance on Square (n = ' num2str(numObs) ')'],'FontSize',15)
 legend('Feature','Conjunction','Location','SouthEast')
 namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\SquareProbeAvg'],'\',filesep));
-print ('-djpeg', '-r500',namefig);
+print ('-dpdf', '-r500',namefig);
 
-%% Diamond
-% Discrimination
-easy_dmd_discri = cat(1,easy_m_p_discri(1,:),easy_m_p_discri(3,:),easy_m_p_discri(5,:),easy_m_p_discri(7,:));
-difficult_dmd_discri = cat(1,difficult_m_p_discri(1,:),difficult_m_p_discri(3,:),difficult_m_p_discri(5,:),difficult_m_p_discri(7,:));
-figure; hold on;
-radarPlot(horzcat(easy_dmd_discri,difficult_dmd_discri),'-o','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12);
-title(['Average Discrimination Performance on Diamond (n = ' num2str(numObs) ')'],'FontSize',15)
-legend('Feature','Conjunction','Location','SouthEast')
-namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\DiamondDiscriminationAvg'],'\',filesep));
-print ('-djpeg', '-r500',namefig);
+% %% Diamond
+% % Discrimination
+% easy_dmd_discri = cat(1,easy_m_p_discri(1,:),easy_m_p_discri(3,:),easy_m_p_discri(5,:),easy_m_p_discri(7,:));
+% difficult_dmd_discri = cat(1,difficult_m_p_discri(1,:),difficult_m_p_discri(3,:),difficult_m_p_discri(5,:),difficult_m_p_discri(7,:));
+% figure; hold on;
+% radarPlot(horzcat(easy_dmd_discri,difficult_dmd_discri),'-o','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12);
+% title(['Average Discrimination Performance on Diamond (n = ' num2str(numObs) ')'],'FontSize',15)
+% legend('Feature','Conjunction','Location','SouthEast')
+% namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\DiamondDiscriminationAvg'],'\',filesep));
+% print ('-dpdf', '-r500',namefig);
+% 
+% % Detection
+% easy_dmd_detect = cat(1,easy_m_p_detect(1,:),easy_m_p_detect(3,:),easy_m_p_detect(5,:),easy_m_p_detect(7,:));
+% difficult_dmd_detect = cat(1,difficult_m_p_detect(1,:),difficult_m_p_detect(3,:),difficult_m_p_detect(5,:),difficult_m_p_detect(7,:));
+% figure; hold on;
+% radarPlot(horzcat(easy_dmd_detect,difficult_dmd_detect),'-o','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12);
+% title(['Average Detection Performance on Diamond (n = ' num2str(numObs) ')'],'FontSize',15)
+% legend('Feature','Conjunction','Location','SouthEast')
+% namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\DiamondDetectionAvg'],'\',filesep));
+% print ('-dpdf', '-r500',namefig);
+% 
+% % Probe Perf
+% easy_dmd_probe = cat(1,easy_m_p_probe(1,:),easy_m_p_probe(3,:),easy_m_p_probe(5,:),easy_m_p_probe(7,:));
+% difficult_dmd_probe = cat(1,difficult_m_p_probe(1,:),difficult_m_p_probe(3,:),difficult_m_p_probe(5,:),difficult_m_p_probe(7,:));
+% figure; hold on;
+% radarPlot(horzcat(easy_dmd_probe,difficult_dmd_probe),'-o','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12);
+% title(['Average Probe Performance on Diamond (n = ' num2str(numObs) ')'],'FontSize',15)
+% legend('Feature','Conjunction','Location','SouthEast')
+% namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\DiamondProbeAvg'],'\',filesep));
+% print ('-dpdf', '-r500',namefig);
 
-% Detection
-easy_dmd_detect = cat(1,easy_m_p_detect(1,:),easy_m_p_detect(3,:),easy_m_p_detect(5,:),easy_m_p_detect(7,:));
-difficult_dmd_detect = cat(1,difficult_m_p_detect(1,:),difficult_m_p_detect(3,:),difficult_m_p_detect(5,:),difficult_m_p_detect(7,:));
-figure; hold on;
-radarPlot(horzcat(easy_dmd_detect,difficult_dmd_detect),'-o','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12);
-title(['Average Detection Performance on Diamond (n = ' num2str(numObs) ')'],'FontSize',15)
-legend('Feature','Conjunction','Location','SouthEast')
-namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\DiamondDetectionAvg'],'\',filesep));
-print ('-djpeg', '-r500',namefig);
-
-% Probe Perf
-easy_dmd_probe = cat(1,easy_m_p_probe(1,:),easy_m_p_probe(3,:),easy_m_p_probe(5,:),easy_m_p_probe(7,:));
-difficult_dmd_probe = cat(1,difficult_m_p_probe(1,:),difficult_m_p_probe(3,:),difficult_m_p_probe(5,:),difficult_m_p_probe(7,:));
-figure; hold on;
-radarPlot(horzcat(easy_dmd_probe,difficult_dmd_probe),'-o','LineWidth',3,'MarkerFaceColor',[1 1 1],'MarkerSize',12);
-title(['Average Probe Performance on Diamond (n = ' num2str(numObs) ')'],'FontSize',15)
-legend('Feature','Conjunction','Location','SouthEast')
-namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\DiamondProbeAvg'],'\',filesep));
-print ('-djpeg', '-r500',namefig);
-
+keyboard
 end

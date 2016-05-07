@@ -1,4 +1,4 @@
-function [all_p1,all_p2,pairs_p1,pairs_p2,pair_p1,pair_p2,sameHemiP1,sameHemiP2,diffHemiP1,diffHemiP2,d1P1,d1P2,d2P1,d2P2,d3P1,d3P2,configP1P2] = overall_probe_analysis(task,expN,trialType,difference,correct,printFg,printColormap,printFFT,printStats,grouping,absDiff,cMin,cMax,observers)
+function [all_p1,all_p2,pairs_p1,pairs_p2,pair_p1,pair_p2,sameHemiP1,sameHemiP2,diffHemiP1,diffHemiP2,d1P1,d1P2,d2P1,d2P2,d3P1,d3P2,configP1P2,squareP1,squareP2,diamondP1,diamondP2,pair1346P1,pair1346P2] = overall_probe_analysis(task,expN,trialType,difference,correct,printFg,printColormap,printFFT,printStats,grouping,absDiff,cMin,cMax,observers)
 %% This function graphs raw probabilities and p1 & p2 for overall, pairs, and hemifields across all observers
 %% Example
 %%% [all_p1,all_p2,pairs_p1,pairs_p2,pair_p1,pair_p2] = overall_probe_analysis('difficult',2,2,false,false,true,true,true,false,1,true,0.1,0.3,{'ax','ld'});
@@ -31,11 +31,11 @@ function [all_p1,all_p2,pairs_p1,pairs_p2,pair_p1,pair_p2,sameHemiP1,sameHemiP2,
 if strcmp(task,'difficult')
     condition = 'Conjunction';
     p1clr = [0 0 204]/255;
-    p2clr = [153 204 255]/255;
+    p2clr = [0 170 255]/255;
 else 
     condition = 'Feature';
     p1clr = [255 102 0]/255;
-    p2clr = [255 194 153]/255;
+    p2clr = [255 170 0]/255;
 end
 
 if expN == 1
@@ -245,6 +245,10 @@ sem_diamondP2 = std(diamondP2,[],2)./sqrt(numObs);
 
 configP1P2 = cat(1,mean(squareP1,2),mean(squareP2,2),mean(diamondP1,2),mean(diamondP2,2));
 
+pair1346PB = mean(cat(3,pbothp(:,:,1),pbothp(:,:,3),pbothp(:,:,4),pbothp(:,:,6)),3);
+pair1346PN = mean(cat(3,pnonep(:,:,1),pnonep(:,:,3),pnonep(:,:,4),pnonep(:,:,6)),3);
+[pair1346P1,pair1346P2] = quadratic_analysis(pair1346PB,pair1346PN);
+
 if printFg && ~difference
     % make a data directory if necessary
     thisdir = strrep(dir_name,'\',filesep);
@@ -264,8 +268,6 @@ if printFg && ~difference
 %         disp('Making task directory');
 %         mkdir(strrep([thisdir '\figures\main_' task],'\',filesep),['main_' task]);
 %     end   
-
-
 
     %% Averaging across runs
     if correct
@@ -294,7 +296,6 @@ if printFg && ~difference
         ylim([0 1])
     end
     
-%     title(condition,'FontSize',24,'Fontname','Ariel')
     title([condition ' Search (n = ' num2str(numObs) ') ' titleName],'FontSize',24,'Fontname','Ariel')
 
     if correct
@@ -302,7 +303,7 @@ if printFg && ~difference
     else
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_rawProbs' saveFileName],'\',filesep));
     end
-    print ('-djpeg', '-r500',namefig);
+    print ('-dpdf', '-r500',namefig);
     %% Plot p1 and p2 for each probe delay    
     figure;hold on;
 
@@ -317,15 +318,15 @@ if printFg && ~difference
     ylabel('Probe report probabilities','FontSize',20,'Fontname','Ariel')
     xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
     ylim([0 1])
-
     xlim([0 500])
     
-%     title(condition,'FontSize',24,'Fontname','Ariel')
     title([condition ' Search (n = ' num2str(numObs) ') ' titleName],'FontSize',24,'Fontname','Ariel')
 
+    plot(50,mean(m_p1,1),'s','Color',p1clr,'LineWidth',2,'MarkerSize',8)
+    plot(50,mean(m_p2,1),'s','Color',p2clr,'LineWidth',2,'MarkerSize',8)
+    
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2' saveFileName],'\',filesep));
-
-    print ('-djpeg', '-r500',namefig);
+    print ('-dpdf', '-r500',namefig);
     
     if correct
         %% Plot p1 and p2 for each probe delay - p1 and p2 from corrected pboth and pnone
@@ -348,11 +349,10 @@ if printFg && ~difference
         xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
         ylim([-0.2 1.2])
 
-%         title(condition,'FontSize',24,'Fontname','Ariel')
         title([condition ' Search (n = ' num2str(numObs) ')'],'FontSize',24,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures\main_' task '\' condition '_p1p2C1'],'\',filesep));
-        print ('-djpeg', '-r500',namefig);
+        print ('-dpdf', '-r500',namefig);
         
         %% Plot p1 and p2 for each probe delay - average of corrected p1 and p2 for each observer 
         Sp1C2 = nanstd(P1_C2,[],2)./sqrt(numObs)*size(P1_C2,1)/(size(P1_C2,1)-1);
@@ -379,7 +379,7 @@ if printFg && ~difference
         title([condition ' Search (n = ' num2str(numObs) ')' titleName],'FontSize',24,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2C2' saveFileName],'\',filesep));
-        print ('-djpeg', '-r500',namefig);
+        print ('-dpdf', '-r500',namefig);
         
         %% Plot p1 and p2 - corrected by combined global average
         global_averageC3 = nanmean(vertcat(all_p1,all_p2),1);
@@ -405,11 +405,10 @@ if printFg && ~difference
         xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
         ylim([-0.4 0.4])
 
-%         title(condition,'FontSize',24,'Fontname','Ariel')
         title([condition ' Search (n = ' num2str(numObs) ')' titleName],'FontSize',24,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2C3' saveFileName],'\',filesep));
-        print ('-djpeg', '-r500',namefig);
+        print ('-dpdf', '-r500',namefig);
     end
     if ~correct
         %% Plot p1 and p2 for each pair - square configuration
@@ -438,7 +437,7 @@ if printFg && ~difference
         end
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2PAIR1' saveFileName],'\',filesep));
-        print ('-djpeg', '-r500',namefig);
+        print ('-dpdf', '-r500',namefig);
 
         %% Plot p1 and p2 for each pair - diamond configuration
         figure;
@@ -466,7 +465,7 @@ if printFg && ~difference
         end
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2PAIR2' saveFileName],'\',filesep));
-        print ('-djpeg', '-r500',namefig);  
+        print ('-dpdf', '-r500',namefig);  
  
         %% Plot p1 and p2 for square configuration
         figure;
@@ -479,26 +478,28 @@ if printFg && ~difference
         set(gca,'YTick',0:.2:1,'FontSize',18,'LineWidth',2','Fontname','Ariel')
         set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
 
-        [sig] = diff_ttest(squareP1,squareP2,false);
-        for j=1:size(sig,2)
-            if sig(1,j) <= 0.05/13
-                plot((j-1)*30+100,0.05,'*','Color',[0 0 0])
-            elseif sig(1,j) <= 0.05
-                plot((j-1)*30+100,0.05,'+','Color',[0 0 0])
+        [sig] = diff_ttest(cat(3,squareP1,squareP2),false);
+        
+        for delay=1:size(sig,1)
+            if sig(delay,1) <= 0.05/13
+                plot((delay-1)*30+100,0.05,'*','Color',[0 0 0])
+            elseif sig(delay,1) <= 0.05
+                plot((delay-1)*30+100,0.05,'+','Color',[0 0 0])
             end   
         end        
-        
+
         ylabel('Probe report probabilities','FontSize',18,'Fontname','Ariel')
         xlabel('Time from search array onset [ms]','FontSize',18,'Fontname','Ariel')
         ylim([0 1])
         xlim([0 500])
 
-        title(condition,'FontSize',24,'Fontname','Ariel')
-%         title([condition ' Search - Square Configuration - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
+        title([condition ' Search - Square Configuration - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 
+        plot(50,mean(mean(squareP1,2),1),'s','Color',p1clr,'LineWidth',2,'MarkerSize',8)
+        plot(50,mean(mean(squareP2,2),1),'s','Color',p2clr,'LineWidth',2,'MarkerSize',8)
+        
         namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileConfigLoc '_p1p2SQ' saveFileName],'\',filesep));
-
-        print ('-djpeg', '-r500',namefig);        
+        print ('-dpdf', '-r500',namefig);        
         
         %% Plot p1 and p2 for diamond configuration
         figure;
@@ -516,21 +517,22 @@ if printFg && ~difference
         ylim([0 1])
         xlim([0 500])
 
-        [sig] = diff_ttest(diamondP1,diamondP2,false);
-        for j=1:size(sig,2)
-            if sig(1,j) <= 0.05/13
-                plot((j-1)*30+100,0.05,'*','Color',[0 0 0])
-            elseif sig(1,j) <= 0.05
-                plot((j-1)*30+100,0.05,'+','Color',[0 0 0])
+        [sig] = diff_ttest(cat(3,diamondP1,diamondP2),false);
+        for delay=1:size(sig,1)
+            if sig(delay,1) <= 0.05/13
+                plot((delay-1)*30+100,0.05,'*','Color',[0 0 0])
+            elseif sig(delay,1) <= 0.05
+                plot((delay-1)*30+100,0.05,'+','Color',[0 0 0])
             end   
         end 
         
-        title(condition,'FontSize',24,'Fontname','Ariel')
-%         title([condition ' Search - Diamond Configuration - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
+        title([condition ' Search - Diamond Configuration - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
+
+        plot(50,mean(mean(diamondP1,2),1),'s','Color',p1clr,'LineWidth',2,'MarkerSize',8)
+        plot(50,mean(mean(diamondP2,2),1),'s','Color',p2clr,'LineWidth',2,'MarkerSize',8)
 
         namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileConfigLoc '_p1p2DMD' saveFileName],'\',filesep));
-
-        print ('-djpeg', '-r500',namefig);         
+        print ('-dpdf', '-r500',namefig);         
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PLOT HEMIFIELDS %%%%%%%%%%%%%%%%%%%%%%%
         %% Plot p1 and p2 for same hemifield
@@ -547,15 +549,13 @@ if printFg && ~difference
         ylabel('Probe report probabilities','FontSize',18,'Fontname','Ariel')
         xlabel('Time from search array onset [ms]','FontSize',18,'Fontname','Ariel')
         ylim([0 1])
-
         xlim([0 500])
 
-%         title(condition,'FontSize',24,'Fontname','Ariel')
         title([condition ' Search - Same Hemi - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2SH' saveFileName],'\',filesep));
 
-        print ('-djpeg', '-r500',namefig);        
+        print ('-dpdf', '-r500',namefig);        
         
         %% Plot p1 and p2 for different hemifield
         figure;
@@ -571,15 +571,13 @@ if printFg && ~difference
         ylabel('Probe report probabilities','FontSize',18,'Fontname','Ariel')
         xlabel('Time from search array onset [ms]','FontSize',18,'Fontname','Ariel')
         ylim([0 1])
-
         xlim([0 500])
 
-%         title(condition,'FontSize',24,'Fontname','Ariel')
         title([condition ' Search - Diff Hemi - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2DH' saveFileName],'\',filesep));
 
-        print ('-djpeg', '-r500',namefig);
+        print ('-dpdf', '-r500',namefig);
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PLOT ACCORDING TO DISTANCE %%%%%%%%%%%%%%%%%%%%%%%
         %% Plot p1 and p2 for d1 (shortest distance)
@@ -596,15 +594,13 @@ if printFg && ~difference
         ylabel('Probe report probabilities','FontSize',18,'Fontname','Ariel')
         xlabel('Time from search array onset [ms]','FontSize',18,'Fontname','Ariel')
         ylim([0 1])
-
         xlim([0 500])
 
-%         title(condition,'FontSize',24,'Fontname','Ariel')
         title([condition ' Search - Shortest Dist - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2D1' saveFileName],'\',filesep));
 
-        print ('-djpeg', '-r500',namefig);
+        print ('-dpdf', '-r500',namefig);
         
         %% Plot p1 and p2 for d2 (medium distance)
         figure;
@@ -623,12 +619,11 @@ if printFg && ~difference
 
         xlim([0 500])
 
-%         title(condition,'FontSize',24,'Fontname','Ariel')
         title([condition ' Search - Medium Dist - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2D2' saveFileName],'\',filesep));
 
-        print ('-djpeg', '-r500',namefig);   
+        print ('-dpdf', '-r500',namefig);   
         
         %% Plot p1 and p2 for d3 (farthest distance)
         figure;
@@ -644,15 +639,13 @@ if printFg && ~difference
         ylabel('Probe report probabilities','FontSize',18,'Fontname','Ariel')
         xlabel('Time from search array onset [ms]','FontSize',18,'Fontname','Ariel')
         ylim([0 1])
-
         xlim([0 500])
 
-%         title(condition,'FontSize',24,'Fontname','Ariel')
         title([condition ' Search - Farthest Dist - (n = ' num2str(numObs) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2D3' saveFileName],'\',filesep));
 
-        print ('-djpeg', '-r500',namefig);  
+        print ('-dpdf', '-r500',namefig);  
     end            
     %%%%%%%%%%%%%%%%%%%% OTHER PAIR GROUPINGS %%%%%%%%%%%%%%%%%%%%%%%% 
     for i = 1:size(m_pairs_p1,3)
@@ -691,11 +684,10 @@ if printFg && ~difference
             name = '9 and 11';   
         end
 
-%         title(condition,'FontSize',20,'Fontname','Ariel')
         title([condition ' Search - Pair ' name ' ' titleName],'FontSize',20,'Fontname','Ariel')
 
         namefig=sprintf('%s', strrep([dir_name '\figures\' saveFilePairsLoc '_p1p2_' name saveFileName],'\',filesep));
-        print ('-djpeg', '-r500',namefig);   
+        print ('-dpdf', '-r500',namefig);   
     end     
 end
 
@@ -720,7 +712,7 @@ if printFg && difference
 
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2diff' saveFileName],'\',filesep));
 
-    print ('-djpeg', '-r500',namefig);    
+    print ('-dpdf', '-r500',namefig);    
     %% Plot p1 and p2 for each pair - square configuration
     figure;
     for numPair = 1:size(m_pair_p1,3)/2
@@ -748,7 +740,7 @@ if printFg && difference
     end
 
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2PAIR1diff' saveFileName],'\',filesep));
-    print ('-djpeg', '-r500',namefig);
+    print ('-dpdf', '-r500',namefig);
 
     %% Plot p1 and p2 for each pair - diamond configuration
     figure;
@@ -777,7 +769,7 @@ if printFg && difference
     end
 
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2PAIR2diff' saveFileName],'\',filesep));
-    print ('-djpeg', '-r500',namefig);  
+    print ('-dpdf', '-r500',namefig);  
 
 end
 
@@ -819,7 +811,7 @@ if printColormap
     xlabel('Time from Search Array Onset [ms]','FontSize',10,'Fontname','Ariel')
     title([condition ' P1 - P2 ' titleName],'FontSize',15,'Fontname','Ariel')
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_Overall' saveFileName],'\',filesep));
-    print ('-djpeg', '-r500',namefig);
+    print ('-dpdf', '-r500',namefig);
 
     %% Plot colormap of all pairs averaged across all delays
     figure; hold on;
@@ -833,7 +825,7 @@ if printColormap
     xlabel('Averaged Across Delays','FontSize',10,'Fontname','Ariel')
     title([condition ' P1 - P2 ' titleName],'FontSize',15,'Fontname','Ariel')
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_OverallAvg' saveFileName],'\',filesep));
-    print ('-djpeg', '-r500',namefig);
+    print ('-dpdf', '-r500',namefig);
 
     % %% Plot Performance Field groupings for all delays
     % figure; hold on;
@@ -854,7 +846,7 @@ if printColormap
     % xlabel('Time from Search Array Onset [ms]','FontSize',12,'Fontname','Ariel')
     % title([condition ' P1 - P2 (Performance Field) ' titleName],'FontSize',15,'Fontname','Ariel')
     % namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_PerfField' saveFileName],'\',filesep));
-    % print ('-djpeg', '-r500',namefig);
+    % print ('-dpdf', '-r500',namefig);
     % 
     % %% Plot Performance Field groupings averaged across delays
     % ylim([0.5 3.5])
@@ -864,7 +856,7 @@ if printColormap
     % xlabel('Averaged Across Delays','FontSize',12,'Fontname','Ariel')
     % title([condition ' P1 - P2 (Performance Field) ' titleName],'FontSize',15,'Fontname','Ariel')
     % namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_PerfFieldAvg' saveFileName],'\',filesep));
-    % print ('-djpeg', '-r500',namefig);
+    % print ('-dpdf', '-r500',namefig);
     % 
     % %% Plot Hemifield groupings across all delays
     % figure; hold on;
@@ -889,7 +881,7 @@ if printColormap
     % xlabel('Time from Search Array Onset [ms]','FontSize',12,'Fontname','Ariel')
     % title([condition ' P1 - P2 (Hemifield) ' titleName],'FontSize',15,'Fontname','Ariel')
     % namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_Hemifield' saveFileName],'\',filesep));
-    % print ('-djpeg', '-r500',namefig);
+    % print ('-dpdf', '-r500',namefig);
     % 
     % %% Plot Hemifield groupings averaged across delays
     % figure; hold on;
@@ -903,7 +895,7 @@ if printColormap
     % xlabel('Averaged Across Delays','FontSize',12,'Fontname','Ariel')
     % title([condition ' P1 - P2 (Hemifield) ' titleName],'FontSize',15,'Fontname','Ariel')
     % namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_HemifieldAvg' saveFileName],'\',filesep));
-    % print ('-djpeg', '-r500',namefig);
+    % print ('-dpdf', '-r500',namefig);
     % 
     % %% Plot colormap for Distance groupings across all delays
     % figure; hold on;
@@ -924,7 +916,7 @@ if printColormap
     % xlabel('Time from Search Array Onset [ms]','FontSize',12,'Fontname','Ariel')
     % title([condition ' P1 - P2 (Distance) ' titleName],'FontSize',15,'Fontname','Ariel')
     % namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_Distance' saveFileName],'\',filesep));
-    % print ('-djpeg', '-r500',namefig);
+    % print ('-dpdf', '-r500',namefig);
     % 
     % %% Plot colormap for Distance groupings averaged across all delays
     % figure; hold on;
@@ -938,7 +930,7 @@ if printColormap
     % xlabel('Time from Search Array Onset [ms]','FontSize',12,'Fontname','Ariel')
     % title([condition ' P1 - P2 (Distance) ' titleName],'FontSize',15,'Fontname','Ariel')
     % namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_DistanceAvg' saveFileName],'\',filesep));
-    % print ('-djpeg', '-r500',namefig);
+    % print ('-dpdf', '-r500',namefig);
     % 
     % %% Plot colormap for Configuration groupings for each delay
     % figure; hold on;
@@ -958,7 +950,7 @@ if printColormap
     % xlabel('Time from Search Array Onset [ms]','FontSize',12,'Fontname','Ariel')
     % title([condition ' P1 - P2 (Configuration) ' titleName],'FontSize',15,'Fontname','Ariel')
     % namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_Config' saveFileName],'\',filesep));
-    % print ('-djpeg', '-r500',namefig);
+    % print ('-dpdf', '-r500',namefig);
     % 
     % %% Plot colormap for Configuration groups averaged across delays
     % figure; hold on;
@@ -972,7 +964,7 @@ if printColormap
     % xlabel('Averaged Across Delays','FontSize',12,'Fontname','Ariel')
     % title([condition ' P1 - P2 (Configuration) ' titleName],'FontSize',15,'Fontname','Ariel')
     % namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_ConfigAvg' saveFileName],'\',filesep));
-    % print ('-djpeg', '-r500',namefig);
+    % print ('-dpdf', '-r500',namefig);
 
 
     %% Plot colormap for square configuration for each delay
@@ -994,7 +986,7 @@ if printColormap
     xlabel('Time from Search Array Onset [ms]','FontSize',12,'Fontname','Ariel')
     title([condition ' P1 - P2 (Square) ' titleName],'FontSize',15,'Fontname','Ariel')
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_Square' saveFileName],'\',filesep));
-    print ('-djpeg', '-r500',namefig);
+    print ('-dpdf', '-r500',namefig);
 
     %% Plot colormap for square configuration averaged across delays
     figure; hold on;
@@ -1008,7 +1000,7 @@ if printColormap
     xlabel('Averaged Across Delays','FontSize',12,'Fontname','Ariel')
     title([condition ' P1 - P2 (Square) ' titleName],'FontSize',15,'Fontname','Ariel')
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_SquareAvg' saveFileName],'\',filesep));
-    print ('-djpeg', '-r500',namefig);
+    print ('-dpdf', '-r500',namefig);
 
     %% Plot colormap for diamond configuration for each delay
     figure; hold on;
@@ -1028,7 +1020,7 @@ if printColormap
     xlabel('Time from Search Array Onset [ms]','FontSize',12,'Fontname','Ariel')
     title([condition ' P1 - P2 (Diamond) ' titleName],'FontSize',15,'Fontname','Ariel')
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_Diamond' saveFileName],'\',filesep));
-    print ('-djpeg', '-r500',namefig);
+    print ('-dpdf', '-r500',namefig);
 
     %% Plot colormap for diamond configuration averaged across delays
     figure; hold on;
@@ -1042,7 +1034,7 @@ if printColormap
     xlabel('Averaged Across Delays','FontSize',12,'Fontname','Ariel')
     title([condition ' P1 - P2 (Diamond) ' titleName],'FontSize',15,'Fontname','Ariel')
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_DiamondAvg' saveFileName],'\',filesep));
-    print ('-djpeg', '-r500',namefig);
+    print ('-dpdf', '-r500',namefig);
 end
 
 if printFFT
@@ -1086,13 +1078,13 @@ index = 0;
 for i = 1:numObs
     p1p2(index+1:index+13,1) = p1(:,i);
     p1p2(index+1:index+13,2) = rot90(1:13,-1);
-    p1p2(index+1:index+13,3) = rot90([1,1,1,1,1,1,1,1,1,1,1,1,1]);
-    p1p2(index+1:index+13,4) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
+    p1p2(index+1:index+13,3) = ones(13,1);
+    p1p2(index+1:index+13,4) = ones(13,1)*i;
     index = index + 13;
     p1p2(index+1:index+13,1) = p2(:,i);
     p1p2(index+1:index+13,2) = rot90(1:13,-1);
-    p1p2(index+1:index+13,3) = rot90([2,2,2,2,2,2,2,2,2,2,2,2,2]);
-    p1p2(index+1:index+13,4) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
+    p1p2(index+1:index+13,3) = ones(13,1)*2;
+    p1p2(index+1:index+13,4) = ones(13,1)*i;
     index = index + 13;
 end
 RMAOV2(p1p2);  

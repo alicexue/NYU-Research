@@ -1,13 +1,15 @@
-function [rt4,rt8,perf4,perf8] = p_search_slope(obs,task,expN,present,training,printFg)
+function [rt4,rt8,perf4,perf8] = p_search_slope(obs,task,expN,trialType,configuration,training,printFg)
 %% Example
-% p_search_slope('ax','difficult',2,1,false,true);
+% p_search_slope('ax','difficult',2,1,3,false,true);
 
 %% Parameters
 % obs = 'ax'; (observer's initials)
 % task = 'difficult'; ('easy' or 'difficult')
 % expN = 1; (1 or 2)
-% present = 1; (only relevant for expN == 2; 1:target-present trials,
+% trialType = 1; (only relevant for expN == 2; 1:target-present trials,
 % 2:target-absent trials, 3:all trials)
+% configuration = 1; (1: all trials regardless of search configuration; 2:
+% square configuration; 3: diamond configuration)
 % training = false; (if true, uses stim files in training folder)
 % printFg = true; (if true, prints and saves figures)
 
@@ -31,11 +33,11 @@ if expN == 1
     end
 elseif expN == 2
     tTask = ['target present or absent\' task];
-    if present == 1
+    if trialType == 1
         saveFileName = '_2TP';
-    elseif present == 2
+    elseif trialType == 2
         saveFileName = '_2TA';
-    elseif present == 3
+    elseif trialType == 3
         saveFileName = '_2';
     end
 end
@@ -52,7 +54,7 @@ for n = 1:size(files,1)
     filename = files(n).name;
     fileL = size(filename,2);
     if fileL == 17 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')         
-        [RT4,RT8,Perf4,Perf8] = search_slope(obs,task,filename,expN,present,training);
+        [RT4,RT8,Perf4,Perf8] = search_slope(obs,task,filename,expN,trialType,configuration,training);
 
         rt4(c) = RT4;
         rt8(c) = RT8;
@@ -98,7 +100,7 @@ if printFg == true
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('RT [ms]','FontSize',20,'Fontname','Ariel')
     namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' tTask '\figures\' obs '_' condition '_rtSetSize' saveFileName]);
-    print ('-djpeg', '-r500',namefig);
+    print ('-dpdf', '-r500',namefig);
 
     %% Plot performance
     figure;hold on;
@@ -114,6 +116,6 @@ if printFg == true
     ylabel('Accuracy','FontSize',20,'Fontname','Ariel')
 
     namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\' obs '\' tTask '\figures\' obs '_' condition '_perfSetSize' saveFileName]);
-    print ('-djpeg', '-r500',namefig);
+    print ('-dpdf', '-r500',namefig);
 end
 end

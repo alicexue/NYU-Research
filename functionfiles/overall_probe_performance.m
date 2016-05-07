@@ -1,4 +1,4 @@
-function overall_probe_performance(expN,present,task,grouping)
+function [sqClick1,sqClick2] = overall_probe_performance(expN,present,task,grouping)
 %% This function averages the general performance on the probe task across observers
 %% Example
 %%% overall_probe_performance(1,1,'difficult',1);
@@ -55,18 +55,25 @@ end
 perfDelays=[];
 perfTP=[];
 perfTA=[];
+perfClicks=[];
+perfClicks1P=[];
+perfClicks2P=[];
 numObs = 0;
 
-files = dir('C:\Users\alice_000\Documents\MATLAB\data');  
+dir_name = setup_dir();
+files = dir(strrep(dir_name,'\',filesep));  
 for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
     if (fileL == 2) && ~strcmp(obs(1,1),'.')
-        [perf,pTP,pTA] = p_probe_performance(obs,task,expN,present,false,grouping);
+        [perf,pTP,pTA,pClicks,pClicksP] = p_probe_performance(obs,task,expN,present,false,grouping);
         if ~isnan(perf) 
             perfDelays = horzcat(perfDelays,perf);
             perfTP = horzcat(perfTP,pTP);
             perfTA = horzcat(perfTA,pTA);
+            perfClicks = horzcat(perfClicks,pClicks);
+            perfClicks1P = horzcat(perfClicks1P,pClicksP(:,1,:));
+            perfClicks2P = horzcat(perfClicks2P,pClicksP(:,2,:));
             numObs = numObs + 1;
         end
     end
@@ -79,6 +86,21 @@ MpTP = nanmean(perfTP,2);
 SpTP = std(perfTP,[],2)./sqrt(numObs);
 MpTA = nanmean(perfTA,2);
 SpTA = std(perfTA,[],2)./sqrt(numObs);
+
+MperfClicks = nanmean(perfClicks,2);
+MpClick1 = MperfClicks(:,:,1);
+MpClick2 = MperfClicks(:,:,2);
+SpClick1 = std(perfClicks(:,:,1),[],2)./sqrt(numObs);
+SpClick2 = std(perfClicks(:,:,2),[],2)./sqrt(numObs);
+
+sqClick1 = mean(perfClicks1P(:,:,1:6),3);
+sqClick2 = mean(perfClicks2P(:,:,1:6),3);
+
+SsqClick1 = std(sqClick1,[],2)./sqrt(numObs);
+SsqClick2 = std(sqClick2,[],2)./sqrt(numObs);
+
+MsqClick1 = mean(sqClick1,2);
+MsqClick2 = mean(sqClick2,2);
 
 %% Plot average across observers
 figure; hold on;
@@ -132,7 +154,7 @@ end
 
 plot([0 500],[chance chance],'Color',[0 0 0],'LineStyle','--')
 
-namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_probePerf' saveFileName]);
+namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_probePerf' saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig);
 
 % Check for outliers
@@ -167,7 +189,7 @@ print ('-djpeg', '-r500',namefig);
 % 
 % plot([0 500],[8.33 8.33],'Color',[0 0 0],'LineStyle','--')
 % 
-% namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_probePerfTP' saveFileName]);
+% namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_probePerfTP' saveFileName],'\',filesep));
 % print ('-djpeg', '-r500',namefig);
 % 
 % %% Plot average across observers - target loc not probed
@@ -195,7 +217,7 @@ print ('-djpeg', '-r500',namefig);
 % 
 % plot([0 500],[8.33 8.33],'Color',[0 0 0],'LineStyle','--')
 % 
-% namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_probePerfTA' saveFileName]);
+% namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_probePerfTA' saveFileName],'\',filesep));
 % print ('-djpeg', '-r500',namefig);
 
 mPerf = mean(perfDelays,1)    
@@ -205,4 +227,52 @@ mPerf = mean(perfDelays,1)
 %     q = rot90(mPerf);
 %     imagesc(q)
 % end    
+
+%% Plot C1 and C2
+figure;hold on;
+errorbar(100:30:460,MpClick1*100,SpClick1*100,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color','r')
+errorbar(100:30:460,MpClick2*100,SpClick2*100,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color','b')
+legend('click 1','click 2')
+ylim([ymin 100])
+xlim([0 500])
+
+set(gca,'YTick', ymin:20:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+
+title([condition ' Probe Performance'],'FontSize',18)
+        
+xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
+ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
+namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_probePerfClick' saveFileName],'\',filesep));
+print ('-djpeg', '-r500',namefig);
+
+%% Plot C1 and C2 for square
+figure;hold on;
+errorbar(100:30:460,MsqClick1*100,SsqClick1*100,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color','r')
+errorbar(100:30:460,MsqClick2*100,SsqClick2*100,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color','b')
+legend('click 1','click 2')
+ylim([ymin 100])
+xlim([0 500])
+
+set(gca,'YTick', ymin:20:100,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+
+title([condition ' Probe Performance on Square'],'FontSize',18)
+        
+xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
+ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
+
+figure;hold on;
+for i = 1:size(sqClick1,2)
+    plot(100:30:460,sqClick1(:,i)-sqClick2(:,i))
+end
+
+xlim([0 500])
+set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
+
+title([condition ' Probe Performance on Square'],'FontSize',18)
+     
+namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_probePerfClick_SQ' saveFileName],'\',filesep));
+print ('-djpeg', '-r500',namefig);
 end

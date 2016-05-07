@@ -1,4 +1,4 @@
-function [m_perf_discri,m_perf_detect,m_probe_perf,all_chi2,all_p,pairs_perf_loc] = p_search_target_location(obs,task,expN)
+function [m_perf_discri,m_perf_detect,m_probe_perf,all_chi2,all_p,pairs_perf_loc,m_square_perf] = p_search_target_location(obs,task,expN)
 %% This program analyzes performance in the search task for performance when the target is at each location
 %% Example
 %%% p_search_target_location('ax','difficult',2);
@@ -29,6 +29,8 @@ probe_perf_loc = [];
 pairs_perf_loc = [];
 pairs_indices = [];
 
+% square_perf = [];
+
 dir_name = setup_dir();
 if expN == 1
     files = dir(strrep([dir_name '\' obs '\main_' task],'\',filesep)); 
@@ -47,13 +49,17 @@ for n = 1:size(files,1)
         
         pairs_perf_loc = [pairs_perf_loc;pairs_p_loc];
         pairs_indices = [pairs_indices;pairs_idc];
+        
+%         square_perf = vertcat(square_perf,sq_perf);
     end
 end
 
 m_perf_discri = nanmean(search_perf_loc_discri,1);
 m_perf_detect = nanmean(search_perf_loc_detect,1);
 m_probe_perf = nanmean(probe_perf_loc,1);
+% m_square_perf = nanmean(square_perf,1);
 
+%%
 all_chi2 = [];
 all_p = [];
 if ~isempty(pairs_perf_loc)

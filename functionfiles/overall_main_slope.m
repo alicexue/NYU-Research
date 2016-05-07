@@ -1,4 +1,4 @@
-function overall_main_slope(task,expN,present,printFg)
+function [all_rt,all_p] = overall_main_slope(task,expN,present,printFg)
 %% Example
 %%% overall_main_slope('easy',2,2,true);
 
@@ -39,7 +39,8 @@ all_p=[];
 
 numObs = 0;
 
-files = dir('C:\Users\alice_000\Documents\MATLAB\data');  
+dir_name = setup_dir();
+files = dir(strrep(dir_name,'\',filesep));  
 for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
@@ -85,8 +86,7 @@ if printFg
     title([condition ' Reaction Time (n = ' num2str(numObs) ') ' titleName],'FontSize',20)
     xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
     ylabel('RT [ms] ','FontSize',15,'Fontname','Ariel')  
-
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_rtDelays' saveFileName]);
+    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_rtDelays' saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);
 
     %% Plot performance
@@ -114,8 +114,7 @@ if printFg
     title([condition ' Performance (n = ' num2str(numObs) ') ' titleName],'FontSize',20)
     xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
     ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
-
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_PerfDelays' saveFileName]);
+    namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_PerfDelays' saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);
 end
 end

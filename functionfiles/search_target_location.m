@@ -28,7 +28,11 @@ exp = getTaskParameters(myscreen,task);
 
 expProbe = task{1}.probeTask;
  
-theTrials_detect = find(task{1}.randVars.fixBreak == 0);
+% theTrials_detect = find(task{1}.randVars.fixBreak == 0);
+theTrials1 = find(task{1}.randVars.fixBreak == 0);
+theTrials2 = find(task{1}.randVars.presence == 2);
+tmp = ismember(theTrials2,theTrials1);
+theTrials_detect = theTrials2(tmp);
 
 if expN == 2    
     theTrials1 = find(task{1}.randVars.fixBreak == 0);
@@ -200,8 +204,8 @@ for i = 1:8
 end
 
 m_probe_locations_perf = nanmean(probe_loc_perf,1);
-m_perf_locations_discri = nanmean(search_perf_loc_discri,1);
-m_perf_locations_detect = nanmean(search_perf_loc_detect,1);
+% m_perf_locations_discri = nanmean(search_perf_loc_discri,1);
+% m_perf_locations_detect = nanmean(search_perf_loc_detect,1);
 
 % probe_perf_trials = NaN(size(probe_perf,1)/2,2);
 % for i = 1:size(probe_perf,1)/2 
@@ -221,30 +225,47 @@ pairs_indices = [];
 
 for pair = unique(exp.randVars.probePairsLoc)
     pairTrials = exp.randVars.probePairsLoc(theTrials)==pair;
-    perf_tmp = NaN(80,2);
-    idx_tmp = NaN(80,1);
+    perf_tmp = NaN(40,2);
+    idx_tmp = NaN(40,1);
+    loc_tmp = NaN(40,1);
     tmpidx = 1;
     for i = 1:size(pairTrials,2);
         if pairTrials(1,i) == true
             trialidx = i * 2 - 1;
             tmp1 = probe_perf(trialidx,2);  
+            loc1 = probe_perf(trialidx,1);  
             tmp2 = probe_perf(trialidx+1,2);
+            loc2 = probe_perf(trialidx+1,1);  
             if probe_perf(trialidx,1) > probe_perf(trialidx+1,1)
                 tmp1 = tmp2;
+                loc1 = loc2;
                 tmp2 = probe_perf(trialidx,2);
+                loc2 = probe_perf(trialidx,1);  
             end
             perf_tmp(tmpidx,1) = tmp1;    
             perf_tmp(tmpidx,2) = tmp2;
+            loc_tmp(tmpidx,1) = loc1;
+            loc_tmp(tmpidx,2) = loc2;
             idx_tmp(tmpidx) = i;
             tmpidx = tmpidx + 1;
         end
     end
-%     keyboard
-%     perf_tmp = perf_tmp(1:tmpidx-1,:);
-%     idx_tmp = idx_tmp(1:tmpidx-1,:);
-    pairs_perf_loc(:,:,pair) = perf_tmp;
-    pairs_indices(:,1,pair) = idx_tmp;
+% %     perf_tmp = perf_tmp(1:tmpidx-1,:);
+% %     idx_tmp = idx_tmp(1:tmpidx-1,:);
+%     pairs_perf_loc(:,:,pair) = perf_tmp;
+%     pairs_indices(:,1,pair) = idx_tmp;
+%     locations_in_pairs(:,:,pair) = loc_tmp;
 end
+
+%%% 2nd dimension refers to locations in each pair 
+m_pairs_loc = nanmean(pairs_perf_loc,1);
+
+%% Square Pairs
+% loc1 = cat(1,pairs_perf_loc(:,1,3),pairs_perf_loc(:,1,6));
+% loc2 = cat(1,pairs_perf_loc(:,1,1),pairs_perf_loc(:,2,3));
+% loc3 = cat(1,pairs_perf_loc(:,2,1),pairs_perf_loc(:,1,4));
+% loc4 = cat(1,pairs_perf_loc(:,2,4),pairs_perf_loc(:,2,6));
+% square_perf = cat(3,loc1,loc2,loc3,loc4);
 
 % all_chi2 = [];
 % all_p = [];

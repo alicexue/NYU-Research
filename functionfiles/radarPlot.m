@@ -22,7 +22,7 @@ r = [0;1]*ones(1,M);
 [x,y] = pol2cart(th, r);
 hLine = line(x, y,...
     'LineWidth', 1.5,...
-    'Color', [1, 1, 1]*0.5  );
+    'Color', [1, 1, 1]*0.8  );
 
 for i = 1:numel(hLine)
     set(get(get(hLine(i),'Annotation'),'LegendInformation'),...
@@ -36,7 +36,7 @@ if toggle
 end
 
 %%% Alice's edit: To set number of axes isocurves
-nLines = 4;
+nLines = 10;
 
 %%% Plot axes isocurves
 % Radial offset per axis
@@ -47,7 +47,7 @@ r = (linspace(0.1, 0.9, nLines)')*ones(1,M);
 [x,y] = pol2cart(th, r);
 hLine = line([x, x(:,1)]', [y, y(:,1)]',...
     'LineWidth', 1,... 
-    'Color', [1, 1, 1]*0.5  );
+    'Color', [1, 1, 1]*0.8  );
 for i = 1:numel(hLine)
     set(get(get(hLine(i),'Annotation'),'LegendInformation'),...
         'IconDisplayStyle','off'); % Exclude line from legend
@@ -88,7 +88,7 @@ Th = (2*pi/M) * ((M:-1:0)'*ones(1,N));
 
 % Alice's edit for colors
 if size(R,2) == 2
-    set(gca, 'ColorOrder', [255 148 77;77 166 255]/255);
+    set(gca, 'ColorOrder', [255 102 0;0 0 204]/255);
 end
 
 h = plot(X, Y, varargin{:});

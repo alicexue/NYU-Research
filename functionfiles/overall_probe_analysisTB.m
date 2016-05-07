@@ -59,7 +59,8 @@ RIGHTp2=[];
 
 numObs = 0;
 
-files = dir('C:\Users\alice_000\Documents\MATLAB\data');  
+dir_name = setup_dir();
+files = dir(strrep(dir_name,'\',filesep));  
 for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
@@ -128,7 +129,7 @@ if printFg && ~difference
         end 
 
     end
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2TB1' saveFileName]);
+    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_p1p2TB1' saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);
     
     %% Graph TOP and BOTTOM separately
@@ -170,7 +171,7 @@ if printFg && ~difference
         end 
 
     end
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2TB2' saveFileName]);
+    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_p1p2TB2' saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);    
 
     %% Graph LEFT AND RIGHT, LEFT OR RIGHT
@@ -212,7 +213,7 @@ if printFg && ~difference
         end 
 
     end
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2LR1' saveFileName]);
+    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_p1p2LR1' saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);
     
     %% Graph LEFT and RIGHT separately
@@ -254,7 +255,7 @@ if printFg && ~difference
         end 
 
     end
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2LR2' saveFileName]);
+    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_p1p2LR2' saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);       
 end
 
@@ -298,7 +299,7 @@ if printFg && difference
         end 
 
     end
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2TB1diff' saveFileName]);
+    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_p1p2TB1diff' saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);
     
     %% Graph TOP and BOTTOM separately
@@ -340,7 +341,7 @@ if printFg && difference
         end 
 
     end
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2TB2diff' saveFileName]);
+    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_p1p2TB2diff' saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);    
 
     %% Graph LEFT AND RIGHT, LEFT OR RIGHT
@@ -382,7 +383,7 @@ if printFg && difference
         end 
 
     end
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2LR1diff' saveFileName]);
+    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_p1p2LR1diff' saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);
     
     %% Graph LEFT and RIGHT separately
@@ -424,7 +425,7 @@ if printFg && difference
         end 
 
     end
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_p1p2LR2diff' saveFileName]);
+    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_p1p2LR2diff' saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);       
 end
 

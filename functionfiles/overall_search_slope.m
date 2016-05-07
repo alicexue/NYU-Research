@@ -1,103 +1,254 @@
-function overall_search_slope(expN,trialType,displayFg,displayStats)
+function [easy_rt,easy_perf,difficult_rt,difficult_perf] = overall_search_slope(expN,trialType,configuration,displayFg,displayStats,observers,include)
 %% Example
-%%% overall_search_slope(2,1,true,true);
+%%% overall_search_slope(2,1,3,true,true,{'ad'},false);
 
 %% Parameters
 % expN = 1; (1 or 2)
 % trialType = 1; (only relevant for expN == 2; 1:target-present trials (discrimination),
 % 2:target-absent trials, 3:all trials (detection))
+% configuration = 1; (1: all trials regardless of search configuration; 2:
+% square configuration; 3: diamond configuration)
+% i.e. targetDiagonal == 3 or 4; if 2, uses diamond trials, if 3, all
+% trials regardless of search configuration)
 % displayFg = true; (if true, prints and saves figures)
 % displayStats = true; (if true, calls search_slope_stats(expN,present) and
 % prints slope and performance ttest results)
+% observers = {'ax','ld'}; (cell of initials for participants to include/exclude
+% in analysis)
+% include = true; (if true, only analyzes observers in observers)
+
+easyclr = [255 102 0]/255;
+difficultclr = [0 0 204]/255;
+
+easy_rt=[];
+easy_perf=[];
+
+difficult_rt=[];
+difficult_perf=[];
+
+s_easy_rt=[];
+s_easy_perf=[];
+
+s_difficult_rt=[];
+s_difficult_perf=[];
+
+numObs = 0;
+%% Load data
+if expN == 1
+    saveFileLoc = '';
+    titleName = '';
+    saveFileName = '';
+elseif expN == 2
+    saveFileLoc = '\target present or absent';
+    if trialType == 1
+        titleName = 'TP';
+        saveFileName = '_2TP';
+    elseif trialType == 2
+        titleName = 'TA';
+        saveFileName = '_2TA';
+    elseif trialType == 3
+        titleName = '';
+        saveFileName = '_2';
+    end
+end 
+
+if configuration == 2
+    titleName = ['SQ ' titleName];
+    saveFileName = ['_SQ' saveFileName];
+elseif configuration == 3
+    titleName = ['DMD ' titleName];
+    saveFileName = ['_DMD' saveFileName];
+end
+
+dir_name = setup_dir();
+files = dir(strrep(dir_name,'\',filesep));  
+for n = 1:size(files,1)
+    obs = files(n).name;
+    fileL = size(obs,2);
+    if isempty(observers)
+        check = true;
+    elseif include
+        if ismember(obs,observers)
+            check = true;
+        else
+            check = false;
+        end
+    elseif ~include
+        if ismember(obs,observers)
+            check = false;
+        else
+            check = true;
+        end
+    end
+    if (fileL == 2 || fileL == 3) && ~strcmp(obs(1,1),'.') && check
+        for i=1:2
+            if i == 1
+                task = 'easy';
+            else 
+                task = 'difficult';
+            end
+            [rt4,rt8,perf4,perf8] = p_search_slope(obs,task,expN,trialType,configuration,false,false);
+                if ~isempty(rt4)
+                    if strcmp(task,'easy')
+                        easy_rt=horzcat(easy_rt,vertcat(median(rt4),median(rt8)));
+                        easy_perf=horzcat(easy_perf,vertcat(mean(perf4),mean(perf8)));
+                        s_easy_rt=horzcat(s_easy_rt,vertcat(std(rt4)/size(rt4,2),std(rt8)/size(rt4,2)));
+                        s_easy_perf=horzcat(s_easy_perf,vertcat(std(perf4)/size(perf4,2),std(perf8)/size(perf4,2)));
+                        numObs = numObs+1;
+                    else
+                        difficult_rt=horzcat(difficult_rt,vertcat(median(rt4),median(rt8)));
+                        difficult_perf=horzcat(difficult_perf,vertcat(mean(perf4),mean(perf8)));
+                        s_difficult_rt=horzcat(s_difficult_rt,vertcat(std(rt4)/size(rt4,2),std(rt8)/size(rt4,2)));
+                        s_difficult_perf=horzcat(s_difficult_perf,vertcat(std(perf4)/size(perf4,2),std(perf8)/size(perf4,2)));                        
+                    end
+                end
+        end
+    end
+end
+
+m_easy_rt=mean(easy_rt,2);
+m_easy_perf=mean(easy_perf,2);
+ms_easy_rt=std(easy_rt,[],2)./sqrt(numObs);
+ms_easy_perf=std(easy_perf,[],2)./sqrt(numObs);
+
+m_difficult_rt=mean(difficult_rt,2);
+m_difficult_perf=mean(difficult_perf,2);
+ms_difficult_rt=std(difficult_rt,[],2)./sqrt(numObs);
+ms_difficult_perf=std(difficult_perf,[],2)./sqrt(numObs);
 
 if displayFg
-    easy_rt=[];
-    easy_perf=[];
-
-    difficult_rt=[];
-    difficult_perf=[];
-
-    s_easy_rt=[];
-    s_easy_perf=[];
-
-    s_difficult_rt=[];
-    s_difficult_perf=[];
-
-    numObs = 0;
-    %% Load data
-    if expN == 1
-        saveFileLoc = '';
-        titleName = '';
-        saveFileName = '';
-    elseif expN == 2
-        saveFileLoc = '\target present or absent';
-        if trialType == 1
-            titleName = 'TP';
-            saveFileName = '_2TP';
-        elseif trialType == 2
-            titleName = 'TA';
-            saveFileName = '_2TA';
-        elseif trialType == 3
-            titleName = '';
-            saveFileName = '_2';
-        end
-    end 
-   
-    files = dir('C:\Users\alice_000\Documents\MATLAB\data');  
-    for n = 1:size(files,1)
-        obs = files(n).name;
-        fileL = size(obs,2);
-        if (fileL == 2 || fileL == 3) && ~strcmp(obs(1,1),'.')
-            for i=1:2
-                if i == 1
-                    task = 'easy';
-                else 
-                    task = 'difficult';
-                end
-                [rt4,rt8,perf4,perf8] = p_search_slope(obs,task,expN,trialType,false,false);
-                    if ~isempty(rt4)
-                        if strcmp(task,'easy')
-                            easy_rt=horzcat(easy_rt,vertcat(median(rt4),median(rt8)));
-                            easy_perf=horzcat(easy_perf,vertcat(mean(perf4),mean(perf8)));
-                            s_easy_rt=horzcat(s_easy_rt,vertcat(std(rt4)/size(rt4,2),std(rt8)/size(rt4,2)));
-                            s_easy_perf=horzcat(s_easy_perf,vertcat(std(perf4)/size(perf4,2),std(perf8)/size(perf4,2)));
-                            numObs = numObs+1;
-                        else
-                            difficult_rt=horzcat(difficult_rt,vertcat(median(rt4),median(rt8)));
-                            difficult_perf=horzcat(difficult_perf,vertcat(mean(perf4),mean(perf8)));
-                            s_difficult_rt=horzcat(s_difficult_rt,vertcat(std(rt4)/size(rt4,2),std(rt8)/size(rt4,2)));
-                            s_difficult_perf=horzcat(s_difficult_perf,vertcat(std(perf4)/size(perf4,2),std(perf8)/size(perf4,2)));                        
-                        end
-                    end
-            end
-        end
-    end
+%     %% Plot reaction time
+%     figure;hold on;
+%     for i=1:numObs
+%         errorbar(4:4:8,easy_rt(:,i)*1000,s_easy_rt(:,i),'-o','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
+%     end
+% 
+%     errorbar(4:4:8,m_easy_rt*1000,ms_easy_rt*1000,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',9,'Color',[0 0 0])
+% 
+% %     legend_obs = cell(numObs,1);
+% %     for i=1:numObs
+% %         legend_obs{i} = ['obs ' num2str(i)];
+% %     end
+% %     legend_obs{numObs+1} = 'average';
+% %     l = legend(legend_obs,'Location','NorthWest');    
+% %     set(l,'FontSize',12);    
+% 
+%     xlim([3 9])
+%     set(gca,'XTick',4:4:8,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+%     if expN == 1
+%         ylim([0 250])
+%         set(gca,'YTick', 0:50:250,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+%     elseif expN == 2
+%         ylim([0 400])
+%         set(gca,'YTick', 0:100:400,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+%     end
+%     title(['Feature Reaction Time (n = ' num2str(numObs) ') ' titleName],'FontSize',20)
+%     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
+%     ylabel('RT [ms]','FontSize',20,'Fontname','Ariel')
+%     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\easy\Feature_rtSetSize' saveFileName],'\',filesep));
+%     print ('-dpdf', '-r500',namefig);
+% 
+%     %% Plot performance
+%     figure;hold on;
+% 
+%     for i=1:numObs
+%         errorbar(4:4:8,easy_perf(:,i)*100,s_easy_perf(:,i),'-o','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
+%     end
+% 
+%     errorbar(4:4:8,m_easy_perf*100,ms_easy_perf*100,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
+% 
+% %     legend_obs = cell(numObs,1);
+% %     for i=1:numObs
+% %         legend_obs{i} = ['obs ' num2str(i)];
+% %     end
+% %     legend_obs{numObs+1} = 'average';    
+% %     l = legend(legend_obs,'Location','NorthWest');    
+% %     set(l,'FontSize',12);      
+%  
+%     xlim([3 9])
+%     set(gca,'XTick', 4:4:8,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+%     if expN == 1
+%         set(gca,'YTick', 50:10:100,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+%         ylim([50 100])
+%     elseif expN == 2
+%         set(gca,'YTick', 40:20:100,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+%         ylim([40 100])
+%     end
+%     title(['Feature Accuracy (n = ' num2str(numObs) ') ' titleName],'FontSize',20)
+%     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
+%     ylabel('Accuracy','FontSize',20,'Fontname','Ariel')
+%     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\easy\Feature_perfSetSize' saveFileName],'\',filesep));
+%     print ('-dpdf', '-r500',namefig);
+% 
+%     %% Plot reaction time
+%     figure;hold on;
+% 
+%     for i=1:numObs
+%         errorbar(4:4:8,difficult_rt(:,i)*1000,s_difficult_rt(:,i),'-o','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
+%     end
+% 
+%     errorbar(4:4:8,m_difficult_rt*1000,ms_difficult_rt*1000,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
+% 
+% %     legend_obs = cell(numObs,1);
+% %     for i=1:numObs
+% %         legend_obs{i} = ['obs ' num2str(i)];
+% %     end
+% %     legend_obs{numObs+1} = 'average';      
+% %     l = legend(legend_obs,'Location','NorthWest');    
+% %     set(l,'FontSize',12);    
+% 
+%     xlim([3 9])
+%     set(gca,'XTick',4:4:8,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+%     if expN == 1
+%         ylim([0 250])
+%         set(gca,'YTick', 0:50:250,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+%     elseif expN == 2
+%         ylim([0 400])
+%         set(gca,'YTick', 0:100:400,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+%     end
+%     title(['Conjunction Reaction Time (n = ' num2str(numObs) ') ' titleName],'FontSize',20)
+%     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
+%     ylabel('RT [ms]','FontSize',20,'Fontname','Ariel')
+%     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\difficult\Conjunction_rtSetSize' saveFileName],'\',filesep));
+%     print ('-dpdf', '-r500',namefig);
+% 
+%     %% Plot performance
+%     figure;hold on;
+% 
+%     for i=1:numObs
+%         errorbar(4:4:8,difficult_perf(:,i)*100,s_difficult_perf(:,i),'-o','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
+%     end
+% 
+%     errorbar(4:4:8,m_difficult_perf*100,ms_difficult_perf*100,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
+% 
+% %     legend_obs = cell(numObs,1);
+% %     for i=1:numObs
+% %         legend_obs{i} = ['obs ' num2str(i)];
+% %     end
+% %     legend_obs{numObs+1} = 'average';
+% %     l = legend(legend_obs,'Location','NorthWest');    
+% %     set(l,'FontSize',12); 
+% 
+%     xlim([3 9])
+%     set(gca,'XTick', 4:4:8,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+%     if expN == 1
+%         set(gca,'YTick', 50:10:100,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+%         ylim([50 100])
+%     elseif expN == 2
+%         set(gca,'YTick', 40:20:100,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+%         ylim([40 100])
+%     end
+%     title(['Conjunction Accuracy (n = ' num2str(numObs) ') ' titleName],'FontSize',20)
+%     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
+%     ylabel('Accuracy','FontSize',20,'Fontname','Ariel')
+%     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\difficult\Conjunction_perfSetSize' saveFileName],'\',filesep));
+%     print ('-dpdf', '-r500',namefig);
     
-    m_easy_rt=mean(easy_rt,2);
-    m_easy_perf=mean(easy_perf,2);
-    ms_easy_rt=std(easy_rt,[],2)./sqrt(numObs);
-    ms_easy_perf=std(easy_perf,[],2)./sqrt(numObs);
-
-    m_difficult_rt=mean(difficult_rt,2);
-    m_difficult_perf=mean(difficult_perf,2);
-    ms_difficult_rt=std(difficult_rt,[],2)./sqrt(numObs);
-    ms_difficult_perf=std(difficult_perf,[],2)./sqrt(numObs);
-
-    %% Plot reaction time
+    %% Plot reaction time for feature and conjunction on same graph
     figure;hold on;
-    for i=1:numObs
-        errorbar(4:4:8,easy_rt(:,i)*1000,s_easy_rt(:,i),'-o','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
-    end
 
-    errorbar(4:4:8,m_easy_rt*1000,ms_easy_rt*1000,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',9,'Color',[0 0 0])
-
-%     legend_obs = cell(numObs,1);
-%     for i=1:numObs
-%         legend_obs{i} = ['obs ' num2str(i)];
-%     end
-%     legend_obs{numObs+1} = 'average';
-%     l = legend(legend_obs,'Location','NorthWest');    
-%     set(l,'FontSize',12);    
+    errorbar(4:4:8,m_easy_rt*1000,ms_easy_rt*1000,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',easyclr)
+    errorbar(4:4:8,m_difficult_rt*1000,ms_difficult_rt*1000,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',difficultclr)
 
     xlim([3 9])
     set(gca,'XTick',4:4:8,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
@@ -105,96 +256,23 @@ if displayFg
         ylim([0 250])
         set(gca,'YTick', 0:50:250,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
     elseif expN == 2
-        ylim([0 400])
-        set(gca,'YTick', 0:100:400,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+        ylim([0 300])
+        set(gca,'YTick', 0:100:300,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
     end
-    title(['Feature Reaction Time (n = ' num2str(numObs) ') ' titleName],'FontSize',20)
+    title('Reaction Time','FontSize',20)
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('RT [ms]','FontSize',20,'Fontname','Ariel')
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\easy\Feature_rtSetSize' saveFileName]);
-    print ('-djpeg', '-r500',namefig);
-
-    %% Plot performance
+    
+    legend('Feature','Conjunction','Location','SouthWest')
+        
+    namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\pre-exp\rtSetSize' saveFileName],'\',filesep));    
+    print ('-dpdf', '-r500',namefig);
+    
+    %% Plot perf for feature and performance on same graph
     figure;hold on;
 
-    for i=1:numObs
-        errorbar(4:4:8,easy_perf(:,i)*100,s_easy_perf(:,i),'-o','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
-    end
-
-    errorbar(4:4:8,m_easy_perf*100,ms_easy_perf*100,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
-
-%     legend_obs = cell(numObs,1);
-%     for i=1:numObs
-%         legend_obs{i} = ['obs ' num2str(i)];
-%     end
-%     legend_obs{numObs+1} = 'average';    
-%     l = legend(legend_obs,'Location','NorthWest');    
-%     set(l,'FontSize',12);      
- 
-    xlim([3 9])
-    set(gca,'XTick', 4:4:8,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
-    if expN == 1
-        set(gca,'YTick', 50:10:100,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
-        ylim([50 100])
-    elseif expN == 2
-        set(gca,'YTick', 40:20:100,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
-        ylim([40 100])
-    end
-    title(['Feature Accuracy (n = ' num2str(numObs) ') ' titleName],'FontSize',20)
-    xlabel('Set Size','FontSize',20,'Fontname','Ariel')
-    ylabel('Accuracy','FontSize',20,'Fontname','Ariel')
-
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\easy\Feature_perfSetSize' saveFileName]);
-    print ('-djpeg', '-r500',namefig);
-
-    %% Plot reaction time
-    figure;hold on;
-
-    for i=1:numObs
-        errorbar(4:4:8,difficult_rt(:,i)*1000,s_difficult_rt(:,i),'-o','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
-    end
-
-    errorbar(4:4:8,m_difficult_rt*1000,ms_difficult_rt*1000,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
-
-%     legend_obs = cell(numObs,1);
-%     for i=1:numObs
-%         legend_obs{i} = ['obs ' num2str(i)];
-%     end
-%     legend_obs{numObs+1} = 'average';      
-%     l = legend(legend_obs,'Location','NorthWest');    
-%     set(l,'FontSize',12);    
-
-    xlim([3 9])
-    set(gca,'XTick',4:4:8,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
-    if expN == 1
-        ylim([0 250])
-        set(gca,'YTick', 0:50:250,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
-    elseif expN == 2
-        ylim([0 400])
-        set(gca,'YTick', 0:100:400,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
-    end
-    title(['Conjunction Reaction Time (n = ' num2str(numObs) ') ' titleName],'FontSize',20)
-    xlabel('Set Size','FontSize',20,'Fontname','Ariel')
-    ylabel('RT [ms]','FontSize',20,'Fontname','Ariel')
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\difficult\Conjunction_rtSetSize' saveFileName]);
-    print ('-djpeg', '-r500',namefig);
-
-    %% Plot performance
-    figure;hold on;
-
-    for i=1:numObs
-        errorbar(4:4:8,difficult_perf(:,i)*100,s_difficult_perf(:,i),'-o','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',9)
-    end
-
-    errorbar(4:4:8,m_difficult_perf*100,ms_difficult_perf*100,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
-
-%     legend_obs = cell(numObs,1);
-%     for i=1:numObs
-%         legend_obs{i} = ['obs ' num2str(i)];
-%     end
-%     legend_obs{numObs+1} = 'average';
-%     l = legend(legend_obs,'Location','NorthWest');    
-%     set(l,'FontSize',12); 
+    errorbar(4:4:8,m_easy_perf*100,ms_easy_perf*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',easyclr)
+    errorbar(4:4:8,m_difficult_perf*100,ms_difficult_perf*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',difficultclr)
 
     xlim([3 9])
     set(gca,'XTick', 4:4:8,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
@@ -202,22 +280,28 @@ if displayFg
         set(gca,'YTick', 50:10:100,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
         ylim([50 100])
     elseif expN == 2
-        set(gca,'YTick', 40:20:100,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
-        ylim([40 100])
+        set(gca,'YTick', 50:10:100,'FontSize',20,'LineWidth',2,'Fontname','Ariel')
+        ylim([50 100])
     end
-    title(['Conjunction Accuracy (n = ' num2str(numObs) ') ' titleName],'FontSize',20)
+    title('Performance','FontSize',20)
     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
     ylabel('Accuracy','FontSize',20,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures' saveFileLoc '\difficult\Conjunction_perfSetSize' saveFileName]);
-    print ('-djpeg', '-r500',namefig);
+    legend('Feature','Conjunction','Location','SouthWest')
+   
+    namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\pre-exp\perfSetSize' saveFileName],'\',filesep));    
+    print ('-dpdf', '-r500',namefig);    
+    fprintf('FEATURE TTEST\n')
+    [h,p,ci,stats] = ttest(easy_perf(1,:),easy_perf(2,:))
+    fprintf('CONJUNCTION TTEST\n')
+    [h,p,ci,stats] = ttest(difficult_perf(1,:),difficult_perf(2,:))    
 end
 if displayStats
-    search_slope_stats(expN,trialType);
+    search_slope_stats(expN,trialType,configuration);
 end
 end
 
-function search_slope_stats(expN,present)
+function search_slope_stats(expN,trialType,configuration)
 % Conducts ttests and prints statistics for all observers' search slopes in
 % the command window
 
@@ -244,7 +328,8 @@ pall_difficult_perf=[];
 
 numObs = 0;
 
-files = dir('C:\Users\alice_000\Documents\MATLAB\data');  
+dir_name = setup_dir();
+files = dir(strrep(dir_name,'\',filesep));  
 for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
@@ -255,7 +340,7 @@ for n = 1:size(files,1)
             else 
                 task = 'difficult';
             end
-            [rt4,rt8,perf4,perf8] = p_search_slope(obs,task,expN,present,false,false);
+            [rt4,rt8,perf4,perf8] = p_search_slope(obs,task,expN,trialType,configuration,false,false);
             rt_slope = (median(rt8) - median(rt4))/4*1000;
             p_slope = (mean(perf8) - mean(perf4))/4*100;               
             [rt_h,rt_p,rt_ci,rt_stats] = ttest(rt4,rt8);

@@ -1,4 +1,4 @@
-function [p,pTargetP,pTargetA] = probe_performance(obs,task,file,expN,present,grouping)
+function [p,pTargetP,pTargetA,perfClicks,perfClickPairs] = probe_performance(obs,task,file,expN,present,grouping)
 %% This program analyzes general performance on the probe task
 %% Example
 %%% probe_performance('ax','difficult','150820_stim01.mat',1,1);
@@ -10,6 +10,8 @@ function [p,pTargetP,pTargetA] = probe_performance(obs,task,file,expN,present,gr
 % expN = 1; (1 or 2)
 % present = 1; (only relevant for exp 2; 1:target-present trials,
 % 2:target-absent trials, 3:all trials)
+% grouping = 1; (if 1, probes must be exactly correct; if 2, probes must
+% match by shape; if 3, probes must match by aperture)
 
 %% Outputs
 % p is a 13x1 matrix for average overall probe performance 
@@ -185,12 +187,75 @@ for n = theTrials
     end   
 end
 
+%%% Plot probe performance on first click vs second click
+click1 = [];
+click2 = [];
+index = 1;
+for n = theTrials
+    if ~isempty(expProbe.probeResponse1{n})
+        idx1 = find(positions == expProbe.probeResponse1{n});
+        idx2 = find(positions == expProbe.probeResponse2{n});
+        i = 11;
+        for a = 1:12
+            idx1 = idx1 + i;
+            idx2 = idx2 + i;
+            i = i - 2;
+        end
+        
+        selected_idx1 = expProbe.list{n}==idx1;
+        selected_idx2 = expProbe.list{n}==idx2;
+        reported1 = identity(selected_idx1,:);
+        reported2 = identity(selected_idx2,:);
+        presented1 = expProbe.probePresented1{n};
+        presented2 = expProbe.probePresented2{n};
+        
+        match11 = false;
+        match12 = false;
+        
+        if reported1(1) == presented1(1)
+            match11 = true;
+            click1(index) = 1;
+        elseif reported1(1) == presented2(1)
+            match12 = true;
+            click1(index) = 1;
+        else
+            click1(index) = 0;
+        end
+        
+        if match11
+            if reported2(1) == presented2(1)
+                click2(index) = 1;
+            else
+                click2(index) = 0;
+            end
+        elseif match12
+            if reported2(1) == presented1(1)
+                click2(index) = 1;
+            else
+                click2(index) = 0;
+            end
+        else
+            if reported2(1) == presented1(1)
+                click2(index) = 1;
+            elseif reported2(1) == presented2(1)
+                click2(index) = 1;
+            else
+                click2(index) = 0;
+            end
+        end
+    end
+    index = index + 1;
+end
+
+%%%
 targetPA = logical(targetPA);
 targetPA = targetPA(theTrials);
 
 perfDelays=NaN(13,100);
 perfTargetP=[];
 perfTargetA=[];
+perfClick1 = [];
+perfClick2 = [];
 
 for delays = unique(exp.randVars.delays)
     delayTrials = exp.randVars.delays(theTrials)==delays;
@@ -201,10 +266,24 @@ for delays = unique(exp.randVars.delays)
     perfDelays(delays,1:size(tmp,2)) = tmp;
     perfTargetP(delays) = nanmean(perf(targetPTrials));
     perfTargetA(delays) = nanmean(perf(targetATrials));
+    perfClick1(delays,1) = nanmean(click1(delayTrials));
+    perfClick2(delays,1) = nanmean(click2(delayTrials));
 end
 p = nanmean(perfDelays,2);
 pTargetP = rot90(perfTargetP,-1);
 pTargetA = rot90(perfTargetA,-1);
+perfClicks = cat(3,perfClick1,perfClick2);
 
+perfClick1Pairs = NaN(13,1,12);
+perfClick2Pairs = NaN(13,1,12);
+for delays = unique(exp.randVars.delays)
+    for pair = unique(exp.randVars.probePairsLoc)
+        delayTrials = exp.randVars.delays(theTrials)==delays;
+        pairTrials = exp.randVars.probePairsLoc(theTrials)==pair;
+        perfClick1Pairs(delays,1,pair) = nanmean(click1(delayTrials & pairTrials));
+        perfClick2Pairs(delays,1,pair) = nanmean(click2(delayTrials & pairTrials));
+    end
+end
+perfClickPairs = horzcat(perfClick1Pairs,perfClick2Pairs);
 end
 

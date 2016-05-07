@@ -1,4 +1,4 @@
-function [perf,pTP,pTA] = p_probe_performance(obs,task,expN,present,printFg,grouping)
+function [perf,pTP,pTA,perfClicks,perfClicksP] = p_probe_performance(obs,task,expN,present,printFg,grouping)
 %% Example
 %%% p_probe_performance('ax','difficult',2,2,true,1);
 
@@ -44,6 +44,10 @@ end
 perf = NaN(13,10000);
 pTP = NaN(13,10000);
 pTA = NaN(13,10000);
+pClick1 = [];
+pClick2 = [];
+pClick1P = [];
+pClick2P = [];
 c = 1;
 
 if expN == 1
@@ -56,13 +60,18 @@ for n = 1:size(files,1)
     filename = files(n).name;
     fileL = size(filename,2);
     if fileL > 4 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')
-        [p,pTargetP,pTargetA] = probe_performance(obs,task,filename,expN,present,grouping);
+        [p,pTargetP,pTargetA,pClicks,pClickPairs] = probe_performance(obs,task,filename,expN,present,grouping);
         perf(:,c) = p; 
         pTP(:,c) = pTargetP;
         pTA(:,c) = pTargetA;
+        pClick1 = horzcat(pClick1,pClicks(:,:,1));
+        pClick2 = horzcat(pClick2,pClicks(:,:,2));
+        pClick1P = horzcat(pClick1P,pClickPairs(:,1,:));
+        pClick2P = horzcat(pClick2P,pClickPairs(:,2,:));
         c = c + 1;
     end
 end
+
 perf = perf(:,1:c-1);
 pTP = pTP(:,1:c-1);
 pTA = pTA(:,1:c-1);
@@ -70,6 +79,10 @@ pTA = pTA(:,1:c-1);
 perf = nanmean(perf,2);
 pTP = nanmean(pTP,2);
 pTA = nanmean(pTA,2);
+
+perfClicks = cat(3,nanmean(pClick1,2),nanmean(pClick2,2));
+
+perfClicksP = cat(2,nanmean(pClick1P,2),nanmean(pClick2P,2));
 
 if printFg
     %% Plot performance

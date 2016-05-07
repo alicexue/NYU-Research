@@ -6,26 +6,14 @@ function [hit,false_alarm,all_RT] = p_norminv_search_slope(obs,task,type)
 % obs = 'ax'; (observer's initials)
 % task = 'difficult'; ('easy' or 'difficult')
 % expN = 1; (1 or 2)
-
-%% Change task name to feature/conjunction
-if strcmp(task(1:4),'easy')
-    condition = 'Feature';
-else
-    condition = 'Conjunction';
-end
     
 %% Obtain pboth, pone and pnone for each run and concatenate over run
 hit = [];
 false_alarm = [];
-hit8 = [];
-false_alarm8 = [];
-
 all_RT = [];
-false_alarmRT = [];
-hitRT8 = [];
-false_alarmRT8 = [];
 
-files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\target present or absent\' task]);  
+dir_name = setup_dir();
+files = dir(strrep([dir_name '\' obs '\target present or absent\' task],'\',filesep));    
 for n = 1:size(files,1)
     filename = files(n).name;
     fileL = size(filename,2);

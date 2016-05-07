@@ -58,7 +58,8 @@ numTrialsAS=0;
 
 numObs = 0;
 
-files = dir('C:\Users\alice_000\Documents\MATLAB\data');  
+dir_name = setup_dir();
+files = dir(strrep(dir_name,'\',filesep));  
 for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
@@ -145,7 +146,7 @@ if printFg
 
     title([condition ' Search - Target Probed' saveFileName],'FontSize',18,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_TP_rawProbs1' saveFileName]);
+    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_TP_rawProbs1' saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);
    
     %% Plot p1 and p2 for each probe delay
@@ -165,7 +166,7 @@ if printFg
     title([condition ' Search-Target Probed (n = ' num2str(numObs) ')' saveFileName],'FontSize',18,'Fontname','Ariel')
     % title([condition ' Search-Target Probed-' num2str(numTrialsP) ' Trials'],'FontSize',18,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_TP_p1p21' saveFileName]);
+    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_TP_p1p21' saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);
 
     %% Averaging across runs
@@ -204,7 +205,7 @@ if printFg
     title([condition ' Search-Target Not Probed (n = ' num2str(numObs) ')' saveFileName],'FontSize',18,'Fontname','Ariel')
     % title([condition ' Search-Target Not Probed - ' num2str(numTrialsA) ' Trials'],'FontSize',18,'Fontname','Ariel')
 
-    namefig=sprintf('%s', ['C:\Users\alice_000\Documents\MATLAB\data\figures\' saveFileLoc '_TA_p1p21' saveFileName]);
+    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_TA_p1p21' saveFileName],'\',filesep));
     print ('-djpeg', '-r500',namefig);
     
     %% Plot sampled data figures - target present

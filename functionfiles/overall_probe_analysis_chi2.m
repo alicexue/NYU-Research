@@ -145,13 +145,13 @@ if printStats
     for i = 1:numObs
         p1p2(index+1:index+13,1) = all_p1(:,i);
         p1p2(index+1:index+13,2) = rot90(1:13,-1);
-        p1p2(index+1:index+13,3) = rot90([1,1,1,1,1,1,1,1,1,1,1,1,1]);
-        p1p2(index+1:index+13,4) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
+        p1p2(index+1:index+13,3) = ones(13,1);
+        p1p2(index+1:index+13,4) = ones(13,1)*i;
         index = index + 13;
         p1p2(index+1:index+13,1) = all_p2(:,i);
         p1p2(index+1:index+13,2) = rot90(1:13,-1);
-        p1p2(index+1:index+13,3) = rot90([2,2,2,2,2,2,2,2,2,2,2,2,2]);
-        p1p2(index+1:index+13,4) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
+        p1p2(index+1:index+13,3) = ones(13,1)*2;
+        p1p2(index+1:index+13,4) = ones(13,1)*i;
         index = index + 13;
     end
     RMAOV2(p1p2);    

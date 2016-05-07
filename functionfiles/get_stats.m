@@ -62,30 +62,30 @@ index = 0;
 for i = 1:numObs
     data(index+1:index+13,1) = easy_p1(:,i);
     data(index+1:index+13,2) = rot90(1:13,-1);
-    data(index+1:index+13,3) = rot90([1,1,1,1,1,1,1,1,1,1,1,1,1]);
-    data(index+1:index+13,4) = rot90([1,1,1,1,1,1,1,1,1,1,1,1,1]);
-    data(index+1:index+13,5) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
+    data(index+1:index+13,3) = ones(13,1);
+    data(index+1:index+13,4) = ones(13,1);
+    data(index+1:index+13,5) = ones(13,1)*i;
     index = index + 13;
     
     data(index+1:index+13,1) = easy_p2(:,i);
     data(index+1:index+13,2) = rot90(1:13,-1);
-    data(index+1:index+13,3) = rot90([2,2,2,2,2,2,2,2,2,2,2,2,2]);
-    data(index+1:index+13,4) = rot90([1,1,1,1,1,1,1,1,1,1,1,1,1]);
-    data(index+1:index+13,5) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
+    data(index+1:index+13,3) = ones(13,1)*2;
+    data(index+1:index+13,4) = ones(13,1);
+    data(index+1:index+13,5) = ones(13,1)*i;
     index = index + 13;
     
     data(index+1:index+13,1) = difficult_p1(:,i);
     data(index+1:index+13,2) = rot90(1:13,-1);
-    data(index+1:index+13,3) = rot90([1,1,1,1,1,1,1,1,1,1,1,1,1]);
-    data(index+1:index+13,4) = rot90([2,2,2,2,2,2,2,2,2,2,2,2,2]);
-    data(index+1:index+13,5) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
+    data(index+1:index+13,3) = ones(13,1);
+    data(index+1:index+13,4) = ones(13,1)*2;
+    data(index+1:index+13,5) = ones(13,1)*i;
     index = index + 13;    
     
     data(index+1:index+13,1) = difficult_p2(:,i);
     data(index+1:index+13,2) = rot90(1:13,-1);
-    data(index+1:index+13,3) = rot90([2,2,2,2,2,2,2,2,2,2,2,2,2]);
-    data(index+1:index+13,4) = rot90([2,2,2,2,2,2,2,2,2,2,2,2,2]);
-    data(index+1:index+13,5) = rot90([i,i,i,i,i,i,i,i,i,i,i,i,i]);
+    data(index+1:index+13,3) = ones(13,1)*2;
+    data(index+1:index+13,4) = ones(13,1)*2;
+    data(index+1:index+13,5) = ones(13,1)*i;
     index = index + 13;
 end
 RMAOV33(data);     

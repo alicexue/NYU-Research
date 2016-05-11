@@ -25,6 +25,8 @@ if expN == 1
     load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\main_' task '\' file])
 elseif expN == 2
     load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\target present or absent\main_' task '\' file])
+elseif expN == 3
+    load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\control exp\' file])
 end
 
 %% Get Probe data
@@ -38,7 +40,7 @@ exp = getTaskParameters(myscreen,task);
 
 expProbe = task{1}.probeTask;
 
-if expN == 1 || (expN == 2 && present == 3)
+if expN == 1 || (expN == 2 && present == 3) || expN == 3
     theTrials = find(task{1}.randVars.fixBreak == 0);
 elseif expN == 2
     if present == 1       
@@ -175,14 +177,16 @@ for n = theTrials
         
         perf(:,n) = vertcat(cor1,cor2);
         
-        if (expProbe.targetPresented{n}(1) == expProbe.probePresented1{n}(3)...
-            && expProbe.targetPresented{n}(2) == expProbe.probePresented1{n}(4))...
-            || (expProbe.targetPresented{n}(1) == expProbe.probePresented2{n}(3)...
-            && expProbe.targetPresented{n}(2) == expProbe.probePresented2{n}(4));
-
-            targetPA(n)=true;
-        else 
-            targetPA(n)=false;            
+        if expN~=3
+            if (expProbe.targetPresented{n}(1) == expProbe.probePresented1{n}(3)...
+                && expProbe.targetPresented{n}(2) == expProbe.probePresented1{n}(4))...
+                || (expProbe.targetPresented{n}(1) == expProbe.probePresented2{n}(3)...
+                && expProbe.targetPresented{n}(2) == expProbe.probePresented2{n}(4));
+    
+                targetPA(n)=true;
+            else 
+                targetPA(n)=false;            
+            end
         end        
     end   
 end
@@ -248,8 +252,9 @@ for n = theTrials
 end
 
 %%%
-targetPA = logical(targetPA);
-targetPA = targetPA(theTrials);
+
+%targetPA = logical(targetPA);
+%targetPA = targetPA(theTrials);
 
 perfDelays=NaN(13,100);
 perfTargetP=[];
@@ -260,18 +265,19 @@ perfClick2 = [];
 for delays = unique(exp.randVars.delays)
     delayTrials = exp.randVars.delays(theTrials)==delays;
     trialPerf = horzcat(perf(1,delayTrials),perf(2,delayTrials));
-    targetPTrials = targetPA & delayTrials;
-    targetATrials = ~targetPA & delayTrials;
+    %targetPTrials = targetPA & delayTrials;
+    %targetATrials = ~targetPA & delayTrials;
     tmp = trialPerf;
     perfDelays(delays,1:size(tmp,2)) = tmp;
-    perfTargetP(delays) = nanmean(perf(targetPTrials));
-    perfTargetA(delays) = nanmean(perf(targetATrials));
+    %perfTargetP(delays) = nanmean(perf(targetPTrials));
+    %perfTargetA(delays) = nanmean(perf(targetATrials));
     perfClick1(delays,1) = nanmean(click1(delayTrials));
     perfClick2(delays,1) = nanmean(click2(delayTrials));
 end
+
 p = nanmean(perfDelays,2);
 pTargetP = rot90(perfTargetP,-1);
-pTargetA = rot90(perfTargetA,-1);
+pTargetA = rot90(perfTargetA,-1);    
 perfClicks = cat(3,perfClick1,perfClick2);
 
 perfClick1Pairs = NaN(13,1,12);
@@ -285,5 +291,6 @@ for delays = unique(exp.randVars.delays)
     end
 end
 perfClickPairs = horzcat(perfClick1Pairs,perfClick2Pairs);
+
 end
 

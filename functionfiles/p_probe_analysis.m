@@ -97,6 +97,8 @@ if expN == 1
     dir_loc = [dir_name '\' obs '\main_' task];
 elseif expN == 2
     dir_loc = [dir_name '\' obs '\target present or absent\main_' task];
+elseif expN == 3
+    dir_loc = [dir_name '\' obs '\control exp'];
 end
 
 files = dir(strrep(dir_loc,'\',filesep));  

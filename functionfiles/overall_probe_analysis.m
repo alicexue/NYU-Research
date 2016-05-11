@@ -69,6 +69,10 @@ elseif expN == 2
         titleName = 'prevPN';
         saveFileName = '_2PN';
     end
+elseif expN == 3
+    saveFileLoc = '\control exp';
+    titleName = '';
+    saveFileName = '';
 end
 
 %% Obtain pboth, pone and pnone for each observer and concatenate over observer
@@ -149,7 +153,6 @@ for n = 1:size(files,1)
             [tmpP1,tmpP2] = quadratic_analysis(diD(:,1),diD(:,2));
             diD_p1 = horzcat(diD_p1,tmpP1);
             diD_p2 = horzcat(diD_p2,tmpP2);            
-            
             
             if ~isnan(P1C2)
                 P1_C2 = horzcat(P1_C2,P1C2);
@@ -249,7 +252,7 @@ pair1346PB = mean(cat(3,pbothp(:,:,1),pbothp(:,:,3),pbothp(:,:,4),pbothp(:,:,6))
 pair1346PN = mean(cat(3,pnonep(:,:,1),pnonep(:,:,3),pnonep(:,:,4),pnonep(:,:,6)),3);
 [pair1346P1,pair1346P2] = quadratic_analysis(pair1346PB,pair1346PN);
 
-if printFg && ~difference
+if printFg && ~difference && expN~=3
     % make a data directory if necessary
     thisdir = strrep(dir_name,'\',filesep);
     if ~isdir(fullfile(thisdir,'figures'))
@@ -319,11 +322,15 @@ if printFg && ~difference
     xlabel('Time from search array onset [ms]','FontSize',20,'Fontname','Ariel')
     ylim([0 1])
     xlim([0 500])
-    
+   
     title([condition ' Search (n = ' num2str(numObs) ') ' titleName],'FontSize',24,'Fontname','Ariel')
 
     plot(50,mean(m_p1,1),'s','Color',p1clr,'LineWidth',2,'MarkerSize',8)
     plot(50,mean(m_p2,1),'s','Color',p2clr,'LineWidth',2,'MarkerSize',8)
+   
+    h = refline(0,2/12);
+    h.Color = [1 1 1]*0.4;
+    h.LineStyle = '--';
     
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_p1p2' saveFileName],'\',filesep));
     print ('-dpdf', '-r500',namefig);
@@ -426,6 +433,10 @@ if printFg && ~difference
             ylim([0 1])
             xlim([0 500])
 
+            h = refline(0,2/12);
+            h.Color = [1 1 1]*0.4;
+            h.LineStyle = '--';
+            
             if numPair == 4
                 ylabel('Probe report probabilities','FontSize',14,'Fontname','Ariel')
             end
@@ -454,6 +465,10 @@ if printFg && ~difference
             ylim([0 1])
             xlim([0 500])
 
+            h = refline(0,2/12);
+            h.Color = [1 1 1]*0.4;
+            h.LineStyle = '--';
+            
             if numPair == 4
                 ylabel('Probe report probabilities','FontSize',14,'Fontname','Ariel')
             end
@@ -498,6 +513,10 @@ if printFg && ~difference
         plot(50,mean(mean(squareP1,2),1),'s','Color',p1clr,'LineWidth',2,'MarkerSize',8)
         plot(50,mean(mean(squareP2,2),1),'s','Color',p2clr,'LineWidth',2,'MarkerSize',8)
         
+        h = refline(0,2/12);
+        h.Color = [1 1 1]*0.4;
+        h.LineStyle = '--';
+        
         namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileConfigLoc '_p1p2SQ' saveFileName],'\',filesep));
         print ('-dpdf', '-r500',namefig);        
         
@@ -531,6 +550,10 @@ if printFg && ~difference
         plot(50,mean(mean(diamondP1,2),1),'s','Color',p1clr,'LineWidth',2,'MarkerSize',8)
         plot(50,mean(mean(diamondP2,2),1),'s','Color',p2clr,'LineWidth',2,'MarkerSize',8)
 
+        h = refline(0,2/12);
+        h.Color = [1 1 1]*0.4;
+        h.LineStyle = '--';
+        
         namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileConfigLoc '_p1p2DMD' saveFileName],'\',filesep));
         print ('-dpdf', '-r500',namefig);         
         
@@ -690,8 +713,7 @@ if printFg && ~difference
         print ('-dpdf', '-r500',namefig);   
     end     
 end
-
-if printFg && difference
+if printFg && difference && expN~=3
     %% Plot p1 and p2 for each probe delay    
     figure;hold on;
     d = m_p1-m_p2;
@@ -773,6 +795,73 @@ if printFg && difference
 
 end
 
+if printFg && expN==3 
+    sem_pb = std(pboth,[],2)./sqrt(numObs);
+    sem_po = std(pone,[],2)./sqrt(numObs);
+    sem_pn = std(pnone,[],2)./sqrt(numObs);
+    
+    sem_p1 = std(all_p1,[],2)./sqrt(numObs);
+    sem_p2 = std(all_p2,[],2)./sqrt(numObs);
+    
+    figure; 
+    hold on
+    bar(1,Mpb(1),.5,'FaceColor',[1 0 0])
+    bar(2,Mpo(1),.5,'FaceColor',[0 1 0])
+    bar(3,Mpn(1),.5,'FaceColor',[0 0 1])
+    errorbar(1,Mpb(1),sem_pb(1,1),'.','Color',[0 0 0])
+    errorbar(2,Mpo(1),sem_po(1,1),'.','Color',[0 0 0])
+    errorbar(3,Mpn(1),sem_pn(1,1),'.','Color',[0 0 0])
+    hold off
+    set(gca,'XTick',1:1:3,'XTickLabel',{'PBoth','POne','PNone'},'FontSize',13,'LineWidth',2','Fontname','Ariel')    
+    set(gca,'YTick',0:.2:1,'FontSize',13,'LineWidth',2','Fontname','Ariel')
+    xlim([0 4])
+    ylim([0 1])
+    ylabel('Percent Correct')
+    title('Control Exp')
+    namefig=sprintf('%s', strrep([dir_name '\figures\control exp\rawProbsBar'],'\',filesep));
+    print ('-dpdf', '-r500',namefig); 
+    
+    figure;
+    hold on
+    bar(1,m_p1(1,1),.5,'FaceColor',[0 0 0])
+    bar(2,m_p2(1,1),.5,'FaceColor',[0 0 0])
+    errorbar(1,m_p1(1,1),sem_p1(1,1),'.','Color',[0 0 0])
+    errorbar(2,m_p2(1,1),sem_p2(1,1),'.','Color',[0 0 0])
+    hold off
+    set(gca,'XTick',1:1:2,'XTickLabel',{'P1','P2'},'FontSize',13,'LineWidth',2','Fontname','Ariel')    
+    set(gca,'YTick',0:.2:1,'FontSize',13,'LineWidth',2','Fontname','Ariel')
+    xlim([0 3])
+    ylim([0 1])
+    ylabel('Probe Report Probability')
+    title('Control Exp')
+    namefig=sprintf('%s', strrep([dir_name '\figures\control exp\p1p2Bar'],'\',filesep));
+    print ('-dpdf', '-r500',namefig); 
+    
+    figure;
+    hold on
+    for i=1:numObs
+        plot(1,all_p1(1,i),'-ro','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',5,'Color',[0 153 51]/255)
+        plot(2,all_p2(1,i),'-ro','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',5,'Color',[0 153 51]/255)
+    end    
+    errorbar(1,m_p1(1,1),sem_p1(1,1),'-ro','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
+    errorbar(2,m_p2(1,1),sem_p2(1,1),'-ro','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
+    hold off
+    set(gca,'XTick',1:1:2,'XTickLabel',{'P1','P2'},'FontSize',13,'LineWidth',2','Fontname','Ariel')    
+    set(gca,'YTick',0:.2:1,'FontSize',13,'LineWidth',2','Fontname','Ariel')
+    xlim([0 3])
+    ylim([0 1])
+    ylabel('Probe Report Probability')
+    title('Control Exp')
+    
+    h = refline(0,2/12);
+    h.Color = [1 1 1]*0.4;
+    h.LineStyle = '--';
+    namefig=sprintf('%s', strrep([dir_name '\figures\control exp\p1p2Plot'],'\',filesep));
+    print ('-dpdf', '-r500',namefig); 
+    
+    [H,P,CI,STATS] = ttest(rot90(all_p1(1,:)),rot90(all_p2(1,:)))
+    
+end
 %% Bar graphs for PBOTH, PNONE, and PONE. Note that the graph is not saved.
 % figure;hold on;
 % y = [];

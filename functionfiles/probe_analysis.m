@@ -26,6 +26,8 @@ if expN == 1
     dir_loc = [dir_name '\' obs '\main_' task '\' file];
 elseif expN == 2
     dir_loc = [dir_name '\' obs '\target present or absent\main_' task '\' file];
+elseif expN == 3
+    dir_loc = [dir_name '\' obs '\control exp\' file];
 end
 
 load(strrep(dir_loc,'\',filesep))
@@ -41,7 +43,7 @@ exp = getTaskParameters(myscreen,task);
 
 expProbe = task{1}.probeTask;
 
-if expN == 1 || (expN == 2 && trialType == 3) 
+if expN == 1 || (expN == 2 && trialType == 3) || expN == 3
     theTrials = find(task{1}.randVars.fixBreak == 0);
 elseif expN == 2
     if trialType == 1       

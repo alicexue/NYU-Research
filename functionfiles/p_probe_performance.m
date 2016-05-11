@@ -38,6 +38,10 @@ elseif expN == 2
     elseif present == 3
         saveFileName = '_2';
     end
+elseif expN == 3
+    saveFileLoc = ['\control exp\figures\' obs];
+    saveFilePairsLoc = ['\control exp\figures'];
+    saveFileName = '';
 end
 
 %% Obtain perf for each run and concatenate over each run
@@ -54,6 +58,8 @@ if expN == 1
     files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\main_', task]);  
 elseif expN == 2
     files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\target present or absent\main_', task]);  
+elseif expN == 3
+    files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\control exp']);  
 end
 
 for n = 1:size(files,1)
@@ -62,8 +68,8 @@ for n = 1:size(files,1)
     if fileL > 4 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')
         [p,pTargetP,pTargetA,pClicks,pClickPairs] = probe_performance(obs,task,filename,expN,present,grouping);
         perf(:,c) = p; 
-        pTP(:,c) = pTargetP;
-        pTA(:,c) = pTargetA;
+%        pTP(:,c) = pTargetP;
+%        pTA(:,c) = pTargetA;
         pClick1 = horzcat(pClick1,pClicks(:,:,1));
         pClick2 = horzcat(pClick2,pClicks(:,:,2));
         pClick1P = horzcat(pClick1P,pClickPairs(:,1,:));
@@ -73,12 +79,12 @@ for n = 1:size(files,1)
 end
 
 perf = perf(:,1:c-1);
-pTP = pTP(:,1:c-1);
-pTA = pTA(:,1:c-1);
+%pTP = pTP(:,1:c-1);
+%pTA = pTA(:,1:c-1);
 
 perf = nanmean(perf,2);
-pTP = nanmean(pTP,2);
-pTA = nanmean(pTA,2);
+%pTP = nanmean(pTP,2);
+%pTA = nanmean(pTA,2);
 
 perfClicks = cat(3,nanmean(pClick1,2),nanmean(pClick2,2));
 

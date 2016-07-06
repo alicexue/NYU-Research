@@ -118,7 +118,7 @@ for n = 1:size(files,1)
         if ~isempty(P1)            
             all_p1 = horzcat(all_p1,P1);
             all_p2 = horzcat(all_p2,P2);          
-                   
+            
             pboth = horzcat(pboth,pb);
             pone = horzcat(pone,po);
             pnone = horzcat(pnone,pn); 
@@ -803,6 +803,7 @@ if printFg && expN==3
     sem_p1 = std(all_p1,[],2)./sqrt(numObs);
     sem_p2 = std(all_p2,[],2)./sqrt(numObs);
     
+    %% Plot PBoth, POne, PNone bar graph for control exp
     figure; 
     hold on
     bar(1,Mpb(1),.5,'FaceColor',[1 0 0])
@@ -821,6 +822,7 @@ if printFg && expN==3
     namefig=sprintf('%s', strrep([dir_name '\figures\control exp\rawProbsBar'],'\',filesep));
     print ('-dpdf', '-r500',namefig); 
     
+    %% Graph p1 p2 bar graph for control exp
     figure;
     hold on
     bar(1,m_p1(1,1),.5,'FaceColor',[0 0 0])
@@ -832,35 +834,232 @@ if printFg && expN==3
     set(gca,'YTick',0:.2:1,'FontSize',13,'LineWidth',2','Fontname','Ariel')
     xlim([0 3])
     ylim([0 1])
-    ylabel('Probe Report Probability')
-    title('Control Exp')
+    ylabel('Probe report probability')
+    title('Cueing Task')
     namefig=sprintf('%s', strrep([dir_name '\figures\control exp\p1p2Bar'],'\',filesep));
-    print ('-dpdf', '-r500',namefig); 
+    print ('-dpdf','-r500',namefig); 
     
+    %% Plot p1 and p2 with same color for all obs for control exp
     figure;
     hold on
     for i=1:numObs
         plot(1,all_p1(1,i),'-ro','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',5,'Color',[0 153 51]/255)
-        plot(2,all_p2(1,i),'-ro','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',5,'Color',[0 153 51]/255)
+        plot(1.5,all_p2(1,i),'-ro','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',5,'Color',[0 153 51]/255)
     end    
     errorbar(1,m_p1(1,1),sem_p1(1,1),'-ro','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
-    errorbar(2,m_p2(1,1),sem_p2(1,1),'-ro','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
+    errorbar(1.5,m_p2(1,1),sem_p2(1,1),'-ro','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
     hold off
-    set(gca,'XTick',1:1:2,'XTickLabel',{'P1','P2'},'FontSize',13,'LineWidth',2','Fontname','Ariel')    
+    set(gca,'XTick',1:.5:1.5,'XTickLabel',{'P1','P2'},'FontSize',13,'LineWidth',2','Fontname','Ariel')    
     set(gca,'YTick',0:.2:1,'FontSize',13,'LineWidth',2','Fontname','Ariel')
-    xlim([0 3])
-    ylim([0 1])
-    ylabel('Probe Report Probability')
-    title('Control Exp')
+    xlim([.5 2])
+    ylim([2/12 1])
+    ylabel('Probe report probability')
+    title('Cueing Task')
+%     h = refline(0,2/12);
+%     h.Color = [1 1 1]*0.4;
+%     h.LineStyle = '--';
     
-    h = refline(0,2/12);
-    h.Color = [1 1 1]*0.4;
-    h.LineStyle = '--';
+    set(gcf, 'PaperSize', [6.25 7.5]);
+    set(gcf, 'PaperPositionMode', 'manual');
+    set(gcf, 'PaperPosition', [0 0 6.25 7.5]);
+ 
+    set(gcf, 'PaperUnits', 'inches');
+    set(gcf, 'PaperSize', [6.25 7.5]);
+    set(gcf, 'PaperPositionMode', 'manual');
+    set(gcf, 'PaperPosition', [0 0 6.25 7.5]);
+    set(gcf, 'renderer', 'painters');
+    
     namefig=sprintf('%s', strrep([dir_name '\figures\control exp\p1p2Plot'],'\',filesep));
-    print ('-dpdf', '-r500',namefig); 
+    print (gcf,'-dpdf','-r500',namefig); 
     
     [H,P,CI,STATS] = ttest(rot90(all_p1(1,:)),rot90(all_p2(1,:)))
+        
+    %% Plot p1 p2 with numbers for each obs for control exp
+    figure;
+    hold on
+    for i=1:numObs
+%         t(1) = text(.989,all_p1(1,i),num2str(i));
+%         t(2) = text(1.489,all_p2(1,i),num2str(i));
+        t(1) = text(.95,all_p1(1,i),num2str(i));
+        t(2) = text(1.45,all_p2(1,i),num2str(i));
+        set(t(:),'FontSize',7,'Fontname','Ariel')
+    end    
+    errorbar(1,m_p1(1,1),sem_p1(1,1),'-ro','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
+    errorbar(1.5,m_p2(1,1),sem_p2(1,1),'-ro','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
+    hold off
+    set(gca,'XTick',1:.5:1.5,'XTickLabel',{'P1','P2'},'FontSize',13,'LineWidth',2','Fontname','Ariel')    
+    set(gca,'YTick',0:.2:1,'FontSize',13,'LineWidth',2','Fontname','Ariel')
+    xlim([.5 2])
+    ylim([2/12 1])
+    ylabel('Probe report probability')
+    title('Cueing Task')
+%     h = refline(0,2/12);
+%     h.Color = [1 1 1]*0.4;
+%     h.LineStyle = '--';
     
+    set(gcf, 'PaperSize', [6.25 7.5]);
+    set(gcf, 'PaperPositionMode', 'manual');
+    set(gcf, 'PaperPosition', [0 0 6.25 7.5]);
+ 
+    set(gcf, 'PaperUnits', 'inches');
+    set(gcf, 'PaperSize', [6.25 7.5]);
+    set(gcf, 'PaperPositionMode', 'manual');
+    set(gcf, 'PaperPosition', [0 0 6.25 7.5]);
+    set(gcf, 'renderer', 'painters');
+    
+    namefig=sprintf('%s', strrep([dir_name '\figures\control exp\p1p2PlotN'],'\',filesep));
+    print (gcf,'-dpdf','-r500',namefig); 
+    
+    %% Plot p1 and p2 with different colors for each obs for control exp
+    figure;
+    hold on
+    colorOrder = {[255 51 51],[255 102 51],[255 153 51],[255 204 51],[153 255 51],[51 255 102],[51 255 153],[51 204 255],[51 153 255],[51 51 255],[102 51 255],[153 51 255],[204 51 255],[255 51 153],[255 51 102],[255 51 51]};
+    for i=1:numObs
+        if i*2-1<size(colorOrder,2)
+            clr = colorOrder{i*2-1}/255;
+        else
+            clr = colorOrder{(i-(size(colorOrder,2)/2))*2}/255;
+        end
+        plot(1,all_p1(1,i),'-ro','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',5,'Color',clr)
+        plot(1.5,all_p2(1,i),'-ro','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',5,'Color',clr)
+    end
+    errorbar(1,m_p1(1,1),sem_p1(1,1),'-ro','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
+    errorbar(1.5,m_p2(1,1),sem_p2(1,1),'-ro','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
+    hold off
+    set(gca,'XTick',1:.5:1.5,'XTickLabel',{'P1','P2'},'FontSize',13,'LineWidth',2','Fontname','Ariel')    
+    set(gca,'YTick',0:.2:1,'FontSize',13,'LineWidth',2','Fontname','Ariel')
+    xlim([.5 2])
+    ylim([2/12 1])
+    ylabel('Probe report probability') 
+    title('Cueing Task')
+%     h = refline(0,2/12);
+%     h.Color = [1 1 1]*0.4;
+%     h.LineStyle = '--';
+    
+    set(gcf, 'PaperSize', [6.25 7.5]);
+    set(gcf, 'PaperPositionMode', 'manual');
+    set(gcf, 'PaperPosition', [0 0 6.25 7.5]);
+ 
+    set(gcf, 'PaperUnits', 'inches');
+    set(gcf, 'PaperSize', [6.25 7.5]);
+    set(gcf, 'PaperPositionMode', 'manual');
+    set(gcf, 'PaperPosition', [0 0 6.25 7.5]);
+    set(gcf, 'renderer', 'painters');
+    
+    namefig=sprintf('%s', strrep([dir_name '\figures\control exp\p1p2PlotC'],'\',filesep));
+    print (gcf,'-dpdf','-r500',namefig); 
+    
+    %% Plot p1 and p2 with same color for all obs for control exp
+    
+    median_p1 = median(all_p1(1,:));
+    median_p2 = median(all_p2(1,:));
+
+    figure;
+    hold on
+    for i=1:numObs
+        plot(1,all_p1(1,i),'-ro','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',5,'Color',[0 153 51]/255)
+        plot(1.5,all_p2(1,i),'-ro','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',5,'Color',[0 153 51]/255)
+    end    
+    errorbar(1,median_p1,sem_p1(1,1),'-ro','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
+    errorbar(1.5,median_p2,sem_p2(1,1),'-ro','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
+    hold off
+    set(gca,'XTick',1:.5:1.5,'XTickLabel',{'P1','P2'},'FontSize',13,'LineWidth',2','Fontname','Ariel')    
+    set(gca,'YTick',0:.2:1,'FontSize',13,'LineWidth',2','Fontname','Ariel')
+    xlim([.5 2])
+    ylim([2/12 1])
+    ylabel('Probe report probability')
+    title('Cueing Task')
+%     h = refline(0,2/12);
+%     h.Color = [1 1 1]*0.4;
+%     h.LineStyle = '--';
+    
+    set(gcf, 'PaperSize', [6.25 7.5]);
+    set(gcf, 'PaperPositionMode', 'manual');
+    set(gcf, 'PaperPosition', [0 0 6.25 7.5]);
+ 
+    set(gcf, 'PaperUnits', 'inches');
+    set(gcf, 'PaperSize', [6.25 7.5]);
+    set(gcf, 'PaperPositionMode', 'manual');
+    set(gcf, 'PaperPosition', [0 0 6.25 7.5]);
+    set(gcf, 'renderer', 'painters');
+    
+    namefig=sprintf('%s', strrep([dir_name '\figures\control exp\p1p2MedianPlot'],'\',filesep));
+    print (gcf,'-dpdf','-r500',namefig); 
+    
+    %% Plot p1 p2 with numbers for each obs for control exp
+    figure;
+    hold on
+    for i=1:numObs
+%         t(1) = text(.989,all_p1(1,i),num2str(i));
+%         t(2) = text(1.489,all_p2(1,i),num2str(i));
+        t(1) = text(.95,all_p1(1,i),num2str(i));
+        t(2) = text(1.45,all_p2(1,i),num2str(i));
+        set(t(:),'FontSize',7,'Fontname','Ariel')
+    end    
+    errorbar(1,median_p1,sem_p1(1,1),'-ro','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
+    errorbar(1.5,median_p2,sem_p2(1,1),'-ro','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
+    hold off
+    set(gca,'XTick',1:.5:1.5,'XTickLabel',{'P1','P2'},'FontSize',13,'LineWidth',2','Fontname','Ariel')    
+    set(gca,'YTick',0:.2:1,'FontSize',13,'LineWidth',2','Fontname','Ariel')
+    xlim([.5 2])
+    ylim([2/12 1])
+    ylabel('Probe report probability')
+    title('Cueing Task')
+%     h = refline(0,2/12);
+%     h.Color = [1 1 1]*0.4;
+%     h.LineStyle = '--';
+    
+    set(gcf, 'PaperSize', [6.25 7.5]);
+    set(gcf, 'PaperPositionMode', 'manual');
+    set(gcf, 'PaperPosition', [0 0 6.25 7.5]);
+ 
+    set(gcf, 'PaperUnits', 'inches');
+    set(gcf, 'PaperSize', [6.25 7.5]);
+    set(gcf, 'PaperPositionMode', 'manual');
+    set(gcf, 'PaperPosition', [0 0 6.25 7.5]);
+    set(gcf, 'renderer', 'painters');
+    
+    namefig=sprintf('%s', strrep([dir_name '\figures\control exp\p1p2PlotMedianN'],'\',filesep));
+    print (gcf,'-dpdf','-r500',namefig); 
+    
+    %% Plot p1 and p2 with different colors for each obs for control exp
+    figure;
+    hold on
+    colorOrder = {[255 51 51],[255 102 51],[255 153 51],[255 204 51],[153 255 51],[51 255 102],[51 255 153],[51 204 255],[51 153 255],[51 51 255],[102 51 255],[153 51 255],[204 51 255],[255 51 153],[255 51 102],[255 51 51]};
+    for i=1:numObs
+        if i*2-1<size(colorOrder,2)
+            clr = colorOrder{i*2-1}/255;
+        else
+            clr = colorOrder{(i-(size(colorOrder,2)/2))*2}/255;
+        end
+        plot(1,all_p1(1,i),'-ro','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',5,'Color',clr)
+        plot(1.5,all_p2(1,i),'-ro','LineWidth',1,'MarkerFaceColor',[1 1 1],'MarkerSize',5,'Color',clr)
+    end
+    errorbar(1,median_p1,sem_p1(1,1),'-ro','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
+    errorbar(1.5,median_p2,sem_p2(1,1),'-ro','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',[0 0 0])
+    hold off
+    set(gca,'XTick',1:.5:1.5,'XTickLabel',{'P1','P2'},'FontSize',13,'LineWidth',2','Fontname','Ariel')    
+    set(gca,'YTick',0:.2:1,'FontSize',13,'LineWidth',2','Fontname','Ariel')
+    xlim([.5 2])
+    ylim([2/12 1])
+    ylabel('Probe report probability') 
+    title('Cueing Task')
+%     h = refline(0,2/12);
+%     h.Color = [1 1 1]*0.4;
+%     h.LineStyle = '--';
+    
+    set(gcf, 'PaperSize', [6.25 7.5]);
+    set(gcf, 'PaperPositionMode', 'manual');
+    set(gcf, 'PaperPosition', [0 0 6.25 7.5]);
+ 
+    set(gcf, 'PaperUnits', 'inches');
+    set(gcf, 'PaperSize', [6.25 7.5]);
+    set(gcf, 'PaperPositionMode', 'manual');
+    set(gcf, 'PaperPosition', [0 0 6.25 7.5]);
+    set(gcf, 'renderer', 'painters');
+    
+    namefig=sprintf('%s', strrep([dir_name '\figures\control exp\p1p2PlotMedianC'],'\',filesep));
+    print (gcf,'-dpdf','-r500',namefig);     
 end
 %% Bar graphs for PBOTH, PNONE, and PONE. Note that the graph is not saved.
 % figure;hold on;
@@ -1126,24 +1325,22 @@ if printColormap
     print ('-dpdf', '-r500',namefig);
 end
 
-if printFFT
+if printFFT && expN~=3
     %% Conduct FFT's
-    obsDiff = pair_p1 - pair_p2;
-    diff1and6 = mean(cat(3,obsDiff(:,:,1),obsDiff(:,:,6)),3);
-    diff2and5 = mean(cat(3,obsDiff(:,:,2),obsDiff(:,:,5)),3);
-    diff3and4 = mean(cat(3,obsDiff(:,:,3),obsDiff(:,:,4)),3);
-    diff7 = mean(obsDiff(:,:,7),3);
-    diff12 = mean(obsDiff(:,:,12),3);
+%     obsDiff = pair_p1 - pair_p2;
+%     diff1and6 = mean(cat(3,obsDiff(:,:,1),obsDiff(:,:,6)),3);
+%     diff2and5 = mean(cat(3,obsDiff(:,:,2),obsDiff(:,:,5)),3);
+%     diff3and4 = mean(cat(3,obsDiff(:,:,3),obsDiff(:,:,4)),3);
+%     diff7 = mean(obsDiff(:,:,7),3);
+%     diff12 = mean(obsDiff(:,:,12),3);
 
-    % diffSquare = mean(cat(3,obsDiff(:,:,1),obsDiff(:,:,2),obsDiff(:,:,3),obsDiff(:,:,4),obsDiff(:,:,5),obsDiff(:,:,6)),3);
+%     fft_p1_p2([],[],diff1and6,expN,trialType,task,'1and6');
+%     fft_p1_p2([],[],diff2and5,expN,trialType,task,'2and5');
+%     fft_p1_p2([],[],diff3and4,expN,trialType,task,'3and4');
+%     fft_p1_p2([],[],diff7,expN,trialType,task,'7');
+%     fft_p1_p2([],[],diff12,expN,trialType,task,'12');
 
-    fft_p1_p2([],[],diff1and6,expN,trialType,task,'1and6');
-    fft_p1_p2([],[],diff2and5,expN,trialType,task,'2and5');
-    fft_p1_p2([],[],diff3and4,expN,trialType,task,'3and4');
-    fft_p1_p2([],[],diff7,expN,trialType,task,'7');
-    fft_p1_p2([],[],diff12,expN,trialType,task,'12');
-
-    % fft_p1_p2([],[],diffSquare,expN,present,task,'Square');
+    fft_p1_p2(squareP1,squareP2,[],expN,trialType,task,'Square');
 
     fft_p1_p2(all_p1,all_p2,[],expN,trialType,task,'');
 end

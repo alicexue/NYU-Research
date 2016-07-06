@@ -1,4 +1,4 @@
-function [perfDelays,rtDelays] = main_slope(obs,task,file,expN,present)
+function [perfDelays,rtDelays,perfPairs] = main_slope(obs,task,file,expN,trialType)
 %% Example
 %%% main_slope('ax','easy','150819_stim05.mat',1,1);
 
@@ -7,7 +7,7 @@ function [perfDelays,rtDelays] = main_slope(obs,task,file,expN,present)
 % task = 'difficult';
 % file = '150716_stim01.mat';
 % expN = 1; (1 or 2)
-% present = 1; (only relevant when expN == 2; 1:target-present trials,
+% trialType = 1; (only relevant when expN == 2; 1:target-present trials,
 % 2:target-absent trials, 3:all trials)
 
 %% Outputs
@@ -28,15 +28,15 @@ load(strrep(dir_loc,'\',filesep))
 
 %% Transform data
 exp = getTaskParameters(myscreen,task);
-if expN == 1 || (expN == 2 && present == 3)
+if expN == 1 || (expN == 2 && trialType == 3)
     theTrials = find(task{1}.randVars.fixBreak == 0);
 elseif expN == 2
-    if present == 1       
+    if trialType == 1 || trialType == 4      
         theTrials1 = find(task{1}.randVars.fixBreak == 0);
         theTrials2 = find(task{1}.randVars.presence == 1);
         tmp = ismember(theTrials2,theTrials1);
         theTrials = theTrials2(tmp);
-    elseif present == 2
+    elseif trialType == 2 
         theTrials1 = find(task{1}.randVars.fixBreak == 0);
         theTrials2 = find(task{1}.randVars.presence == 2);
         tmp = ismember(theTrials2,theTrials1);
@@ -74,10 +74,18 @@ for n = 1:size(exp.randVars.targetOrientation,2)
         end
     elseif expN == 2
         presence = exp.randVars.presence(n);
-        if (orientation == 1 && response == 1) || (orientation == 2 && response == 2) || (presence == 2 && response == 3)
-            perfTmp(n) = 1;
-        else
-            perfTmp(n) = 0;
+        if trialType ~=4
+            if (orientation == 1 && response == 1) || (orientation == 2 && response == 2) || (presence == 2 && response == 3)
+                perfTmp(n) = 1;
+            else
+                perfTmp(n) = 0;
+            end
+        elseif trialType == 4 %%% detection of target - target present trials
+            if (presence == 1 && (orientation == 1 || 2) && (response == 1 || response == 2)) || (presence == 2 && response == 3)
+                perfTmp(n) = 1;
+            else
+                perfTmp(n) = 0;
+            end
         end
     end 
 end
@@ -94,4 +102,12 @@ end
 perfDelays = nanmean(perfDelays,2); 
 rtDelays = nanmedian(rtDelays,2);
 
+perfPairs = [];
+for delays = unique(exp.randVars.delays)
+    for pair = unique(exp.randVars.probePairsLoc)
+        delayTrials = exp.randVars.delays(theTrials)==delays;
+        pairTrials = exp.randVars.probePairsLoc(theTrials)==pair;
+        perfPairs(delays,1,pair) = nanmean(perf(delayTrials & pairTrials));
+    end
+end
 end

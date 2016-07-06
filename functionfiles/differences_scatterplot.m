@@ -58,9 +58,9 @@ if expN==2
     namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\difference\p1p2c1c2DiffScatter_SQ_2TA'],'\',filesep));
     print ('-dpdf', '-r500',namefig);   
 elseif expN == 3
-    %% Plot scatterplot of c1-c2 v. p1-p2 for square configuration
+    %% Plot scatterplot of c1-c2 v. p1-p2 for control exp
     figure; hold on;
-    scatter(d_diff_sqC,d_diff_sqP,'MarkerEdgeColor',difficultclr)
+    scatter(d_diff_sqC,d_diff_sqP,'MarkerEdgeColor','r')
     xlim([0 .6])
     ylim([-0.6 0.6])
     set(gca,'XTick',0:.2:.6,'FontSize',12,'LineWidth',2','Fontname','Ariel')
@@ -75,6 +75,7 @@ elseif expN == 3
     ylabel('P1 - P2')
     namefig=sprintf('%s', strrep([dir_name '\figures\control exp\p1p2c1c2DiffScatter'],'\',filesep));
     print ('-dpdf', '-r500',namefig);  
+    keyboard
 end
 
 % [h,p,ci,stats] = ttest(e_diff_sqC,e_diff_sqP)

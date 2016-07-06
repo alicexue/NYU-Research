@@ -6,7 +6,7 @@ if difference
     sig = NaN(size(x,1),1,size(x,3));
     for i=1:size(x,3)
         for delay=1:size(x,1);
-            [~,p,~,~] = ttest(x(delay,:,i));
+            [t,p,ci,stats] = ttest(x(delay,:,i))
             sig(delay,1,i) = p;
         end
     end  
@@ -15,7 +15,7 @@ else
    diff = x(:,:,1)-x(:,:,2);
    for i=1:size(diff,3)
        for delay=1:size(x,1);
-        [~,p,~,~] = ttest(diff(delay,:,i));
+        [t,p,ci,stats] = ttest(diff(delay,:,i))
         sig(delay,1,i) = p;
        end
     end

@@ -5,7 +5,7 @@ function [easy_rt,easy_perf,difficult_rt,difficult_perf] = overall_search_slope(
 %% Parameters
 % expN = 1; (1 or 2)
 % trialType = 1; (only relevant for expN == 2; 1:target-present trials (discrimination),
-% 2:target-absent trials, 3:all trials (detection))
+% 2:target-absent trials (detection of absent target), 3:all trials (detection), 4:target-present trials (detection))
 % configuration = 1; (1: all trials regardless of search configuration; 2:
 % square configuration; 3: diamond configuration)
 % i.e. targetDiagonal == 3 or 4; if 2, uses diamond trials, if 3, all
@@ -49,6 +49,9 @@ elseif expN == 2
     elseif trialType == 3
         titleName = '';
         saveFileName = '_2';
+    elseif trialType == 4
+        titleName = 'TP Detect';
+        saveFileName = '_2TPDetect';
     end
 end 
 
@@ -146,7 +149,7 @@ if displayFg
 %     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
 %     ylabel('RT [ms]','FontSize',20,'Fontname','Ariel')
 %     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\easy\Feature_rtSetSize' saveFileName],'\',filesep));
-%     print ('-dpdf', '-r500',namefig);
+%     print ('-djpeg', '-r500',namefig);
 % 
 %     %% Plot performance
 %     figure;hold on;
@@ -178,7 +181,7 @@ if displayFg
 %     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
 %     ylabel('Accuracy','FontSize',20,'Fontname','Ariel')
 %     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\easy\Feature_perfSetSize' saveFileName],'\',filesep));
-%     print ('-dpdf', '-r500',namefig);
+%     print ('-djpeg', '-r500',namefig);
 % 
 %     %% Plot reaction time
 %     figure;hold on;
@@ -210,7 +213,7 @@ if displayFg
 %     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
 %     ylabel('RT [ms]','FontSize',20,'Fontname','Ariel')
 %     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\difficult\Conjunction_rtSetSize' saveFileName],'\',filesep));
-%     print ('-dpdf', '-r500',namefig);
+%     print ('-djpeg', '-r500',namefig);
 % 
 %     %% Plot performance
 %     figure;hold on;
@@ -242,7 +245,7 @@ if displayFg
 %     xlabel('Set Size','FontSize',20,'Fontname','Ariel')
 %     ylabel('Accuracy','FontSize',20,'Fontname','Ariel')
 %     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\difficult\Conjunction_perfSetSize' saveFileName],'\',filesep));
-%     print ('-dpdf', '-r500',namefig);
+%     print ('-djpeg', '-r500',namefig);
     
     %% Plot reaction time for feature and conjunction on same graph
     figure;hold on;
@@ -266,9 +269,12 @@ if displayFg
     legend('Feature','Conjunction','Location','SouthWest')
         
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\pre-exp\rtSetSize' saveFileName],'\',filesep));    
-    print ('-dpdf', '-r500',namefig);
+    print ('-djpeg', '-r500',namefig);
     
-    %% Plot perf for feature and performance on same graph
+    %% Plot perf for feature and performance on same graph    
+    easy_slope = (m_easy_perf(2,:) - m_easy_perf(1,:))/4
+    difficult_slope = (m_difficult_perf(2,:) - m_difficult_perf(1,:))/4
+    
     figure;hold on;
 
     errorbar(4:4:8,m_easy_perf*100,ms_easy_perf*100,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',10,'Color',easyclr)
@@ -290,11 +296,31 @@ if displayFg
     legend('Feature','Conjunction','Location','SouthWest')
    
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\pre-exp\perfSetSize' saveFileName],'\',filesep));    
-    print ('-dpdf', '-r500',namefig);    
+    print ('-djpeg', '-r500',namefig);    
     fprintf('FEATURE TTEST\n')
-    [h,p,ci,stats] = ttest(easy_perf(1,:),easy_perf(2,:))
+    fprintf('Performance\n')
+    [h,p,ci,stats] = ttest((easy_perf(2,:)-easy_perf(1,:))/4*100)
+    fprintf('Slope\n')
+    mean(easy_perf(2,:)-easy_perf(1,:))/4*100
+    std((easy_perf(2,:)-easy_perf(1,:))/4*100,[],2)/numObs
+    fprintf('Reaction Time \n')
+    [h,p,ci,stats] = ttest((easy_rt(2,:)-easy_rt(1,:))/4*1000)
+    fprintf('Slope\n')
+    mean(easy_rt(2,:)-easy_rt(1,:))/4*1000
+    std((easy_rt(2,:)-easy_rt(1,:))/4,[],2)/numObs*1000
+    
     fprintf('CONJUNCTION TTEST\n')
-    [h,p,ci,stats] = ttest(difficult_perf(1,:),difficult_perf(2,:))    
+    fprintf('Performance\n')
+    [h,p,ci,stats] = ttest((difficult_perf(2,:)-difficult_perf(1,:))/4*100)    
+    fprintf('Slope\n')
+    mean(difficult_perf(2,:)-difficult_perf(1,:))/4*100
+    std(difficult_perf(2,:)-difficult_perf(1,:)/4*100,[],2)/numObs
+    fprintf('Reaction Time \n')
+    [h,p,ci,stats] = ttest((difficult_rt(2,:)-difficult_rt(1,:))/4*1000)    
+    fprintf('Slope\n')
+    mean(difficult_rt(2,:)-difficult_rt(1,:))/4*1000
+    std((difficult_rt(2,:)-difficult_rt(1,:))/4,[],2)/numObs*1000
+    keyboard
 end
 if displayStats
     search_slope_stats(expN,trialType,configuration);

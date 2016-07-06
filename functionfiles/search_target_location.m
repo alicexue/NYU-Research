@@ -1,4 +1,4 @@
-function [search_perf_loc_detect,search_perf_loc_discri,m_probe_locations_perf,pairs_perf_loc,pairs_indices] = search_target_location(obs,task,file,expN)
+function [search_perf_loc_detect,search_perf_loc_discri,m_probe_locations_perf,pairs_perf_loc,pairs_indices] = search_target_location(obs,task,file,expN,perf)
 %% This program analyzes performance in the search and probe tasks for performance when the target is at each location
 %% Example
 %%% search_target_location('ax','easy','151104_stim03.mat',2);
@@ -47,20 +47,23 @@ search_perf_detect = NaN(100,2);
 
 i = 1;
 
-if expN == 1
+if expN == 1 
     for n = theTrials_detect
         location = find(int16(expProbe.targetPresented{n}(1)) == locations(:,1) & int16(expProbe.targetPresented{n}(2)) == locations(:,2));
         search_perf_detect(i,1) = location;
-        if ~isnan(exp.response(n))
-            if exp.randVars.targetOrientation(n) == exp.response(n)
-                search_perf_detect(i,2) = 1;
+        if perf %        
+            if ~isnan(exp.response(n))
+                if exp.randVars.targetOrientation(n) == exp.response(n)
+                    search_perf_detect(i,2) = 1;
+                else
+                    search_perf_detect(i,2) = 0;
+                end
             else
-                search_perf_detect(i,2) = 0;
+                search_perf_detect(i,2) = NaN;
             end
-        else
-            search_perf_detect(i,2) = NaN;
+        else % plot reaction time
+            search_perf_detect(i,2) = exp.reactionTime(n);   
         end
-
         i = i + 1;
     end
 else
@@ -69,21 +72,24 @@ else
         search_perf_detect(i,1) = location;
         presence = exp.randVars.presence(n);
         orientation = exp.randVars.targetOrientation(n);
-        if ~isnan(exp.response(n))
-            if (presence == 1 && (orientation == 1 || orientation == 2) && (exp.response(n) == 1 || exp.response(n) == 2)) || (presence == 2 && exp.response(n) == 3)
-                search_perf_detect(i,2) = 1;
+        if perf
+            if ~isnan(exp.response(n))
+                if (presence == 1 && (orientation == 1 || orientation == 2) && (exp.response(n) == 1 || exp.response(n) == 2)) || (presence == 2 && exp.response(n) == 3)
+                    search_perf_detect(i,2) = 1;
+                else
+                    search_perf_detect(i,2) = 0;
+                end
             else
-                search_perf_detect(i,2) = 0;
+                search_perf_detect(i,2) = NaN;
             end
         else
-            search_perf_detect(i,2) = NaN;
+            search_perf_detect(i,2) = exp.reactionTime(n);         
         end
         i = i + 1;
     end
 end
 
 search_perf_detect = search_perf_detect(1:i-1,:);
-
 
 search_perf_loc_discri = NaN(1000,8);
 search_perf_discri = NaN(100,2);    
@@ -92,16 +98,20 @@ i = 1;
 for n = theTrials_discri
     location = find(int16(expProbe.targetPresented{n}(1)) == locations(:,1) & int16(expProbe.targetPresented{n}(2)) == locations(:,2));
     search_perf_discri(i,1) = location;
-    if ~isnan(exp.response(n))
-        if exp.randVars.targetOrientation(n) == exp.response(n)
-            search_perf_discri(i,2) = 1;
+    if perf
+        if ~isnan(exp.response(n))
+            if exp.randVars.targetOrientation(n) == exp.response(n)
+                search_perf_discri(i,2) = 1;
+            else
+                search_perf_discri(i,2) = 0;
+            end
         else
-            search_perf_discri(i,2) = 0;
+            search_perf_discri(i,2) = NaN;
         end
-    else
-        search_perf_discri(i,2) = NaN;
+    else % plot reaction time
+        search_perf_discri(i,2) = exp.reactionTime(n);     
     end
-   
+    
     i = i + 1;
 end
 
@@ -123,7 +133,6 @@ for i = 1:8
         search_perf_loc_discri(n,i) = search_perf_discri(trial,2);
         n = n + 1;
     end
-
 end
 
 %% Get probe data

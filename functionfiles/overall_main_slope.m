@@ -1,12 +1,13 @@
-function [all_rt,all_p] = overall_main_slope(task,expN,present,printFg)
+function [all_rt,all_p,all_p_pairs] = overall_main_slope(task,expN,trialType,printFg)
 %% Example
 %%% overall_main_slope('easy',2,2,true);
 
 %% Parameters
 % task = 'easy'; ('easy' or 'difficult')
 % expN = 1; (1 or 2)
-% present = 1; (only relevant for expN == 2; 1:target-present trials,
-% 2:target-absent trials, 3:all trials)
+% present = 1; (only relevant for expN == 2; 1:target-present trials (discrimination),
+% 2:target-absent trials, 3:all trials, 4:detection in target-present
+% trials)
 % printFg = true; (if true, prints and saves figures)
 
 %% Change task filename to feature/conjunction
@@ -22,20 +23,24 @@ if expN == 1
     titleName = '';
 elseif expN == 2
     saveFileLoc = ['\target present or absent\main_' task '\' condition];
-    if present == 1
+    if trialType == 1
         saveFileName = '_2TP';
         titleName = 'TP';
-    elseif present == 2
+    elseif trialType == 2
         saveFileName = '_2TA';
         titleName = 'TA';
-    elseif present == 3
+    elseif trialType == 3
         saveFileName = '_2';
         titleName = '';
+    elseif trialType == 4
+        saveFileName = '_2TPDetect';
+        titleName = 'TP Detect Target';
     end
 end
 %% Load the data
-all_rt=[];
-all_p=[];
+all_rt = [];
+all_p = [];
+all_p_pairs = [];
 
 numObs = 0;
 
@@ -45,15 +50,15 @@ for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
     if (fileL == 2) && ~strcmp(obs(1,1),'.')
-        [rt,p] = p_main_slope(obs,task,expN,present,false);
+        [rt,p,pPairs] = p_main_slope(obs,task,expN,trialType,false);
         if ~isnan(p)
             all_rt = horzcat(all_rt,rot90(rt,-1));
             all_p = horzcat(all_p,rot90(p,-1));
+            all_p_pairs = horzcat(all_p_pairs,pPairs);
             numObs = numObs + 1;
         end
     end
 end
-
 rt_m = nanmean(all_rt,2);
 p_m = nanmean(all_p,2);
 
@@ -63,9 +68,9 @@ p_sem = nanstd(all_p,[],2)./sqrt(numObs);
 if printFg
     %% Plot rt
     figure; hold on;
-    for i=1:numObs
-        plot(100:30:460,all_rt(:,i)*1000,'-o','LineWidth',0.8,'MarkerFaceColor',[1 1 1],'MarkerSize',6)
-    end
+%     for i=1:numObs
+%         plot(100:30:460,all_rt(:,i)*1000,'-o','LineWidth',0.8,'MarkerFaceColor',[1 1 1],'MarkerSize',6)
+%     end
 
     errorbar(100:30:460,rt_m*1000,rt_sem*1000,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 
@@ -87,16 +92,17 @@ if printFg
     xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
     ylabel('RT [ms] ','FontSize',15,'Fontname','Ariel')  
     namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_rtDelays' saveFileName],'\',filesep));
-    print ('-djpeg', '-r500',namefig);
+    print ('-dpdf', '-r500',namefig);
 
     %% Plot performance
     figure; hold on;
-    for i=1:numObs
-        plot(100:30:460,all_p(:,i)*100,'-o','LineWidth',0.8,'MarkerFaceColor',[1 1 1],'MarkerSize',6)
-    end
+%     for i=1:numObs
+%         plot(100:30:460,all_p(:,i)*100,'-o','LineWidth',0.8,'MarkerFaceColor',[1 1 1],'MarkerSize',6)
+%     end
 
     errorbar(100:30:460,p_m*100,p_sem*100,'-o','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
-
+    xlim([0 500])
+    set(gca,'XTick',0:100:500,'FontSize',18,'LineWidth',2','Fontname','Ariel')
 %     legend_obs = cell(numObs,1);
 %     for i=1:numObs
 %         legend_obs{i} = ['obs ' num2str(i)];
@@ -115,6 +121,6 @@ if printFg
     xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
     ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '_PerfDelays' saveFileName],'\',filesep));
-    print ('-djpeg', '-r500',namefig);
+    print ('-dpdf', '-r500',namefig);
 end
 end

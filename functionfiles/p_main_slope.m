@@ -1,4 +1,4 @@
-function [rt,p] = p_main_slope(obs,task,expN,present,printFg)
+function [rt,p,p_pairs] = p_main_slope(obs,task,expN,present,printFg)
 %% Example
 % p_main_slope('ax','difficult',2,1,true);
 
@@ -33,6 +33,7 @@ end
 %% Obtain perf for each run and concatenate over each run
 perf_avg = zeros(13,10000);
 rt_median = [];
+p_pairs = [];
 c = 1;
 
 dir_name = setup_dir();
@@ -48,9 +49,10 @@ for n = 1:size(files,1)
     filename = files(n).name;
     fileL = size(filename,2);
     if fileL > 4 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')
-        [perfDelays,rtDelays] = main_slope(obs,task,filename,expN,present);
+        [perfDelays,rtDelays,perfPairs] = main_slope(obs,task,filename,expN,present);
         perf_avg(:,c) = perfDelays; 
         rt_median = horzcat(rt_median,rtDelays);
+        p_pairs = horzcat(p_pairs,perfPairs);
         c = c + 1;
     end
 end
@@ -69,6 +71,8 @@ for delay = 1:size(perf_avg,1)
     p(delay) = nanmean(perf_avg(delay,:));
     p_sem(delay) = (nanstd(perf_avg(delay,:))/sqrt(size(perf_avg,2)));
 end
+
+p_pairs = nanmean(p_pairs,2);
 
 if printFg
     %% Plot rt

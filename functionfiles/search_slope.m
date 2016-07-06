@@ -43,7 +43,7 @@ if expN == 1 || (expN == 2 && trialType == 3)
     size4 = exp.randVars.setsize==4;
     size8 = exp.randVars.setsize==8;
 elseif expN == 2
-    if trialType == 1
+    if trialType == 1 || trialType == 4
         size4 = exp.randVars.setsize == 4 & exp.randVars.presence == 1;
         size8 = exp.randVars.setsize == 8 & exp.randVars.presence == 1;
     elseif trialType == 2
@@ -87,7 +87,7 @@ for n = 1:size(noFixBreakIndices,2)
             else
                 perf(n) = 0;
             end
-        else
+        elseif trialType == 3
             presence = exp.randVars.presence(tmp);
             if (presence == 1 && orientation == 1 && response == 1) || (presence == 1 && orientation == 2 && response == 2) || (presence == 1 && orientation == 1 && response == 2)  || (presence == 1 && orientation == 2 && response == 1) || (presence == 2 && response == 3) && config(tmp)
                 perf(n) = 1;
@@ -96,6 +96,15 @@ for n = 1:size(noFixBreakIndices,2)
             else
                 perf(n) = 0;
             end       
+        elseif trialType == 4
+            presence = exp.randVars.presence(tmp);
+            if (presence == 1 && (response == 1 || response == 2)) || (presence == 2 && response == 3) && config(tmp)
+                perf(n) = 1;
+            elseif config(tmp) == false
+                perf(n) = NaN;
+            else
+                perf(n) = 0;
+            end            
         end
     end        
     s4(n) = size4(tmp);
@@ -115,6 +124,7 @@ for n = 1:size(noFixBreakIndices,2)
         i8 = i8 + 1;
     end
 end
+
 perf4 = nanmean(perf4);
 perf8 = nanmean(perf8);
 end

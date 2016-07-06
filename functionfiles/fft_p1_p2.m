@@ -1,4 +1,4 @@
-function fft_p1_p2(p1,p2,diff,expN,present,task,note)
+function fft_p1_p2(p1,p2,diff,expN,trialType,task,note)
 %% This function does an FFT on the difference between p1 and p2 
 %% Example
 % fft_p1_p2(p1,p2,[],2,1,'easy','TB');
@@ -31,27 +31,42 @@ end
 dir_name = setup_dir();
 if expN == 1
     saveFileLoc = '';
-    saveFileName = '';
+    saveFileName = '1';
     titleName = '';
 elseif expN == 2
-    saveFileLoc = '\target present or absent';
-    if present == 1
+    saveFileLoc = '\target present or absent\';
+    if trialType == 1 || trialType == 4
         saveFileName = '_2TP';
         titleName = 'TP';
-    elseif present == 2
+    elseif trialType == 2
         saveFileName = '_2TA';
         titleName = 'TA';
-    elseif present == 3
+    elseif trialType == 3
         saveFileName = '_2';
         titleName = '';
-    end
+    elseif trialType == 5
+        saveFileName = '_2Discri';
+        titleName = 'TP Discri';
+    elseif trialType == 6
+        saveFileName = '_2Detect';
+        titleName = 'TP Detect';
+    elseif trialType == 7
+        saveFileName = '_NotProbed';
+        titleName = 'Target Not Probed';
+    elseif trialType == 8
+        saveFileName = '_CompareProbeTargetLoc';
+        titleName = 'Compare Probe and Target Location';
+    elseif trialType == 9
+        saveFileName = '_CompareProbeTargetLocDetect';
+        titleName = 'Compare Probe and Target Location, Detect Correctly';
+    end    
 end
 
 if ~isempty(p1)
     diff = p1 - p2;
 end
-m_diff = mean(diff,2);
-std_diff = std(diff,[],2)./sqrt(size(diff,2));
+m_diff = nanmean(diff,2);
+std_diff = nanstd(diff,[],2)./sqrt(size(diff,2));
 
 %% Plot difference of p1 and p2
 figure; hold on;
@@ -65,11 +80,11 @@ xlabel('Time from discrimination task onset [ms]','FontSize',15,'Fontname','Arie
 ylim([-1 1])
 xlim([0 500])
 plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
-title([condition ' Search (n = ' num2str(size(diff,2)) ') ' note ' ' titleName],'FontSize',18,'Fontname','Ariel')
+title([condition ' Search (n = ' num2str(size(diff,2)) ') ' titleName],'FontSize',18,'Fontname','Ariel')
 namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\time\' condition '_p1p2_difference' note saveFileName],'\',filesep)); 
 print ('-djpeg', '-r500',namefig); 
 
-a_m_diff = mean(diff,2);
+a_m_diff = nanmean(diff,2);
 a_fft_r=fft(a_m_diff);
 
 for i=1:size(diff,2)
@@ -87,22 +102,22 @@ xlabel('Frequency (Hz)','FontSize',15,'Fontname','Ariel')
 set(gca,'XTick',[2.8 5.6 8.3 11.1 13.9 16.7],'FontSize',12,'LineWidth',2','Fontname','Ariel')
 set(gca,'YTick',0:.2:1.4,'FontSize',12,'LineWidth',2','Fontname','Ariel')
 ylim([0 1.4])
-title([condition ' Search-FFT on the average data-' note ' ' titleName],'FontSize',18,'Fontname','Ariel')
+title([condition ' Search-FFT on the average data-' titleName],'FontSize',18,'Fontname','Ariel')
 
-namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\time\' condition '_FFTavg_' note saveFileName],'\',filesep));
-print ('-djpeg', '-r500',namefig); 
+% namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\time\' condition '_FFTavg_' note saveFileName],'\',filesep));
+% print ('-djpeg', '-r500',namefig); 
 
 %% Plots average amplitude spectrum for FFT on each observer's p1 p2 difference
 figure; hold on;
-m_fft = mean(i_fft_results(2:7,:),2);
-fft_std = std(i_fft_results(2:7,:),[],2)/sqrt(size(diff,2));
+m_fft = nanmean(i_fft_results(2:7,:),2);
+fft_std = nanstd(i_fft_results(2:7,:),[],2)/sqrt(size(diff,2));
 errorbar([2.8 5.6 8.3 11.1 13.9 16.7],m_fft,fft_std,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 ylabel('Amplitude (au)','FontSize',15,'Fontname','Ariel')
 xlabel('Frequency (Hz)','FontSize',15,'Fontname','Ariel')
 set(gca,'XTick',[2.8 5.6 8.3 11.1 13.9 16.7],'FontSize',12,'LineWidth',2','Fontname','Ariel')
 set(gca,'YTick',0:.5:3.5,'FontSize',12,'LineWidth',2','Fontname','Ariel')
 ylim([0 3.5])
-title([condition ' Search-FFT on the individual data-' note ' ' titleName],'FontSize',18,'Fontname','Ariel')
+title([condition ' Search-FFT on the individual data-' titleName],'FontSize',18,'Fontname','Ariel')
 namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\time\' condition '_FFTindiv_' note saveFileName],'\',filesep));
 print ('-djpeg', '-r500',namefig);
 
@@ -117,9 +132,9 @@ xlabel('Frequency (Hz)','FontSize',15,'Fontname','Ariel')
 set(gca,'XTick',[2.8 5.6 8.3 11.1 13.9 16.7],'FontSize',12,'LineWidth',2','Fontname','Ariel')
 set(gca,'YTick',0:0.5:4,'FontSize',12,'LineWidth',2','Fontname','Ariel')
 ylim([0 4])
-title([condition ' Search-FFT on the individual data-' note ' ' titleName],'FontSize',18,'Fontname','Ariel')
+title([condition ' Search-FFT on the individual data-' titleName],'FontSize',18,'Fontname','Ariel')
 
-namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\time\' condition '_FFTindividuals_' note saveFileName],'\',filesep));
-print ('-djpeg', '-r500',namefig);
+% namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\time\' condition '_FFTindividuals_' note saveFileName],'\',filesep));
+% print ('-djpeg', '-r500',namefig);
 
 end

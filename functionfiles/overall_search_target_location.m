@@ -1,4 +1,4 @@
-function [ordered_p_discri,ordered_p_detect,ordered_p_probe] = overall_search_target_location(task,expN)
+function [ordered_p_discri,ordered_p_detect,ordered_p_probe] = overall_search_target_location(task,expN,perf)
 %% This program analyzes performance in the search task for performance when the target is at each location
 %% Example
 %%% overall_search_target_location('difficult',2);
@@ -29,7 +29,7 @@ for n = 1:size(files,1)
     obs = files(n).name;
     fileL = size(obs,2);
     if (fileL == 2 || fileL == 3) && ~strcmp(obs(1,1),'.')
-        [p_loc_discri,p_loc_detect,p_probe_loc,~,~,~] = p_search_target_location(obs,task,expN);
+        [p_loc_discri,p_loc_detect,p_probe_loc,~,~,~] = p_search_target_location(obs,task,expN,perf);
         perf_loc_discri = vertcat(perf_loc_discri,p_loc_discri);
         perf_loc_detect = vertcat(perf_loc_detect,p_loc_detect);
         probe_perf = vertcat(probe_perf,p_probe_loc);

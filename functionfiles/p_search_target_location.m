@@ -1,4 +1,4 @@
-function [m_perf_discri,m_perf_detect,m_probe_perf,all_chi2,all_p,pairs_perf_loc,m_square_perf] = p_search_target_location(obs,task,expN)
+function [m_perf_discri,m_perf_detect,m_probe_perf,all_chi2,all_p,pairs_perf_loc,m_square_perf] = p_search_target_location(obs,task,expN,perf)
 %% This program analyzes performance in the search task for performance when the target is at each location
 %% Example
 %%% p_search_target_location('ax','difficult',2);
@@ -16,7 +16,7 @@ function [m_perf_discri,m_perf_detect,m_probe_perf,all_chi2,all_p,pairs_perf_loc
 
 %% Change task filename to feature/conjunction
 if strcmp(task,'difficult')
-    condition = 'Conjunction';
+    condition = 'Conjunction'; 
 else 
     condition = 'Feature';
 end
@@ -42,7 +42,7 @@ for n = 1:size(files,1)
     filename = files(n).name;
     fileL = size(filename,2);
     if fileL > 4 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')
-        [search_p_loc_detect,search_p_loc_discri,m_probe_locations_perf,pairs_p_loc,pairs_idc] = search_target_location(obs,task,filename,expN);
+        [search_p_loc_detect,search_p_loc_discri,m_probe_locations_perf,pairs_p_loc,pairs_idc] = search_target_location(obs,task,filename,expN,perf);
         search_perf_loc_discri = vertcat(search_perf_loc_discri,search_p_loc_discri);
         search_perf_loc_detect = vertcat(search_perf_loc_detect,search_p_loc_detect);
         probe_perf_loc = vertcat(probe_perf_loc,m_probe_locations_perf);
@@ -54,10 +54,16 @@ for n = 1:size(files,1)
     end
 end
 
-m_perf_discri = nanmean(search_perf_loc_discri,1);
-m_perf_detect = nanmean(search_perf_loc_detect,1);
-m_probe_perf = nanmean(probe_perf_loc,1);
-% m_square_perf = nanmean(square_perf,1);
+if perf
+    m_perf_discri = nanmean(search_perf_loc_discri,1);
+    m_perf_detect = nanmean(search_perf_loc_detect,1);
+    m_probe_perf = nanmean(probe_perf_loc,1);
+    % m_square_perf = nanmean(square_perf,1);
+else
+    m_perf_discri = nanmedian(search_perf_loc_discri,1);
+    m_perf_detect = nanmedian(search_perf_loc_detect,1);
+    m_probe_perf = nanmean(probe_perf_loc,1);
+end
 
 %%
 all_chi2 = [];

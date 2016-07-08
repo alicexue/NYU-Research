@@ -4,7 +4,8 @@ function [sqClick1,sqClick2] = overall_probe_performance(expN,trialType,task,gro
 %%% overall_probe_performance(2,2,'difficult',1,true);
 
 %% Parameters
-% expN = 1; (1 or 2) 3: control
+% expN = 1; (1 or 2) 3: control (for control, plot performance of choice 1
+% and choice 2)
 % trialType = 1; (only relevant for exp 2; 1:target-present trials,
 % 2:target-absent trials, 3:all trials, 4:target-present trials-analyze 
 % perf at target and nontarget locations when target is probed, 5:target-present trials where 
@@ -460,7 +461,7 @@ if printFg && expN==3
     print ('-dpdf', '-r500',namefig); 
 end
 
-if trialType == 4 || trialType == 5 || trialType == 6 || trialType == 7 || trialType == 8 || trialType == 9
+if expN~= 3 && trialType == 4 || trialType == 5 || trialType == 6 || trialType == 7 || trialType == 8 || trialType == 9
     MpTPsq = nanmean(perfTP(:,:,1:6),3);
     SpTPsq = nanstd(MpTPsq,[],2)./sqrt(numObs);
     MpTAsq = nanmean(perfTA(:,:,1:6),3);

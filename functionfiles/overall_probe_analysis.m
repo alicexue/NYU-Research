@@ -5,7 +5,10 @@ function [all_p1,all_p2,pairs_p1,pairs_p2,pair_p1,pair_p2,sameHemiP1,sameHemiP2,
 % overall_probe_analysis('difficult',2,2,false,false,true,true,true,false,1,true,0.1,0.3,{});
 %% Parameters
 % task = 'difficult'; ('easy' or 'difficult')
-% expN = 1; (1 or 2) 
+% expN = 1; (1, 2, or 3) 
+% 1:exp when target was always present
+% 2:exp when target was present or absent
+% 3:control exp
 % trialType = 1; (only valid for expN == 2; all possible options below)
 % 1:target-present trials
 % 2:target-absent trials 

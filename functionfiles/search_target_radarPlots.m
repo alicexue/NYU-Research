@@ -2,13 +2,13 @@ function search_target_radarPlots(perf)
 %% Parameters
 % perf = true; plot performance when perf is true or plot reaction time if false
 
-[easy_p_discri,easy_p_detect,easy_p_probe] = overall_search_target_location('easy',2,perf);
-[difficult_p_discri,difficult_p_detect,difficult_p_probe] = overall_search_target_location('difficult',2,perf);
+[easy_discri,easy_detect,easy_probe] = overall_search_target_location('easy',2,perf);
+[difficult_discri,difficult_detect,difficult_probe] = overall_search_target_location('difficult',2,perf);
 
 easyclr = [255 102 0]/255;
 difficultclr = [0 0 204]/255;
 
-numObs = size(easy_p_discri,2);
+numObs = size(easy_discri,2);
 
 dir_name = setup_dir();
 
@@ -22,12 +22,12 @@ else
     saveFileName = '_RT';
 end
 
-easy_m_p_discri = nanmean(easy_p_discri,2);
-easy_m_p_detect = nanmean(easy_p_detect,2);
-easy_m_p_probe = nanmean(easy_p_probe,2);
-difficult_m_p_discri = nanmean(difficult_p_discri,2);
-difficult_m_p_detect = nanmean(difficult_p_detect,2);
-difficult_m_p_probe = nanmean(difficult_p_probe,2);
+easy_m_p_discri = nanmean(easy_discri,2);
+easy_m_p_detect = nanmean(easy_detect,2);
+easy_m_p_probe = nanmean(easy_probe,2);
+difficult_m_p_discri = nanmean(difficult_discri,2);
+difficult_m_p_detect = nanmean(difficult_detect,2);
+difficult_m_p_probe = nanmean(difficult_probe,2);
 
 %% Individual data
 % figure; hold on;
@@ -89,8 +89,8 @@ print ('-dpdf', '-r500',namefig);
 
 %% Square - Note: the figure does not a accurately represent locations in the search display; graph must be rotated 45 counterclockwise
 % Discrimination
-easy_sq_discri = cat(1,easy_p_discri(8,:),easy_p_discri(2,:),easy_p_discri(4,:),easy_p_discri(6,:));
-difficult_sq_discri = cat(1,difficult_p_discri(8,:),difficult_p_discri(2,:),difficult_p_discri(4,:),difficult_p_discri(6,:));
+easy_sq_discri = cat(1,easy_discri(8,:),easy_discri(2,:),easy_discri(4,:),easy_discri(6,:));
+difficult_sq_discri = cat(1,difficult_discri(8,:),difficult_discri(2,:),difficult_discri(4,:),difficult_discri(6,:));
 
 easy_m_sq_discri = mean(easy_sq_discri,2);
 difficult_m_sq_discri = mean(difficult_sq_discri,2);
@@ -103,8 +103,8 @@ namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\perfor
 print ('-dpdf', '-r500',namefig);
 
 % Detection
-easy_sq_detect = cat(1,easy_p_detect(8,:),easy_p_detect(2,:),easy_p_detect(4,:),easy_p_detect(6,:));
-difficult_sq_detect = cat(1,difficult_p_detect(8,:),difficult_p_detect(2,:),difficult_p_detect(4,:),difficult_p_detect(6,:));
+easy_sq_detect = cat(1,easy_detect(8,:),easy_detect(2,:),easy_detect(4,:),easy_detect(6,:));
+difficult_sq_detect = cat(1,difficult_detect(8,:),difficult_detect(2,:),difficult_detect(4,:),difficult_detect(6,:));
 
 easy_m_sq_detect = mean(easy_sq_detect,2);
 difficult_m_sq_detect = mean(difficult_sq_detect,2);
@@ -117,8 +117,8 @@ namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\perfor
 print ('-dpdf', '-r500',namefig);
 
 % Probe Perf
-easy_sq_probe = cat(1,easy_p_probe(8,:),easy_p_probe(2,:),easy_p_probe(4,:),easy_p_probe(6,:));
-difficult_sq_probe = cat(1,difficult_p_probe(8,:),difficult_p_probe(2,:),difficult_p_probe(4,:),difficult_p_probe(6,:));
+easy_sq_probe = cat(1,easy_probe(8,:),easy_probe(2,:),easy_probe(4,:),easy_probe(6,:));
+difficult_sq_probe = cat(1,difficult_probe(8,:),difficult_probe(2,:),difficult_probe(4,:),difficult_probe(6,:));
 
 easy_m_sq_probe = mean(easy_sq_probe,2);
 difficult_m_sq_probe = mean(difficult_sq_probe,2);
@@ -132,8 +132,8 @@ print ('-dpdf', '-r500',namefig);
 
 %% Diamond
 % Discrimination
-easy_dmd_discri = cat(1,easy_p_discri(1,:),easy_p_discri(3,:),easy_p_discri(5,:),easy_p_discri(7,:));
-difficult_dmd_discri = cat(1,difficult_p_discri(1,:),difficult_p_discri(3,:),difficult_p_discri(5,:),difficult_p_discri(7,:));
+easy_dmd_discri = cat(1,easy_discri(1,:),easy_discri(3,:),easy_discri(5,:),easy_discri(7,:));
+difficult_dmd_discri = cat(1,difficult_discri(1,:),difficult_discri(3,:),difficult_discri(5,:),difficult_discri(7,:));
 
 easy_m_dmd_discri = mean(easy_dmd_discri,2);
 difficult_m_dmd_discri = mean(difficult_dmd_discri,2);
@@ -146,8 +146,8 @@ namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\perfor
 print ('-dpdf', '-r500',namefig);
 
 % Detection
-easy_dmd_detect = cat(1,easy_p_detect(1,:),easy_p_detect(3,:),easy_p_detect(5,:),easy_p_detect(7,:));
-difficult_dmd_detect = cat(1,difficult_p_detect(1,:),difficult_p_detect(3,:),difficult_p_detect(5,:),difficult_p_detect(7,:));
+easy_dmd_detect = cat(1,easy_detect(1,:),easy_detect(3,:),easy_detect(5,:),easy_detect(7,:));
+difficult_dmd_detect = cat(1,difficult_detect(1,:),difficult_detect(3,:),difficult_detect(5,:),difficult_detect(7,:));
 
 easy_m_dmd_detect = mean(easy_dmd_detect,2);
 difficult_m_dmd_detect = mean(difficult_dmd_detect,2);
@@ -160,8 +160,8 @@ namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\perfor
 print ('-dpdf', '-r500',namefig);
 
 % Probe Perf
-easy_dmd_probe = cat(1,easy_p_probe(1,:),easy_p_probe(3,:),easy_p_probe(5,:),easy_p_probe(7,:));
-difficult_dmd_probe = cat(1,difficult_p_probe(1,:),difficult_p_probe(3,:),difficult_p_probe(5,:),difficult_p_probe(7,:));
+easy_dmd_probe = cat(1,easy_probe(1,:),easy_probe(3,:),easy_probe(5,:),easy_probe(7,:));
+difficult_dmd_probe = cat(1,difficult_probe(1,:),difficult_probe(3,:),difficult_probe(5,:),difficult_probe(7,:));
 
 easy_m_dmd_probe = mean(easy_dmd_probe,2);
 difficult_m_dmd_probe = mean(difficult_dmd_probe,2);
@@ -173,24 +173,24 @@ legend('Feature','Conjunction','Location','SouthEast')
 namefig=sprintf('%s', strrep([dir_name '\figures\target present or absent\performance fields\DiamondProbeAvg'],'\',filesep));
 print ('-dpdf', '-r500',namefig);
 
-numObs = size(easy_p_discri,2);
+numObs = size(easy_discri,2);
 
 %% Discrimination
 % horizontal meridian
-easy_horz_discri = mean(vertcat(easy_p_discri(1,:),easy_p_discri(5,:)),1);
+easy_horz_discri = mean(vertcat(easy_discri(1,:),easy_discri(5,:)),1);
 sem_easy_horz_discri = std(easy_horz_discri,[],2)./sqrt(numObs);
 m_easy_horz_discri = mean(easy_horz_discri,2);
 
-difficult_horz_discri = mean(vertcat(difficult_p_discri(1,:),difficult_p_discri(5,:)),1);
+difficult_horz_discri = mean(vertcat(difficult_discri(1,:),difficult_discri(5,:)),1);
 sem_difficult_horz_discri = std(difficult_horz_discri,[],2)./sqrt(numObs);
 m_difficult_horz_discri = mean(difficult_horz_discri,2);
 
 % vertical meridian
-easy_vert_discri = mean(vertcat(easy_p_discri(3,:),easy_p_discri(7,:)),1);
+easy_vert_discri = mean(vertcat(easy_discri(3,:),easy_discri(7,:)),1);
 sem_easy_vert_discri = std(easy_vert_discri,[],2)./sqrt(numObs);
 m_easy_vert_discri = mean(easy_vert_discri,2);
 
-difficult_vert_discri = mean(vertcat(difficult_p_discri(3,:),difficult_p_discri(7,:)),1);
+difficult_vert_discri = mean(vertcat(difficult_discri(3,:),difficult_discri(7,:)),1);
 sem_difficult_vert_discri = std(difficult_vert_discri,[],2)./sqrt(numObs);
 m_difficult_vert_discri = mean(difficult_vert_discri,2);
 
@@ -230,28 +230,28 @@ sprintf('Feature\n')
 
 %%% search
 % horizontal meridian
-upper_horz_meridian = mean(vertcat(easy_p_detect(8,:),easy_p_detect(6,:)),1);
-lower_horz_meridian = mean(vertcat(easy_p_detect(2,:),easy_p_detect(4,:)),1);
+upper_horz_meridian = mean(vertcat(easy_detect(8,:),easy_detect(6,:)),1);
+lower_horz_meridian = mean(vertcat(easy_detect(2,:),easy_detect(4,:)),1);
 
 sprintf('Feature Horizontal Meridian\n')
 [h,p,tstat,ci] = ttest(rot90(upper_horz_meridian),rot90(lower_horz_meridian))
 
-upper_horz_meridian = mean(vertcat(difficult_p_detect(8,:),difficult_p_detect(6,:)),1);
-lower_horz_meridian = mean(vertcat(difficult_p_detect(2,:),difficult_p_detect(4,:)),1);
+upper_horz_meridian = mean(vertcat(difficult_detect(8,:),difficult_detect(6,:)),1);
+lower_horz_meridian = mean(vertcat(difficult_detect(2,:),difficult_detect(4,:)),1);
 
 sprintf('Conjunction Horizontal Meridian\n')
 [h,p,tstat,ci] = ttest(rot90(upper_horz_meridian),rot90(lower_horz_meridian))
 
 
 % vertical meridian
-left_vert_meridian = mean(vertcat(easy_p_detect(4,:),easy_p_detect(6,:)),1);
-right_vert_meridian = mean(vertcat(easy_p_detect(2,:),easy_p_detect(8,:)),1);
+left_vert_meridian = mean(vertcat(easy_detect(4,:),easy_detect(6,:)),1);
+right_vert_meridian = mean(vertcat(easy_detect(2,:),easy_detect(8,:)),1);
 
 sprintf('Feature Vertical Meridian\n')
 [h,p,tstat,ci] = ttest(rot90(left_vert_meridian),rot90(right_vert_meridian))
 
-left_vert_meridian = mean(vertcat(difficult_p_detect(4,:),difficult_p_detect(6,:)),1);
-right_vert_meridian = mean(vertcat(difficult_p_detect(2,:),difficult_p_detect(8,:)),1);
+left_vert_meridian = mean(vertcat(difficult_detect(4,:),difficult_detect(6,:)),1);
+right_vert_meridian = mean(vertcat(difficult_detect(2,:),difficult_detect(8,:)),1);
 
 sprintf('Conjunction Vertical Meridian\n')
 [h,p,tstat,ci] = ttest(rot90(left_vert_meridian),rot90(right_vert_meridian))
@@ -259,28 +259,28 @@ sprintf('Conjunction Vertical Meridian\n')
 
 %%% probe
 % horizontal meridian
-upper_horz_meridian = mean(vertcat(easy_p_probe(8,:),easy_p_probe(6,:)),1);
-lower_horz_meridian = mean(vertcat(easy_p_probe(2,:),easy_p_probe(4,:)),1);
+upper_horz_meridian = mean(vertcat(easy_probe(8,:),easy_probe(6,:)),1);
+lower_horz_meridian = mean(vertcat(easy_probe(2,:),easy_probe(4,:)),1);
 
 sprintf('Feature Vertical Meridian Probe\n')
 [h,p,tstat,ci] = ttest(rot90(upper_horz_meridian),rot90(lower_horz_meridian))
 
-upper_horz_meridian = mean(vertcat(difficult_p_probe(8,:),difficult_p_probe(6,:)),1);
-lower_horz_meridian = mean(vertcat(difficult_p_probe(2,:),difficult_p_probe(4,:)),1);
+upper_horz_meridian = mean(vertcat(difficult_probe(8,:),difficult_probe(6,:)),1);
+lower_horz_meridian = mean(vertcat(difficult_probe(2,:),difficult_probe(4,:)),1);
 
 sprintf('Conjunction Vertical Meridian Probe\n')
 [h,p,tstat,ci] = ttest(rot90(upper_horz_meridian),rot90(lower_horz_meridian))
 
 
 % vertical meridian
-left_vert_meridian = mean(vertcat(easy_p_probe(4,:),easy_p_probe(6,:)),1);
-right_vert_meridian = mean(vertcat(easy_p_probe(2,:),easy_p_probe(8,:)),1);
+left_vert_meridian = mean(vertcat(easy_probe(4,:),easy_probe(6,:)),1);
+right_vert_meridian = mean(vertcat(easy_probe(2,:),easy_probe(8,:)),1);
 
 sprintf('Feature Vertical Meridian Probe\n')
 [h,p,tstat,ci] = ttest(rot90(left_vert_meridian),rot90(right_vert_meridian))
 
-left_vert_meridian = mean(vertcat(difficult_p_probe(4,:),difficult_p_probe(6,:)),1);
-right_vert_meridian = mean(vertcat(difficult_p_probe(2,:),difficult_p_probe(8,:)),1);
+left_vert_meridian = mean(vertcat(difficult_probe(4,:),difficult_probe(6,:)),1);
+right_vert_meridian = mean(vertcat(difficult_probe(2,:),difficult_probe(8,:)),1);
 
 sprintf('Conjunction Vertical Meridian Probe\n')
 [h,p,tstat,ci] = ttest(rot90(left_vert_meridian),rot90(right_vert_meridian))
@@ -288,20 +288,20 @@ sprintf('Conjunction Vertical Meridian Probe\n')
 
 %%% diamond
 % horizontal meridian
-easy_horz_detect = mean(vertcat(easy_p_detect(1,:),easy_p_detect(5,:)),1);
+easy_horz_detect = mean(vertcat(easy_detect(1,:),easy_detect(5,:)),1);
 sem_easy_horz_detect = std(easy_horz_detect,[],2)./sqrt(numObs);
 m_easy_horz_detect = mean(easy_horz_detect,2);
 
-difficult_horz_detect = mean(vertcat(difficult_p_detect(1,:),difficult_p_detect(5,:)),1);
+difficult_horz_detect = mean(vertcat(difficult_detect(1,:),difficult_detect(5,:)),1);
 sem_difficult_horz_detect = std(difficult_horz_detect,[],2)./sqrt(numObs);
 m_difficult_horz_detect = mean(difficult_horz_detect,2);
 
 % vertical meridian
-easy_vert_detect = mean(vertcat(easy_p_detect(3,:),easy_p_detect(7,:)),1);
+easy_vert_detect = mean(vertcat(easy_detect(3,:),easy_detect(7,:)),1);
 sem_easy_vert_detect = std(easy_vert_detect,[],2)./sqrt(numObs);
 m_easy_vert_detect = mean(easy_vert_detect,2);
 
-difficult_vert_detect = mean(vertcat(difficult_p_detect(3,:),difficult_p_detect(7,:)),1);
+difficult_vert_detect = mean(vertcat(difficult_detect(3,:),difficult_detect(7,:)),1);
 sem_difficult_vert_detect = std(difficult_vert_detect,[],2)./sqrt(numObs);
 m_difficult_vert_detect = mean(difficult_vert_detect,2);
 
@@ -338,20 +338,20 @@ sprintf('Feature\n')
 
 %% Probe
 % horizontal meridian
-easy_horz_probe = mean(vertcat(easy_p_probe(1,:),easy_p_probe(5,:)),1);
+easy_horz_probe = mean(vertcat(easy_probe(1,:),easy_probe(5,:)),1);
 sem_easy_horz_probe = std(easy_horz_probe,[],2)./sqrt(numObs);
 m_easy_horz_probe = mean(easy_horz_probe,2);
 
-difficult_horz_probe = mean(vertcat(difficult_p_probe(1,:),difficult_p_probe(5,:)),1);
+difficult_horz_probe = mean(vertcat(difficult_probe(1,:),difficult_probe(5,:)),1);
 sem_difficult_horz_probe = std(difficult_horz_probe,[],2)./sqrt(numObs);
 m_difficult_horz_probe = mean(difficult_horz_probe,2);
 
 % vertical meridian
-easy_vert_probe = mean(vertcat(easy_p_probe(3,:),easy_p_probe(7,:)),1);
+easy_vert_probe = mean(vertcat(easy_probe(3,:),easy_probe(7,:)),1);
 sem_easy_vert_probe = std(easy_vert_probe,[],2)./sqrt(numObs);
 m_easy_vert_probe = mean(easy_vert_probe,2);
 
-difficult_vert_probe = mean(vertcat(difficult_p_probe(3,:),difficult_p_probe(7,:)),1);
+difficult_vert_probe = mean(vertcat(difficult_probe(3,:),difficult_probe(7,:)),1);
 sem_difficult_vert_probe = std(difficult_vert_probe,[],2)./sqrt(numObs);
 m_difficult_vert_probe = mean(difficult_vert_probe,2);
 

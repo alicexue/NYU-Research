@@ -1,4 +1,5 @@
 function [p,pTargetP,pTargetA,perfTargetPairs,perfClicks,perfClickPairs] = probe_performance(obs,task,file,expN,trialType,grouping)
+% function [p,pPairs,pTargetP,pTargetA,perfTargetPairs,perfClicks,perfClickPairs] = probe_performance(obs,task,file,expN,trialType,grouping)
 %% This program analyzes general performance on the probe task
 %% Example
 %%% probe_performance('ax','difficult','150820_stim01.mat',1,1);
@@ -27,13 +28,16 @@ function [p,pTargetP,pTargetA,perfTargetPairs,perfClicks,perfClickPairs] = probe
 % location is not probed 
 
 %% Load the data
+dir_name = setup_dir();
 if expN == 1
-    load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\main_' task '\' file])
+    dir_loc = [dir_name '\' obs '\main_' task '\' file];
 elseif expN == 2
-    load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\target present or absent\main_' task '\' file])
+    dir_loc = [dir_name '\' obs '\target present or absent\main_' task '\' file];
 elseif expN == 3
-    load(['C:\Users\alice_000\Documents\MATLAB\data\' obs '\control exp\' file])
+    dir_loc = [dir_name '\' obs '\control exp\' file];
 end
+
+load(strrep(dir_loc,'\',filesep))
 
 %% Get Probe data
 %%% Probe identity
@@ -453,6 +457,8 @@ if expN == 1 || expN == 2
     for delays = unique(exp.randVars.delays)
         for pair = unique(exp.randVars.probePairsLoc)
             delayTrials = exp.randVars.delays(theTrials)==delays;
+
+	    %%%%%%% here are pair trials???
             pairTrials = exp.randVars.probePairsLoc(theTrials)==pair;
             trialPerf = horzcat(perf(1,delayTrials),perf(2,delayTrials));
             targetPTrials = targetPA & delayTrials & pairTrials;
@@ -504,6 +510,9 @@ else
 end
 
 p = nanmean(perfDelays,2);
+%% pair trials???
+pPairs = nanmean(pairTrials,2);
+
 pTargetP = rot90(perfTargetP,-1);
 pTargetA = rot90(perfTargetA,-1);    
 perfClicks = cat(3,perfClick1,perfClick2);

@@ -82,6 +82,7 @@ end
 
 %% Obtain pboth, pone and pnone for each run and concatenate over run
 perfDelays=[];
+% perfPairs=[];
 perfTP=[];
 perfTA=[];
 perfTP_Pair=[];
@@ -98,8 +99,10 @@ for n = 1:size(files,1)
     fileL = size(obs,2);
     if (fileL == 2) && ~strcmp(obs(1,1),'.')
         [perf,pTP,pTA,pTP_Pair,pTA_Pair,pClicks,pClicksP] = p_probe_performance(obs,task,expN,trialType,false,grouping);
+	% [perf,pPairs,pTP,pTA,pTP_Pair,pTA_Pair,pClicks,pClicksP] = p_probe_performance(obs,task,expN,trialType,false,grouping);
         if ~isnan(perf) 
             perfDelays = horzcat(perfDelays,perf);
+  	    % perfPairs = horzcat(perfPairs,pPairs);
             perfTP = horzcat(perfTP,pTP);
             perfTA = horzcat(perfTA,pTA);
             perfTP_Pair = horzcat(perfTP_Pair,pTP_Pair);
@@ -122,10 +125,13 @@ if trialType~=4 && trialType~=5 && trialType~=6 && trialType~=7 && trialType~=8
     SpTA = std(perfTA,[],2)./sqrt(numObs);
 
     if expN ~= 3
+	% MpSQ = nanmean(perfPairs(:,:,1:6),3);
+	% SpSQ = std(MpSQ,[],2)./sqrt(numObs);
         MpTPsq = nanmean(perfTP_Pair(:,:,1:6),3);
         SpTPsq = std(MpTPsq,[],2)./sqrt(numObs);
         MpTAsq = nanmean(perfTA_Pair(:,:,1:6),3);
         SpTAsq = std(MpTAsq,[],2)./sqrt(numObs);    
+	% MpSQ = nanmean(MpSQ,2);
         MpTPsq = nanmean(MpTPsq,2);
         MpTAsq = nanmean(MpTAsq,2);
     end
@@ -208,6 +214,35 @@ if printFg && expN~=3 && trialType ~= 4 && trialType ~= 5 && trialType ~= 6 && t
     %    avgAcrossDelays + 2*z_score
     %    avgAcrossDelays - 2*z_score
     %    nanmean(perfDelays,1)
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55 
+    
+
+    %%% Plot average across observers - Average Probe Performance - SQUARE CONFIGURATION
+    %figure; hold on;
+    %errorbar(100:30:460,MpSQ,SpSQ,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+    % 
+    %legend_obs = cell(numObs,1);
+    %for i=1:numObs
+    %    legend_obs{i} = ['obs ' num2str(i)];
+    %end
+    %legend_obs{numObs+1} = 'average';
+    %legend(legend_obs,'Location','NorthWest')
+    %
+    %ylim([0 1])
+    %xlim([0 500])
+    %set(gca,'YTick', 0:.2:1,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    %set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    % 
+    %title([condition ' Probe Perf - SQ'],'FontSize',18)
+    %xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
+    %ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
+    %
+    %plot([0 500],[1/12 1/12],'Color',[0 0 0],'LineStyle','--')
+    % 
+    %namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_probePerfSQ' saveFileName],'\',filesep));
+    %print ('-dpdf', '-r500',namefig);
+
 
     %%% Plot average across observers - target loc probed
     %figure; hold on;

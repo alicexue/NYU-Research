@@ -1,4 +1,5 @@
 function [perf,pTP,pTA,pTP_Pair,pTA_Pair,perfClicks,perfClicksP] = p_probe_performance(obs,task,expN,trialType,printFg,grouping)
+% function [perf,pPairs,pTP,pTA,pTP_Pair,pTA_Pair,perfClicks,perfClicksP] = p_probe_performance(obs,task,expN,trialType,printFg,grouping)
 %% Example
 %%% p_probe_performance('ax','difficult',2,2,true,1);
 
@@ -46,6 +47,7 @@ end
 
 %% Obtain perf for each run and concatenate over each run
 perf = [];
+% pPairs = [];
 pTP = [];
 pTA = [];
 pTP_Pair = [];
@@ -56,20 +58,25 @@ pClick1P = [];
 pClick2P = [];
 c = 1;
 
+dir_name = setup_dir();
 if expN == 1
-    files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\main_', task]);  
+    dir_loc = [dir_name '\' obs '\main_' task];
 elseif expN == 2
-    files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\target present or absent\main_', task]);  
+    dir_loc = [dir_name '\' obs '\target present or absent\main_' task];
 elseif expN == 3
-    files = dir(['C:\Users\alice_000\Documents\MATLAB\data\', obs, '\control exp']);  
+    dir_loc = [dir_name '\' obs '\control exp'];
 end
+
+files = dir(strrep(dir_loc,'\',filesep));  
 
 for n = 1:size(files,1)
     filename = files(n).name;
     fileL = size(filename,2);
     if fileL > 4 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')
         [p,pTargetP,pTargetA,pTarget,pClicks,pClickPairs] = probe_performance(obs,task,filename,expN,trialType,grouping);
-        perf(:,c) = p; 
+        % [p,perfPairs,pTargetP,pTargetA,pTarget,pClicks,pClickPairs] = probe_performance(obs,task,filename,expN,trialType,grouping);
+	perf(:,c) = p; 
+	% pPairs = horzcat(pPairs,perfPairs);
         pTP = horzcat(pTP,pTargetP);
         pTA = horzcat(pTA,pTargetA);
         pClick1 = horzcat(pClick1,pClicks(:,:,1));
@@ -84,6 +91,7 @@ for n = 1:size(files,1)
 end
 
 perf = nanmean(perf,2);
+% pPairs = nanmean(pPairs,2);
 pTP = nanmean(pTP,2);
 pTA = nanmean(pTA,2);
 

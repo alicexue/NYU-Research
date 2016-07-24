@@ -1,5 +1,5 @@
 % function [p,pTargetP,pTargetA,perfTargetPairs,perfClicks,perfClickPairs] = probe_performance(obs,task,file,expN,trialType,grouping)
-function [p,perfPairs,pTargetP,pTargetA,perfTargetPairs,perfClicks,perfClickPairs] = probe_performance(obs,task,file,expN,trialType,grouping)
+function [p,pPairs,pTargetP,pTargetA,perfTargetPairs,perfClicks,perfClickPairs] = probe_performance(obs,task,file,expN,trialType,grouping)
 %% This program analyzes general performance on the probe task
 %% Example
 %%% probe_performance('ax','difficult','150820_stim01.mat',1,1);
@@ -412,7 +412,6 @@ end
 %%%
 
 perfDelays=NaN(13,100);
-perfPairs = [];
 perfTargetP = [];
 perfTargetA = [];
 targetProbeP = [];
@@ -460,9 +459,9 @@ if expN == 1 || expN == 2
             delayTrials = exp.randVars.delays(theTrials)==delays;
             pairTrials = exp.randVars.probePairsLoc(theTrials)==pair;
             trialPerf = horzcat(perf(1,delayTrials),perf(2,delayTrials));
-%%%%%%%%%%%%%%%%
+            
             delayPairTrials = delayTrials & pairTrials;
-            perfPairs(delays,1,pair) = nanmean(perf(delayTrials & pairTrials));
+            pairPerf(delays,1,pair) = = horzcat(perf(1,delayTrials & pairTrials)
             
             targetPTrials = targetPA & delayTrials & pairTrials;
             targetATrials = ~targetPA & delayTrials & pairTrials;
@@ -513,6 +512,9 @@ else
 end
 
 p = nanmean(perfDelays,2);
+%% pair trials???
+pPairs = nanmean(pairTrials,2);
+keyboard
 pTargetP = rot90(perfTargetP,-1);
 pTargetA = rot90(perfTargetA,-1);    
 perfClicks = cat(3,perfClick1,perfClick2);

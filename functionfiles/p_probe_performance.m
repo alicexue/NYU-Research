@@ -1,5 +1,5 @@
-function [perf,pTP,pTA,pTP_Pair,pTA_Pair,perfClicks,perfClicksP] = p_probe_performance(obs,task,expN,trialType,printFg,grouping)
-% function [perf,pPairs,pTP,pTA,pTP_Pair,pTA_Pair,perfClicks,perfClicksP] = p_probe_performance(obs,task,expN,trialType,printFg,grouping)
+% function [perf,pTP,pTA,pTP_Pair,pTA_Pair,perfClicks,perfClicksP] = p_probe_performance(obs,task,expN,trialType,printFg,grouping)
+function [perf,pPairs,pTP,pTA,pTP_Pair,pTA_Pair,perfClicks,perfClicksP] = p_probe_performance(obs,task,expN,trialType,printFg,grouping)
 %% Example
 %%% p_probe_performance('ax','difficult',2,2,true,1);
 
@@ -47,7 +47,7 @@ end
 
 %% Obtain perf for each run and concatenate over each run
 perf = [];
-% pPairs = [];
+pPairs = [];
 pTP = [];
 pTA = [];
 pTP_Pair = [];
@@ -73,10 +73,10 @@ for n = 1:size(files,1)
     filename = files(n).name;
     fileL = size(filename,2);
     if fileL > 4 && strcmp(filename(fileL-4+1:fileL),'.mat') && isa(str2double(filename(1:6)),'double')
-        [p,pTargetP,pTargetA,pTarget,pClicks,pClickPairs] = probe_performance(obs,task,filename,expN,trialType,grouping);
-        % [p,perfPairs,pTargetP,pTargetA,pTarget,pClicks,pClickPairs] = probe_performance(obs,task,filename,expN,trialType,grouping);
-	perf(:,c) = p; 
-	% pPairs = horzcat(pPairs,perfPairs);
+%         [p,pTargetP,pTargetA,pTarget,pClicks,pClickPairs] = probe_performance(obs,task,filename,expN,trialType,grouping);
+        [p,perfPairs,pTargetP,pTargetA,pTarget,pClicks,pClickPairs] = probe_performance(obs,task,filename,expN,trialType,grouping);
+        perf(:,c) = p;
+        pPairs = horzcat(pPairs,perfPairs);
         pTP = horzcat(pTP,pTargetP);
         pTA = horzcat(pTA,pTargetA);
         pClick1 = horzcat(pClick1,pClicks(:,:,1));
@@ -91,7 +91,7 @@ for n = 1:size(files,1)
 end
 
 perf = nanmean(perf,2);
-% pPairs = nanmean(pPairs,2);
+pPairs = nanmean(pPairs,2);
 pTP = nanmean(pTP,2);
 pTA = nanmean(pTA,2);
 

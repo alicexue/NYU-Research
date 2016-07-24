@@ -38,7 +38,7 @@ identity = [1 0;2 0;3 0;4 0;5 0;6 0;7 0;8 0;9 0;10 0;11 0;12 0];
 
 %%% Probe positions
 positions = [-16 -13.25 -10.5 -7.75 -5 -2.25 0.5 3.25 6 8.75 11.5 14.25];
-%keyboard
+
 exp = getTaskParameters(myscreen,task);
 
 expProbe = task{1}.probeTask;

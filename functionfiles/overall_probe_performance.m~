@@ -134,17 +134,12 @@ if trialType~=4 && trialType~=5 && trialType~=6 && trialType~=7 && trialType~=8
         MpSQ = nanmean(MpSQ,2);
         MpTPsq = nanmean(MpTPsq,2);
         MpTAsq = nanmean(MpTAsq,2);
-        %%%% Square
-        fprintf('Square')
+        %%%% Sqy
         tmp = nanmean(perfPairs(:,:,1:6),3);
         tmp2 = mean(tmp,1);
         std(tmp2,[],2)./sqrt(numObs)
         tmp3 = mean(tmp2)
-        fprintf('Diamond')
-        tmp = nanmean(perfPairs(:,:,7:12),3);
-        tmp2 = mean(tmp,1);
-        std(tmp2,[],2)./sqrt(numObs)
-        tmp3 = mean(tmp2)
+        
     end
     
     MperfClicks = nanmean(perfClicks,2);

@@ -6,10 +6,6 @@ function avg_delay_comparison()
 [~,~,~,~,~,~,~,~,~,~,~,~,~,~,~,~,~,d_sq_TP_P1,d_sq_TP_P2,d_dmd_TP_P1,d_dmd_TP_P2,~,~] = overall_probe_analysis('difficult',2,1,false,false,false,false,false,false,1,true,0.1,0.3,{});
 [~,~,~,~,~,~,~,~,~,~,~,~,~,~,~,~,~,e_sq_TP_P1,e_sq_TP_P2,e_dmd_TP_P1,e_dmd_TP_P2,~,~] = overall_probe_analysis('easy',2,1,false,false,false,false,false,false,1,true,0.1,0.3,{});
 
-keyboard
-
-
-
 dir_name = setup_dir();
 
 numObs = size(d_sq_TA_P1,2);

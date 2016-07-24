@@ -203,175 +203,175 @@ if printFg && expN~=3 && trialType ~= 4 && trialType ~= 5 && trialType ~= 6 && t
     print ('-dpdf', '-r500',namefig);
 
     % Check for outliers
-        avgAcrossDelays = nanmean(MpD);
-        z_score = std(mean(perfDelays,1));
-        avgAcrossDelays + 2*z_score
-        avgAcrossDelays - 2*z_score
-        nanmean(perfDelays,1)
+    %    avgAcrossDelays = nanmean(MpD);
+    %    z_score = std(mean(perfDelays,1));
+    %    avgAcrossDelays + 2*z_score
+    %    avgAcrossDelays - 2*z_score
+    %    nanmean(perfDelays,1)
 
-    %% Plot average across observers - target loc probed
-    figure; hold on;
-    for i=1:numObs
-        plot(100:30:460,perfTP(:,i),'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8)
-    end
-    errorbar(100:30:460,MpTP,SpTP,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+    %%% Plot average across observers - target loc probed
+    %figure; hold on;
+    %for i=1:numObs
+    %    plot(100:30:460,perfTP(:,i),'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8)
+    %end
+    %errorbar(100:30:460,MpTP,SpTP,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+    % 
+    %legend_obs = cell(numObs,1);
+    %for i=1:numObs
+    %    legend_obs{i} = ['obs ' num2str(i)];
+    %end
+    %legend_obs{numObs+1} = 'average';
+    %legend(legend_obs,'Location','NorthWest')
+    %
+    %ylim([0 1])
+    %xlim([0 500])
+    %set(gca,'YTick', 0:.2:1,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    %set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    % 
+    %title([condition ' Perf-target loc probed'],'FontSize',18)
+    %xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
+    %ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
+    %
+    %plot([0 500],[1/12 1/12],'Color',[0 0 0],'LineStyle','--')
+    % 
+    %namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_probePerfTP' saveFileName],'\',filesep));
+    %print ('-dpdf', '-r500',namefig);
     
-    legend_obs = cell(numObs,1);
-    for i=1:numObs
-        legend_obs{i} = ['obs ' num2str(i)];
-    end
-    legend_obs{numObs+1} = 'average';
-    legend(legend_obs,'Location','NorthWest')
-    
-    ylim([0 1])
-    xlim([0 500])
-    set(gca,'YTick', 0:.2:1,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
-    set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
-    
-    title([condition ' Perf-target loc probed'],'FontSize',18)
-    xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
-    ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
-    
-    plot([0 500],[1/12 1/12],'Color',[0 0 0],'LineStyle','--')
-    
-    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_probePerfTP' saveFileName],'\',filesep));
-    print ('-dpdf', '-r500',namefig);
-    
-    %% Plot average across observers - target loc not probed
-    figure; hold on;
-    for i=1:numObs
-        plot(100:30:460,perfTA(:,i),'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8)
-    end   
-    errorbar(100:30:460,MpTA,SpTA,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
-    
-    legend_obs = cell(numObs,1);
-    for i=1:numObs
-        legend_obs{i} = ['obs ' num2str(i)];
-    end
-    legend_obs{numObs+1} = 'average';
-    legend(legend_obs,'Location','NorthWest')
-    
-    ylim([0 1])
-    xlim([0 500])
-    set(gca,'YTick', 0:.2:1,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
-    set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
-    
-    title([condition ' Perf-target loc not probed'],'FontSize',18)
-    xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
-    ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
-    
-    plot([0 500],[1/12 1/12],'Color',[0 0 0],'LineStyle','--')
-    
-    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_probePerfTA' saveFileName],'\',filesep));
-    print ('-dpdf', '-r500',namefig);
+    %%% Plot average across observers - target loc not probed
+    %figure; hold on;
+    %for i=1:numObs
+    %    plot(100:30:460,perfTA(:,i),'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8)
+    %end   
+    %errorbar(100:30:460,MpTA,SpTA,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+    %
+    %legend_obs = cell(numObs,1);
+    %for i=1:numObs
+    %    legend_obs{i} = ['obs ' num2str(i)];
+    %end
+    %legend_obs{numObs+1} = 'average';
+    %legend(legend_obs,'Location','NorthWest')
+    %
+    %ylim([0 1])
+    %xlim([0 500])
+    %set(gca,'YTick', 0:.2:1,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    %set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    %
+    %title([condition ' Perf-target loc not probed'],'FontSize',18)
+    %xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
+    %ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
+    %
+    %plot([0 500],[1/12 1/12],'Color',[0 0 0],'LineStyle','--')
+    %
+    %namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_probePerfTA' saveFileName],'\',filesep));
+    %print ('-dpdf', '-r500',namefig);
 
-    %% Plot probe performance for target loc probed and target loc not probed
-    figure; hold on;
-    errorbar(100:30:460,MpTP,SpTP,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',TPclr)
-    errorbar(100:30:460,MpTA,SpTA,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',TAclr)
+    %%% Plot probe performance for target loc probed and target loc not probed
+    %figure; hold on;
+    %errorbar(100:30:460,MpTP,SpTP,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',TPclr)
+    %errorbar(100:30:460,MpTA,SpTA,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',TAclr)
+    %
+    %legend('Probe at Target Location','Probe at Non-Target Location')
+    %
+    %ylim([0 1])
+    %xlim([0 500])
+    %set(gca,'YTick', 0:.2:1,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    %set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    %
+    %title([condition ' Performance'],'FontSize',18)
+    %xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
+    %ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
+    %
+    %plot([0 500],[1/12 1/12],'Color',[0 0 0],'LineStyle','--')
+    % 
+    %namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_probePerfTargetAnalysis' saveFileName],'\',filesep));
+    %print ('-dpdf', '-r500',namefig);
     
-    legend('Probe at Target Location','Probe at Non-Target Location')
+    %%% Plot difference in probe performance for target loc probed and target loc not probed
+    %diff_sem = std(perfTP - perfTA,[],2)./sqrt(numObs);    
+    %figure; hold on;
+    %errorbar(100:30:460,MpTP-MpTA,diff_sem,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+    %
+    %[sig] = diff_ttest(cat(3,perfTP,perfTA),false);
+    %for i=1:size(sig,1)
+    %    for j=1:size(sig,3)
+    %        y = -0.10;
+    %        if sig(i,1,j) <= 0.05/13
+    %            plot((i-1)*30+100,y,'*','Color',[0 0 0])
+    %        elseif sig(i,1,j) <= 0.05
+    %            plot((i-1)*30+100,y,'+','Color',[0 0 0])
+    %        end
+    %    end
+    %end
+    %
+    %ylim([-.2 .2])
+    %xlim([0 500])
+    %set(gca,'YTick', -.2:.1:.2,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    %set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    %
+    %title([condition ' Performance'],'FontSize',18)
+    %xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
+    %ylabel('Performance Difference','FontSize',15,'Fontname','Ariel')  
+    %
+    %plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
+    %
+    %namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_probePerfDiffTargetAnalysis' saveFileName],'\',filesep));
+    %print ('-dpdf', '-r500',namefig);
     
-    ylim([0 1])
-    xlim([0 500])
-    set(gca,'YTick', 0:.2:1,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
-    set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
-    
-    title([condition ' Performance'],'FontSize',18)
-    xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
-    ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
-    
-    plot([0 500],[1/12 1/12],'Color',[0 0 0],'LineStyle','--')
-    
-    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_probePerfTargetAnalysis' saveFileName],'\',filesep));
-    print ('-dpdf', '-r500',namefig);
-    
-    %% Plot difference in probe performance for target loc probed and target loc not probed
-    diff_sem = std(perfTP - perfTA,[],2)./sqrt(numObs);    
-    figure; hold on;
-    errorbar(100:30:460,MpTP-MpTA,diff_sem,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
-
-    [sig] = diff_ttest(cat(3,perfTP,perfTA),false);
-    for i=1:size(sig,1)
-        for j=1:size(sig,3)
-            y = -0.10;
-            if sig(i,1,j) <= 0.05/13
-                plot((i-1)*30+100,y,'*','Color',[0 0 0])
-            elseif sig(i,1,j) <= 0.05
-                plot((i-1)*30+100,y,'+','Color',[0 0 0])
-            end
-        end
-    end
-    
-    ylim([-.2 .2])
-    xlim([0 500])
-    set(gca,'YTick', -.2:.1:.2,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
-    set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
-    
-    title([condition ' Performance'],'FontSize',18)
-    xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
-    ylabel('Performance Difference','FontSize',15,'Fontname','Ariel')  
-    
-    plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
-    
-    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_probePerfDiffTargetAnalysis' saveFileName],'\',filesep));
-    print ('-dpdf', '-r500',namefig);
-    
-    mPerf = nanmean(perfDelays,1)    
+    %mPerf = nanmean(perfDelays,1)    
 
     %% SQUARE
-    %%% Square - Plot probe performance for target loc probed and target loc not probed
-    figure; hold on;
-    errorbar(100:30:460,MpTPsq,SpTPsq,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',TPclr)
-    errorbar(100:30:460,MpTAsq,SpTAsq,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',TAclr)
+    %%%% Square - Plot probe performance for target loc probed and target loc not probed
+    %figure; hold on;
+    %errorbar(100:30:460,MpTPsq,SpTPsq,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',TPclr)
+    %errorbar(100:30:460,MpTAsq,SpTAsq,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',TAclr)
+    %
+    %legend('Probe at Target Location','Probe at Non-Target Location')
+    % 
+    %ylim([0 1])
+    %xlim([0 500])
+    %set(gca,'YTick', 0:.2:1,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    %set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    % 
+    %title([condition ' Performance'],'FontSize',18)
+    %xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
+    %ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
+    %
+    %plot([0 500],[1/12 1/12],'Color',[0 0 0],'LineStyle','--')
+    %
+    %namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_probePerfTargetAnalysis_SQ' saveFileName],'\',filesep));
+    %print ('-dpdf', '-r500',namefig);  
     
-    legend('Probe at Target Location','Probe at Non-Target Location')
     
-    ylim([0 1])
-    xlim([0 500])
-    set(gca,'YTick', 0:.2:1,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
-    set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
-    
-    title([condition ' Performance'],'FontSize',18)
-    xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
-    ylabel('Accuracy','FontSize',15,'Fontname','Ariel')  
-    
-    plot([0 500],[1/12 1/12],'Color',[0 0 0],'LineStyle','--')
-    
-    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_probePerfTargetAnalysis_SQ' saveFileName],'\',filesep));
-    print ('-dpdf', '-r500',namefig);  
-    
-    
-    %%% Square - Plot difference in probe performance for target loc probed and target loc not probed
-    diff_sem = std(nanmean(perfTP_Pair(:,:,1:6),3) - nanmean(perfTA_Pair(:,:,1:6),3),[],2)./sqrt(numObs);    
-    figure; hold on;
-    errorbar(100:30:460,MpTPsq-MpTAsq,diff_sem,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
-
-    [sig] = diff_ttest(cat(3,nanmean(perfTP_Pair(:,:,1:6),3),nanmean(perfTA_Pair(:,:,1:6),3)),false);
-    for i=1:size(sig,1)
-        for j=1:size(sig,3)
-            y = -0.18;
-            if sig(i,1,j) <= 0.05/13
-                plot((i-1)*30+100,y,'*','Color',[0 0 0])
-            elseif sig(i,1,j) <= 0.05
-                plot((i-1)*30+100,y,'+','Color',[0 0 0])
-            end
-        end
-    end
-    
-    ylim([-.2 .2])
-    xlim([0 500])
-    set(gca,'YTick', -.2:.1:.2,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
-    set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
-    
-    title([condition ' Performance'],'FontSize',18)
-    xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
-    ylabel('Performance Difference','FontSize',15,'Fontname','Ariel')  
-    
-    plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
-    
-    namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_probePerfDiffTargetAnalysis_SQ' saveFileName],'\',filesep));
-    print ('-dpdf', '-r500',namefig);
+    %%%% Square - Plot difference in probe performance for target loc probed and target loc not probed
+    %diff_sem = std(nanmean(perfTP_Pair(:,:,1:6),3) - nanmean(perfTA_Pair(:,:,1:6),3),[],2)./sqrt(numObs);    
+    %figure; hold on;
+    %errorbar(100:30:460,MpTPsq-MpTAsq,diff_sem,'-o','LineWidth',1.5,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+    % 
+    %[sig] = diff_ttest(cat(3,nanmean(perfTP_Pair(:,:,1:6),3),nanmean(perfTA_Pair(:,:,1:6),3)),false);
+    %for i=1:size(sig,1)
+    %    for j=1:size(sig,3)
+    %        y = -0.18;
+    %        if sig(i,1,j) <= 0.05/13
+    %            plot((i-1)*30+100,y,'*','Color',[0 0 0])
+    %        elseif sig(i,1,j) <= 0.05
+    %            plot((i-1)*30+100,y,'+','Color',[0 0 0])
+    %        end
+    %    end
+    %end
+    %
+    %ylim([-.2 .2])
+    %xlim([0 500])
+    %set(gca,'YTick', -.2:.1:.2,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    %set(gca,'XTick', 0:100:500,'FontSize',15,'LineWidth',2,'Fontname','Ariel')
+    %
+    %title([condition ' Performance'],'FontSize',18)
+    %xlabel('Time from search array onset [ms]','FontSize',15,'Fontname','Ariel')
+    %ylabel('Performance Difference','FontSize',15,'Fontname','Ariel')  
+    %
+    %plot([0 500],[0 0],'Color',[0 0 0],'LineStyle','--')
+    %
+    %namefig=sprintf('%s', strrep([dir_name '\figures\' saveFileLoc '_probePerfDiffTargetAnalysis_SQ' saveFileName],'\',filesep));
+    %print ('-dpdf', '-r500',namefig);
     
     
     % if grouping == 2 || grouping == 3

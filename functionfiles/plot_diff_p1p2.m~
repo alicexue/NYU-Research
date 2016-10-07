@@ -146,14 +146,14 @@ if printFg
 
     %% Plot P1-P2 scatterplot for square configuration 
     figure; hold on;
-    scatter(mean(easy_squareP1 - easy_squareP2,1),mean(difficult_squareP1 - difficult_squareP2,1))
-    set(gca,'XTick',-.3:.1:.6,'FontSize',18,'LineWidth',2','Fontname','Ariel')
-    set(gca,'YTick',-.3:.1:.6,'FontSize',18,'LineWidth',2','Fontname','Ariel')
-    xlim([-.3 .6])
-    ylim([-.3 .6])
+    scatter(m_easy,m_difficult)
+    set(gca,'XTick',-.2:.2:.6,'FontSize',18,'LineWidth',2','Fontname','Ariel')
+    set(gca,'YTick',-.2:.2:.6,'FontSize',18,'LineWidth',2','Fontname','Ariel')
+    xlim([-.2 .6])
+    ylim([-.2 .6])
     xlabel('Feature','FontSize',20,'Fontname','Ariel')
     ylabel('Conjunction','FontSize',18,'Fontname','Ariel')
-    title('P1 - P2 per observer (Square, TA)')
+    title(['P1 - P2 per observer (Square, TA'])
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diffSQ_SCATTERPLOT' saveFileName],'\',filesep));    
     print ('-dpdf', '-r500',namefig);    
 

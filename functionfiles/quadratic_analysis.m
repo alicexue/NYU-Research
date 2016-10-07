@@ -32,6 +32,31 @@ delta_sq(holder) = -delta_sq(holder);
 delta_sq = sqrt(delta_sq);
 delta_sq(holder) = -delta_sq(holder);
 
+%% When delta < 0, set delta = 0
+% holder = delta<0;
+% delta_sq = delta;
+% delta_sq(holder) = 0;
+% delta_sq = sqrt(delta_sq);
+% delta_sq(holder) = -delta_sq(holder);
+
+%% When delta < 0, set delta = |delta|
+% holder = delta<0;
+% delta_sq = delta;
+% delta_sq(holder) = abs(delta_sq(holder));
+% delta_sq = sqrt(delta_sq);
+
+% %% Find number of trials in which delta < 0
+% if size(holder,1) == 13 && size(holder,2) == 16 && size(holder,3) == 1
+%     fprintf(['per observer: ' num2str(sum(holder)) '\n'])
+%     perDelay = [];
+%     for n = 1:size(holder,1)
+%        perDelay = horzcat(perDelay,sum(holder(n,:)));
+%     end
+%     fprintf('per delay: ')
+%     disp(perDelay)
+%     fprintf('\n')
+% end
+
 %% Compute P1 and P2: P1 is either higher or equal to P2 by mathematical construction
 % P1 and P2 are the two solutions of the following second-degree equation:
 % X^2 - sigma*X + phi = 0

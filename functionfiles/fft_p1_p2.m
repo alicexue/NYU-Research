@@ -96,30 +96,35 @@ i_fft_results=abs(i_fft_r);
 
 %% Plot amplitude spectrum for FFT on average difference between p1 and p2 across all observers
 figure; hold on;
-plot([2.8 5.6 8.3 11.1 13.9 16.7],a_fft_results(2:7),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+plot(a_fft_results,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+% plot([2.8 5.6 8.3 11.1 13.9 16.7],a_fft_results(2:7),'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 ylabel('Amplitude (au)','FontSize',15,'Fontname','Ariel')
 xlabel('Frequency (Hz)','FontSize',15,'Fontname','Ariel')
-set(gca,'XTick',[2.8 5.6 8.3 11.1 13.9 16.7],'FontSize',12,'LineWidth',2','Fontname','Ariel')
-set(gca,'YTick',0:.2:1.4,'FontSize',12,'LineWidth',2','Fontname','Ariel')
-ylim([0 1.4])
+% set(gca,'XTick',[2.8 5.6 8.3 11.1 13.9 16.7],'FontSize',12,'LineWidth',2','Fontname','Ariel')
+% set(gca,'YTick',0:.2:1.4,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+set(gca,'YTick',0:.2:2,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+% ylim([0 1.4])
+ylim([0 2])
 title([condition ' Search-FFT on the average data-' titleName],'FontSize',18,'Fontname','Ariel')
-
 % namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\time\' condition '_FFTavg_' note saveFileName],'\',filesep));
-% print ('-djpeg', '-r500',namefig); 
+% print ('-dpdf', '-r500',namefig); 
 
 %% Plots average amplitude spectrum for FFT on each observer's p1 p2 difference
 figure; hold on;
-m_fft = nanmean(i_fft_results(2:7,:),2);
-fft_std = nanstd(i_fft_results(2:7,:),[],2)/sqrt(size(diff,2));
-errorbar([2.8 5.6 8.3 11.1 13.9 16.7],m_fft,fft_std,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+% m_fft = nanmean(i_fft_results(2:7,:),2);
+% fft_std = nanstd(i_fft_results(2:7,:),[],2)/sqrt(size(diff,2));
+m_fft = nanmean(i_fft_results,2);
+plot(m_fft,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
+% errorbar([2.8 5.6 8.3 11.1 13.9 16.7],m_fft,fft_std,'ro-','LineWidth',2,'MarkerFaceColor',[1 1 1],'MarkerSize',8,'Color',[0 0 0])
 ylabel('Amplitude (au)','FontSize',15,'Fontname','Ariel')
 xlabel('Frequency (Hz)','FontSize',15,'Fontname','Ariel')
-set(gca,'XTick',[2.8 5.6 8.3 11.1 13.9 16.7],'FontSize',12,'LineWidth',2','Fontname','Ariel')
-set(gca,'YTick',0:.5:3.5,'FontSize',12,'LineWidth',2','Fontname','Ariel')
-ylim([0 3.5])
+% set(gca,'XTick',[2.8 5.6 8.3 11.1 13.9 16.7],'FontSize',12,'LineWidth',2','Fontname','Ariel')
+set(gca,'YTick',0.5:.5:3,'FontSize',12,'LineWidth',2','Fontname','Ariel')
+ylim([0.5 3])
 title([condition ' Search-FFT on the individual data-' titleName],'FontSize',18,'Fontname','Ariel')
-namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\time\' condition '_FFTindiv_' note saveFileName],'\',filesep));
-print ('-djpeg', '-r500',namefig);
+namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\time\' condition '_FFTindiv_13POINTS' note saveFileName],'\',filesep));
+print ('-dpdf', '-r500',namefig); 
+keyboard
 
 %% Plots individual amplitude spectrums for each observer
 figure; hold on;

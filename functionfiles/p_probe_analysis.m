@@ -154,11 +154,11 @@ for i = 1:size(files,1)
     end
 end
 
-% pb_pairs = mean(cat(3,pb_pair_7,pb_pair_12,pb_pair_1_6,pb_pair_2_5,pb_pair_3_4,pb_pair_8_10,pb_pair_9_11),2);
-% pn_pairs = mean(cat(3,pn_pair_7,pn_pair_12,pn_pair_1_6,pn_pair_2_5,pn_pair_3_4,pn_pair_8_10,pn_pair_9_11),2);
+pb_pairs = mean(cat(3,pb_pair_7,pb_pair_12,pb_pair_1_6,pb_pair_2_5,pb_pair_3_4,pb_pair_8_10,pb_pair_9_11),2);
+pn_pairs = mean(cat(3,pn_pair_7,pn_pair_12,pn_pair_1_6,pn_pair_2_5,pn_pair_3_4,pn_pair_8_10,pn_pair_9_11),2);
 
-pb_pairs = cat(3,pb_pair_7,pb_pair_12,pb_pair_1_6,pb_pair_2_5,pb_pair_3_4,pb_pair_8_10,pb_pair_9_11);
-pn_pairs = cat(3,pn_pair_7,pn_pair_12,pn_pair_1_6,pn_pair_2_5,pn_pair_3_4,pn_pair_8_10,pn_pair_9_11);
+% % pb_pairs = cat(3,pb_pair_7,pb_pair_12,pb_pair_1_6,pb_pair_2_5,pb_pair_3_4,pb_pair_8_10,pb_pair_9_11);
+% % pn_pairs = cat(3,pn_pair_7,pn_pair_12,pn_pair_1_6,pn_pair_2_5,pn_pair_3_4,pn_pair_8_10,pn_pair_9_11);
 
 %% Averaging across runs pair by pair for hemifields and diagonals
 pbMsHemi = nanmean(nanmean(pbSH,2),3);
@@ -174,12 +174,12 @@ pnMdSide2 = nanmean(nanmean(pnDSi2,2),3);
 pbMdDiag3 = nanmean(nanmean(pbDDg3,2),3);
 pnMdDiag3 = nanmean(nanmean(pnDDg3,2),3);  
 
-% Mpb = nanmean(pb,2);
-% Mpo = nanmean(po,2);
-% Mpn = nanmean(pn,2);
-Mpb = pb;
-Mpo = po;
-Mpn = pn;
+Mpb = nanmean(pb,2);
+Mpo = nanmean(po,2);
+Mpn = nanmean(pn,2);
+% % Mpb = pb;
+% % Mpo = po;
+% % Mpn = pn;
 Spb = nanstd(pb,[],2)./sqrt(size(pb,2));
 Spo = nanstd(po,[],2)./sqrt(size(po,2));
 Spn = nanstd(pn,[],2)./sqrt(size(pn,2));
@@ -188,13 +188,13 @@ Spn = nanstd(pn,[],2)./sqrt(size(pn,2));
 [P1,P2] = quadratic_analysis(Mpb,Mpn);
 
 %% Averaging across runs pair by pair
-% Mpb_pair = nanmean(pbp,2);
-% Mpo_pair = nanmean(pop,2);
-% Mpn_pair = nanmean(pnp,2);
+Mpb_pair = nanmean(pbp,2);
+Mpo_pair = nanmean(pop,2);
+Mpn_pair = nanmean(pnp,2);
 
-Mpb_pair = pbp;
-Mpo_pair = pop;
-Mpn_pair = pnp;
+% % Mpb_pair = pbp;
+% % Mpo_pair = pop;
+% % Mpn_pair = pnp;
 
 %% Transform pboth and pnone into p1 and p2
 [p1,p2] = quadratic_analysis(Mpb_pair,Mpn_pair);

@@ -2,9 +2,9 @@ function [easy_squareP1,easy_squareP2,difficult_squareP1,difficult_squareP2] = p
 % Example
 %% plot_diff_p1p2(2,2,false);
 
-[easy_p1,easy_p2,easy_pairs_p1,easy_pairs_p2,easy_pair_p1,easy_pair_p2,easy_SHP1,easy_SHP2,easy_DHP1,easy_DHP2,easy_D1P1,easy_D1P2,easy_D2P1,easy_D2P2,easy_D3P1,easy_D3P2,~,easy_squareP1,easy_squareP2,easy_diamondP1,easy_diamondP2,easy_1346P1,easy_1346P2] = overall_probe_analysis('easy',expN,trialType,false,false,false,false,false,false,1,true,0.1,0.3,{});
+[easy_p1,easy_p2,easy_pairs_p1,easy_pairs_p2,easy_pair_p1,easy_pair_p2,easy_SHP1,easy_SHP2,easy_DHP1,easy_DHP2,easy_D1P1,easy_D1P2,easy_D2P1,easy_D2P2,easy_D3P1,easy_D3P2,~,easy_squareP1,easy_squareP2,easy_diamondP1,easy_diamondP2,easy_1346P1,easy_1346P2] = overall_probe_analysis('easy',expN,trialType,false,false,true,false,false,false,1,true,0.1,0.3,{});
 
-[difficult_p1,difficult_p2,difficult_pairs_p1,difficult_pairs_p2,difficult_pair_p1,difficult_pair_p2,difficult_SHP1,difficult_SHP2,difficult_DHP1,difficult_DHP2,difficult_D1P1,difficult_D1P2,difficult_D2P1,difficult_D2P2,difficult_D3P1,difficult_D3P2,~,difficult_squareP1,difficult_squareP2,difficult_diamondP1,difficult_diamondP2,difficult_1346P1,difficult_1346P2] = overall_probe_analysis('difficult',expN,trialType,false,false,false,false,false,false,1,true,0.1,0.3,{});
+[difficult_p1,difficult_p2,difficult_pairs_p1,difficult_pairs_p2,difficult_pair_p1,difficult_pair_p2,difficult_SHP1,difficult_SHP2,difficult_DHP1,difficult_DHP2,difficult_D1P1,difficult_D1P2,difficult_D2P1,difficult_D2P2,difficult_D3P1,difficult_D3P2,~,difficult_squareP1,difficult_squareP2,difficult_diamondP1,difficult_diamondP2,difficult_1346P1,difficult_1346P2] = overall_probe_analysis('difficult',expN,trialType,false,false,true,false,false,false,1,true,0.1,0.3,{});
 
 numObs = size(easy_p1,2);
 
@@ -153,6 +153,8 @@ if printFg
     ylim([-.3 .6])
     xlabel('Feature','FontSize',20,'Fontname','Ariel')
     ylabel('Conjunction','FontSize',18,'Fontname','Ariel')
+    h = refline(1,0);
+    h.Color = [1 1 1]*0.4;
     title('P1 - P2 per observer (Square, TA)')
     namefig=sprintf('%s', strrep([dir_name '\figures' saveFileLoc '\p1p2diffSQ_SCATTERPLOT' saveFileName],'\',filesep));    
     print ('-dpdf', '-r500',namefig);    

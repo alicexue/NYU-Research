@@ -22,7 +22,7 @@ end
 
 nameObs = {'ad';'ax';'dg';'ek';'en';'ga';'id';'jp';'ld';'mc';'mr';'rp';'sl';'xw';'ys';'yz'};
 
-[all_p1,all_p2,~,~,~,~,~,~,~,~,~,~,~,~,~,~,~,squareP1,squareP2,diamondP1,diamondP2,~,~] = overall_probe_analysis(task,2,trialType,false,false,false,false,false,false,1,true,0.1,0.3,nameObs);
+% [all_p1,all_p2,~,~,~,~,~,~,~,~,~,~,~,~,~,~,~,squareP1,squareP2,diamondP1,diamondP2,~,~] = overall_probe_analysis(task,2,trialType,false,false,false,false,false,false,1,true,0.1,0.3,nameObs);
 if strcmp(name, 'all')
     subj_pA = all_p1;
     subj_pB = all_p2;
@@ -127,14 +127,14 @@ for ci = list
     set(h,'edgecolor',get(h,'facecolor'));
     
     plot(freqs,expected,'k--','LineWidth',1.5);
-    errorbar(freqs,real,real_sem,'ko-','LineWidth',3,'MarkerSize',12,'MarkerFaceColor',[1 1 1]);
+% %     errorbar(freqs,real,real_sem,'ko-','LineWidth',3,'MarkerSize',12,'MarkerFaceColor',[1 1 1]);
     b = b-1;
     xlim([2  16.7])
-    ylim([0.6 lim(1)])
+% %     ylim([0.6 lim(1)])
 end
 set(gca, 'XTick',[2.78 5.56 8.34 11.12 13.90 16.68])
 namefig = sprintf(['boot_secVersion_' task '_' name saveFileName]);
-print('-djpeg','-r500',namefig);
+print('-dpdf','-r500',namefig);
 
 %% Plot bootstrap results: on the average data across observers
 data = fft_ALL_p(:,2:7);
@@ -179,7 +179,7 @@ for ci = list
 end
 set(gca, 'XTick',[2.78 5.56 8.34 11.12 13.90 16.68])
 namefig = sprintf(['boot_ind_mainVersion_' task '_' name saveFileName]);
-print('-djpeg','-r500',namefig);
+print('-dpdf','-r500',namefig);
 
 
 %% Plot bootstrap results: CONTINUOUS SCALE - avg of individual fft
@@ -243,7 +243,7 @@ for ci = list
 end
 set(gca, 'XTick',[2.78 5.56 8.34 11.12 13.90 16.68])
 namefig = sprintf(['bootFFTLINEold_indiv_' task '_' name saveFileName]);
-print('-djpeg','-r500',namefig);
+print('-dpdf','-r500',namefig);
 
 save('fft_ALL_p.mat','fft_ALL_p')
 
@@ -260,7 +260,7 @@ end
 maybeNorm = (a-min(min(a)))./(max(max(a))-min(min(a)));
 figure;imagesc(a);colormap(C);colorbar;
 namefig = sprintf(['colorBoot_indiv_' task '_' name saveFileName]);
-print('-djpeg','-r500',namefig);
+print('-dpdf','-r500',namefig);
 
 %%
 b = a(1:78487,:);
@@ -281,7 +281,7 @@ plot(freqs,real,'ko-','LineWidth',3,'MarkerSize',12,'MarkerFaceColor',[1 1 1]);
 %set(gca,'clim',[1.1 1.8])
 hold off;
 namefig = sprintf(['colorBootnew_indiv_' task '_' name saveFileName]);
-print('-djpeg','-r500',namefig);
+print('-dpdf','-r500',namefig);
 
 
 %% Plot bootstrap results: CONTINUOUS SCALE - fft on average data
@@ -327,11 +327,11 @@ for ci = list
     plot(freqs,real,'ko-','LineWidth',3,'MarkerSize',12,'MarkerFaceColor',[1 1 1]);
     b = b-1;
     xlim([2  16.7])
-    ylim([0 .8])
+% %     ylim([0 .8])
 end
 set(gca, 'XTick',[2.78 5.56 8.34 11.12 13.90 16.68])
 namefig = sprintf(['bootFFTLINEold_avg_' task '_' name saveFileName]);
-print('-djpeg','-r500',namefig);
+print('-dpdf','-r500',namefig);
 
 save('fft_ALL_p.mat','fft_ALL_p')
 
@@ -350,13 +350,13 @@ end
 maybeNorm = (a-min(min(a)))./(max(max(a))-min(min(a)));
 figure;imagesc(a);colormap(C);colorbar;
 namefig = sprintf(['colorBoot_avg_' task '_' name saveFileName]);
-print('-djpeg','-r500',namefig);
+print('-dpdf','-r500',namefig);
 
 %%
 b = a(1:78487,:);
 maybeNorm = (b-min(min(b)))./(max(max(b))-min(min(b)));
 figure;imagesc(b);
-set(gca,'clim',[1 1.8])
+% % set(gca,'clim',[1 1.8])
 
 %%
 figure;
@@ -368,17 +368,17 @@ set(gcf,'Renderer','Zbuffer');
 shading interp;
 plot(freqs,real,'ko-','LineWidth',3,'MarkerSize',12,'MarkerFaceColor',[1 1 1]);
 %set(gca,'ylim',[78000 100000])
-%set(gca,'clim',[1.1 1.8])
+set(gca,'clim',[1.1 1.8])
 hold off;
 namefig = sprintf(['colorBootnew_avg_' task '_' name saveFileName]);
-print('-djpeg','-r500',namefig);
+print('-dpdf','-r500',namefig);
 
 %% TEST
 data2 = mean((subj_pA(1:13,:) - subj_pB(1:13,:)),2);
 f = abs(fft(data2));
 figure;
 plot(xaxis,f(2:7),'ko-','LineWidth',3,'MarkerSize',12,'MarkerFaceColor',[1 1 1])
-ylim([0 1])
+% % ylim([0 1])
 set(gca,'XTick',xaxis)
 set(gca,'XTickLabel',xaxis)
 xlabel('Frequency (Hz)','FontSize',16)
@@ -386,5 +386,5 @@ ylabel('Amplitude (au)','FontSize',16)
 title('FFT of the grand-average curve','FontSize',16)
 
 namefig = sprintf(['FFTgrandAvg_' task '_' name saveFileName]);
-print('-djpeg','-r500',namefig);
+print('-dpdf','-r500',namefig);
 keyboard

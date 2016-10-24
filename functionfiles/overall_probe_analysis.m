@@ -185,29 +185,29 @@ s_pair_p2=nanstd(pair_p2,[],2)/sqrt(numObs);
 m_pair_p1=nanmean(pair_p1,2);
 m_pair_p2=nanmean(pair_p2,2);
 
-% pbp_1_6 = mean(cat(3,pbothp(:,:,1),pbothp(:,:,6)),3);
-% pbp_2_5 = mean(cat(3,pbothp(:,:,2),pbothp(:,:,5)),3);
-% pbp_3_4 = mean(cat(3,pbothp(:,:,3),pbothp(:,:,4)),3);
-% pbp_8_10 = mean(cat(3,pbothp(:,:,8),pbothp(:,:,10)),3);
-% pbp_9_11 = mean(cat(3,pbothp(:,:,9),pbothp(:,:,11)),3);
-% 
-% pnp_1_6 = mean(cat(3,pnonep(:,:,1),pnonep(:,:,6)),3);
-% pnp_2_5 = mean(cat(3,pnonep(:,:,2),pnonep(:,:,5)),3);
-% pnp_3_4 = mean(cat(3,pnonep(:,:,3),pnonep(:,:,4)),3);
-% pnp_8_10 = mean(cat(3,pnonep(:,:,8),pnonep(:,:,10)),3);
-% pnp_9_11 = mean(cat(3,pnonep(:,:,9),pnonep(:,:,11)),3);
+pbp_1_6 = mean(cat(3,pbothp(:,:,1),pbothp(:,:,6)),3);
+pbp_2_5 = mean(cat(3,pbothp(:,:,2),pbothp(:,:,5)),3);
+pbp_3_4 = mean(cat(3,pbothp(:,:,3),pbothp(:,:,4)),3);
+pbp_8_10 = mean(cat(3,pbothp(:,:,8),pbothp(:,:,10)),3);
+pbp_9_11 = mean(cat(3,pbothp(:,:,9),pbothp(:,:,11)),3);
 
-pbp_1_6 = cat(3,pbothp(:,:,1),pbothp(:,:,6));
-pbp_2_5 = cat(3,pbothp(:,:,2),pbothp(:,:,5));
-pbp_3_4 = cat(3,pbothp(:,:,3),pbothp(:,:,4));
-pbp_8_10 = cat(3,pbothp(:,:,8),pbothp(:,:,10));
-pbp_9_11 = cat(3,pbothp(:,:,9),pbothp(:,:,11));
+pnp_1_6 = mean(cat(3,pnonep(:,:,1),pnonep(:,:,6)),3);
+pnp_2_5 = mean(cat(3,pnonep(:,:,2),pnonep(:,:,5)),3);
+pnp_3_4 = mean(cat(3,pnonep(:,:,3),pnonep(:,:,4)),3);
+pnp_8_10 = mean(cat(3,pnonep(:,:,8),pnonep(:,:,10)),3);
+pnp_9_11 = mean(cat(3,pnonep(:,:,9),pnonep(:,:,11)),3);
 
-pnp_1_6 = cat(3,pnonep(:,:,1),pnonep(:,:,6));
-pnp_2_5 = cat(3,pnonep(:,:,2),pnonep(:,:,5));
-pnp_3_4 = cat(3,pnonep(:,:,3),pnonep(:,:,4));
-pnp_8_10 = cat(3,pnonep(:,:,8),pnonep(:,:,10));
-pnp_9_11 = cat(3,pnonep(:,:,9),pnonep(:,:,11));
+% % pbp_1_6 = cat(3,pbothp(:,:,1),pbothp(:,:,6));
+% % pbp_2_5 = cat(3,pbothp(:,:,2),pbothp(:,:,5));
+% % pbp_3_4 = cat(3,pbothp(:,:,3),pbothp(:,:,4));
+% % pbp_8_10 = cat(3,pbothp(:,:,8),pbothp(:,:,10));
+% % pbp_9_11 = cat(3,pbothp(:,:,9),pbothp(:,:,11));
+% % 
+% % pnp_1_6 = cat(3,pnonep(:,:,1),pnonep(:,:,6));
+% % pnp_2_5 = cat(3,pnonep(:,:,2),pnonep(:,:,5));
+% % pnp_3_4 = cat(3,pnonep(:,:,3),pnonep(:,:,4));
+% % pnp_8_10 = cat(3,pnonep(:,:,8),pnonep(:,:,10));
+% % pnp_9_11 = cat(3,pnonep(:,:,9),pnonep(:,:,11));
 
 pairs_PB = cat(3,pbothp(:,:,7),pbothp(:,:,12),pbp_1_6,pbp_2_5,pbp_3_4,pbp_8_10,pbp_9_11);
 pairs_PN = cat(3,pnonep(:,:,7),pnonep(:,:,12),pnp_1_6,pnp_2_5,pnp_3_4,pnp_8_10,pnp_9_11);
@@ -256,9 +256,15 @@ squarePN = mean(cat(3,pnonep(:,:,1),pnonep(:,:,2),pnonep(:,:,3),pnonep(:,:,4),pn
 % % find number of trials in which delta < 0
 % fprintf('---------------------------------\n')
 % fprintf('Number of corrections for square:\n')
+
+% squarePB = mean(squarePB,2);
+% squarePN = mean(squarePN,2);
 [squareP1,squareP2] = quadratic_analysis(squarePB,squarePN);
 sem_squareP1 = std(squareP1,[],2)./sqrt(numObs);  
 sem_squareP2 = std(squareP2,[],2)./sqrt(numObs); 
+
+% % boot_analysis
+
 % fprintf('---------------------------------\n')
 
 diamondPB = mean(cat(3,pbothp(:,:,7),pbothp(:,:,8),pbothp(:,:,9),pbothp(:,:,10),pbothp(:,:,11),pbothp(:,:,12)),3);

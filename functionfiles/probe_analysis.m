@@ -247,6 +247,10 @@ end
 % pop = NaN(13,100,12);
 % pnp = NaN(13,100,12);
 
+numNoBreakTrials = [];
+numBreakTrials = [];
+rtTmp = exp.reactionTime;
+
 for delays = unique(exp.randVars.delays)
     for pair = unique(exp.randVars.probePairsLoc)
         delaysTrials = exp.randVars.delays(theTrials)==delays;
@@ -257,7 +261,17 @@ for delays = unique(exp.randVars.delays)
         pop(delays,1:size(tmp,2),pair) = tmp;
         tmp = pnone(delaysTrials & pairTrials);
         pnp(delays,1:size(tmp,2),pair) = tmp;
+        
+        %%%%%%%%
+        numNoBreakTrials = sum(~isnan(rtTmp) & exp.randVars.delays==delays & exp.randVars.probePairsLoc==pair);
+        numBreakTrials = sum(isnan(rtTmp) & exp.randVars.delays==delays & exp.randVars.probePairsLoc==pair);
+        rtPairNoBreak(delays,1:size(numNoBreakTrials,2),pair) = numNoBreakTrials;
+        rtPairBreak(delays,1:size(numBreakTrials,2),pair) = numBreakTrials;
+        
     end
 end
+%%% percent of fixation breaks
+obs
+sum(sum(rtPairBreak(:,:,1:6))) / sum(sum((rtPairBreak(:,:,1:6) + rtPairNoBreak(:,:,1:6))))
 end
 
